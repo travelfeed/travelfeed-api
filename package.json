@@ -1,0 +1,35 @@
+{
+  "name": "travelfeed-api",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --watch dist/ dist/server.js",
+    "build": "tsc -p tsconfig.json",
+    "watch": "nodemon --exec \"yarn run build\" --watch src/ --ext ts",
+    "lint": "tslint -p tsconfig.json",
+    "format": "prettier --write \"src/**/*.{ts,scss,md}\"",
+    "precommit": "lint-staged"
+  },
+  "private": true,
+  "lint-staged": {
+    "{e2e,src}/**/*.{ts,scss,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.8",
+    "@types/express": "^4.11.1",
+    "@types/node": "^9.4.6",
+    "nodemon": "^1.17.1",
+    "prettier": "^1.11.1",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.9.0",
+    "typescript": "^2.7.2"
+  }
+}
