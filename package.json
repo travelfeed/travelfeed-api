@@ -5,10 +5,11 @@
   "scripts": {
     "start": "nodemon --watch dist/ dist/server.js",
     "build": "tsc -p tsconfig.json",
-    "watch": "nodemon --exec \"yarn run build\" --watch src/ --ext ts",
+    "watch": "nodemon --exec \"yarn run build\" --watch ./ --ext ts",
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"src/**/*.{ts,scss,md}\"",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "test": "ava dist/tests/**/*.ts"
   },
   "private": true,
   "lint-staged": {
@@ -26,8 +27,11 @@
     "@types/body-parser": "^1.16.8",
     "@types/express": "^4.11.1",
     "@types/node": "^9.4.6",
+    "@types/supertest": "^2.0.4",
+    "ava": "^0.25.0",
     "nodemon": "^1.17.1",
     "prettier": "^1.11.1",
+    "supertest": "^3.0.0",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.9.0",
     "typescript": "^2.7.2"
