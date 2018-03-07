@@ -1,0 +1,4 @@
+<IfModule mod_proxy.c>
+    ProxyRequests Off
+    ProxyPass / http://localhost:3000
+</IfModule>

@@ -1,23 +1,25 @@
-import * as express from 'express'
-import * as bodyParser from 'body-parser'
-import { routes } from './routes'
+import * as http from 'http'
+import chalk from 'chalk'
+import { Express } from './config/express'
 
-const port: number = 9001
-const server: express.Application = express()
+const log = console.log
+const app = new Express().app
 
-server.use(bodyParser.text())
-server.use(bodyParser.json())
-server.use(bodyParser.urlencoded({ extended: true }))
-server.use('/api', routes)
-server.use((req: express.Request, res: express.Response) => {
-    res.status(500).json({
-        status: 500,
-        message: 'Internal server error'
-    })
+const server = http.createServer(app)
+const port = process.env.PORT || 3000
+
+server.listen(port)
+
+server.on('listening', () => {
+    log(chalk.green(`Server is listening on port: ${port}`))
 })
 
-server.listen(port, () => {
-    console.log(`server listening at port ${port}`)
+server.on('close', () => {
+    log(chalk.yellow(`Server closed`))
 })
 
-export { server }
+server.on('error', err => {
+    log(chalk.red(err.stack))
+})
+
+export { app as server }
