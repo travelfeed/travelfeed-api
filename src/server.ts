@@ -1,15 +1,23 @@
-import * as express from 'express'
-import * as bodyParser from 'body-parser'
+import * as http from 'http';
+import chalk from 'chalk';
+import {Express} from './config/express';
 
-// api routes
-import routes from './routes'
+const log = console.log;
+const app = new Express().app;
 
-const port: number = 9001
-const app: express.Application = express()
+const server = http.createServer(app);
+const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json())
-app.use('/api', routes)
+server.listen(port)
 
-app.listen(port, () => {
-    console.log(`server listening at port ${port}`)
+server.on('listening', () => {
+    log(chalk.green(`Server is listening on port: ${port}`));
+});
+
+server.on('close', () => {
+    log(chalk.yellow(`Server closed`));
 })
+
+server.on('error', (err) => {
+    log(chalk.red(err.stack));
+});
