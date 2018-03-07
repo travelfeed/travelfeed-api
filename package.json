@@ -9,7 +9,7 @@
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"src/**/*.{ts,scss,md}\"",
     "precommit": "lint-staged",
-    "test": "ava dist/tests/**/*.ts"
+    "test": "ava dist/tests/**/*.js"
   },
   "private": true,
   "lint-staged": {
