@@ -1,35 +1,8 @@
 import * as express from 'express'
+import { auth } from './auth'
 
 const routes: express.Router = express.Router()
 
-/**
- * Handles /api
- */
-routes.get('/', (req: express.Request, res: express.Response) => {
-    res.status(200).json({
-        status: 200,
-        message: 'API Endpoint'
-    })
-})
+routes.use('/auth', auth)
 
-/**
- * Handles /api/hello
- */
-routes.get('/hello', (req: express.Request, res: express.Response) => {
-    res.status(200).json({
-        status: 200,
-        message: 'Hello World!'
-    })
-})
-
-/**
- * Handles /api/hello/:id
- */
-routes.get('/hello/:id', (req: express.Request, res: express.Response) => {
-    res.status(200).json({
-        status: 200,
-        message: `Hello ${req.params.id}!`
-    })
-})
-
-export default routes
+export { routes }
