@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --watch dist/ dist/server.js",
+    "start": "nodemon --watch dist/ dist/src/server.js",
     "build": "tsc -p tsconfig.json",
     "watch": "nodemon --exec \"yarn run build\" --watch ./ --ext ts",
     "lint": "tslint -p tsconfig.json",

@@ -7,7 +7,7 @@ const server: express.Application = express()
 
 server.use(bodyParser.text())
 server.use(bodyParser.json())
-server.use(bodyParser.urlencoded())
+server.use(bodyParser.urlencoded({ extended: true }))
 server.use('/api', routes)
 server.use((req: express.Request, res: express.Response) => {
     res.status(500).json({
