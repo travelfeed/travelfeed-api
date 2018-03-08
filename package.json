@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "yarn run build && nodemon --watch dist/ dist/src/server.js",
+    "start": "nodemon --watch dist/ dist/src/server.js",
     "build": "tsc -p tsconfig.json",
     "watch": "nodemon --exec \"yarn run build\" --watch ./ --ext ts",
     "lint": "tslint -p tsconfig.json",
+    "test": "ava dist/tests/**/*.js",
     "format": "prettier --write \"src/**/*.{ts,scss,md}\"",
-    "precommit": "lint-staged",
-    "test": "ava dist/tests/**/*.js"
+    "precommit": "lint-staged"
   },
   "private": true,
   "lint-staged": {
@@ -25,7 +25,8 @@
     "express": "^4.16.2",
     "knex": "^0.14.4",
     "morgan": "^1.9.0",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "nodemon": "^1.17.1"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.8",
@@ -37,7 +38,6 @@
     "@types/node": "^9.4.6",
     "@types/supertest": "^2.0.4",
     "ava": "^0.25.0",
-    "nodemon": "^1.17.1",
     "prettier": "^1.11.1",
     "supertest": "^3.0.0",
     "tslint": "^5.9.1",
