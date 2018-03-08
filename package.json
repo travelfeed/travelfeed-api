@@ -4,12 +4,12 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn run build && nodemon --watch dist/ dist/src/server.js",
-    "build": "rm -r dist/ && tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json",
     "watch": "nodemon --exec \"yarn run build\" --watch ./ --ext ts",
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"src/**/*.{ts,scss,md}\"",
     "precommit": "lint-staged",
-    "test": "yarn run build && ava dist/tests/**/*.js"
+    "test": "ava dist/tests/**/*.js"
   },
   "private": true,
   "lint-staged": {
