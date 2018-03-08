@@ -1,4 +1,5 @@
-<IfModule mod_proxy.c>
-    ProxyRequests Off
-    ProxyPass / http://localhost:3000
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteEngine On
+    RewriteRule ^(.*) http://localhost:61000/api/$1 [P]
 </IfModule>
