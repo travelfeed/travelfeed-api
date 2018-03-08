@@ -6,6 +6,7 @@ import chalk from 'chalk'
 // routes
 import { AuthRoutes } from '../modules/auth/routes/auth.routes'
 import { UserRoutes } from '../modules/users/routes/users.routes'
+import { ArticleRoutes } from '../modules/articles/routes/articles.routes'
 
 const log = console.log
 
@@ -32,11 +33,15 @@ export class Express {
     initRoutes() {
         this.app.use('/api/auth', new AuthRoutes(this.router).router)
         this.app.use('/api/users', new UserRoutes(this.router).router)
+        this.app.use('/api/articles', new ArticleRoutes(this.router).router)
 
         // error handling
         this.app.use((err, req, res, next) => {
             log(chalk.red(err.stack))
-            res.status(500).json({ error: err.stack })
+            res.status(500).json({
+                status: 500,
+                error: err.stack
+            })
         })
     }
 }

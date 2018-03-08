@@ -3,12 +3,12 @@ import User from '../../users/models/users.model'
 
 class Auth extends User {
     signin() {
-        return true
+        return 'signin'
     }
 
     register() {
-        return true
+        return 'register'
     }
 }
 
-export default bookshelf.model('Auth', Auth)
+export default bookshelf.model('AuthModel', Auth)

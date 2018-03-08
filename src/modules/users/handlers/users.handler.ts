@@ -1,20 +1,40 @@
 import { Request, Response, NextFunction } from 'express'
-import User from '../../users/models/users.model'
+import UserModel from '../../users/models/users.model'
 
-class UserHandler {
-    public getUsers(req: Request, res: Response, next: NextFunction) {
-        res.json({
-            status: res.statusCode,
-            data: 'Hello user!'
-        })
+export class UserHandler {
+    public async readUsers(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await UserModel.forge().readUsers()
+            res.json({
+                status: res.statusCode,
+                data: data
+            })
+        } catch (err) {
+            next(err)
+        }
     }
 
-    public getUser(req: Request, res: Response, next: NextFunction) {
-        res.json({
-            status: res.statusCode,
-            data: `Hello user ${req.params.id}`
-        })
+    public async readUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await UserModel.forge().readUser(req.params.id)
+            res.json({
+                status: res.statusCode,
+                data: data
+            })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    public async readUserArticles(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await UserModel.forge().readUserArticles(req.params.id)
+            res.json({
+                status: res.statusCode,
+                data: data != null ? data.related('articles') : []
+            })
+        } catch (err) {
+            next(err)
+        }
     }
 }
-
-export default new UserHandler()

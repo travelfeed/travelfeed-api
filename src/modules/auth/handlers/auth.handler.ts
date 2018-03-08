@@ -1,12 +1,20 @@
 import { Request, Response, NextFunction } from 'express'
-import Auth from '../models/auth.model'
+import AuthModel from '../models/auth.model'
 
 export class AuthHandler {
     public signin(req: Request, res: Response, next: NextFunction) {
-        res.json({ status: res.statusCode, data: 'Signin!' })
+        const data = AuthModel.forge().signin()
+        res.json({
+            status: res.statusCode,
+            data: data
+        })
     }
 
     public register(req: Request, res: Response, next: NextFunction) {
-        res.json({ status: res.statusCode, data: 'Register!' })
+        const data = AuthModel.forge().register()
+        res.json({
+            status: res.statusCode,
+            data: data
+        })
     }
 }
