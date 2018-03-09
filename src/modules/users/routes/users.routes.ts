@@ -4,7 +4,7 @@ import { UserHandler } from '../handlers/users.handler'
 export class UserRoutes {
     public router: Router
 
-    constructor(router: Router) {
+    public constructor(router: Router) {
         this.router = router
         this.initRoutes()
     }

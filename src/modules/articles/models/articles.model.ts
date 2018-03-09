@@ -2,22 +2,22 @@ import bookshelf from '../../../config/bookshelf'
 import UserModel from '../../users/models/users.model'
 
 class Article extends bookshelf.Model {
-    tableName() {
+    public tableName() {
         return 'articles'
     }
 
     // relations
-    users() {
+    public users() {
         return this.belongsTo('UserModel', 'id')
     }
 
     // methods
     public async readArticles() {
-        return await this.fetch()
+        return this.fetch()
     }
 
     public async readArticle(id: number) {
-        return await this.where('id', id).fetch()
+        return this.where('id', id).fetch()
     }
 }
 

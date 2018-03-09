@@ -2,11 +2,11 @@ import bookshelf from '../../../config/bookshelf'
 import User from '../../users/models/users.model'
 
 class Auth extends User {
-    signin() {
+    public signin() {
         return 'signin'
     }
 
-    register() {
+    public register() {
         return 'register'
     }
 }

@@ -14,7 +14,7 @@ export class Express {
     public app: express.Application
     public router: express.Router
 
-    constructor() {
+    public constructor() {
         this.app = express()
         this.router = express.Router()
 
@@ -23,14 +23,14 @@ export class Express {
     }
 
     // middleware
-    initConfig() {
+    public initConfig() {
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({ extended: true }))
         this.app.use(morgan('dev'))
     }
 
     // routes
-    initRoutes() {
+    public initRoutes() {
         this.app.use('/api/auth', new AuthRoutes(this.router).router)
         this.app.use('/api/users', new UserRoutes(this.router).router)
         this.app.use('/api/articles', new ArticleRoutes(this.router).router)

@@ -4,7 +4,7 @@ import { AuthHandler } from '../handlers/auth.handler'
 export class AuthRoutes {
     public router: Router
 
-    constructor(router: Router) {
+    public constructor(router: Router) {
         this.router = router
         this.initRoutes()
     }

@@ -1,4 +1,7 @@
-const knex = require('knex')({
+import * as knex from 'knex'
+import * as bookshelf from 'bookshelf'
+
+const knexInstance = knex({
     client: 'mysql',
     connection: {
         user: 'root',
@@ -9,8 +12,8 @@ const knex = require('knex')({
     }
 })
 
-const bookshelf = require('bookshelf')(knex)
+const bookshelfInstance = bookshelf(knexInstance)
 
-bookshelf.plugin('registry')
+bookshelfInstance.plugin('registry')
 
-export default bookshelf
+export default bookshelfInstance
