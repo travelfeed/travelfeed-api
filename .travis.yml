@@ -2,8 +2,8 @@ language: node_js
 node_js:
   - '9'
 install:
-  - yarn install
+  - npm install
 script:
-  - yarn run build
-  - yarn run lint
-  - yarn run test
+  - npm run build
+  - npm run lint
+  - npm run test
