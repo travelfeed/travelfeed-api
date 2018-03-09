@@ -1,7 +1,7 @@
 import bookshelf from '../../../config/bookshelf'
-import User from '../../users/models/users.model'
+import { User } from '../../users/models/users.model'
 
-class Auth extends User {
+export class Auth extends User {
     public signin() {
         return 'signin'
     }
@@ -10,5 +10,3 @@ class Auth extends User {
         return 'register'
     }
 }
-
-export default bookshelf.model('AuthModel', Auth)

@@ -1,19 +1,19 @@
 import bookshelf from '../../../config/bookshelf'
-import ArticleModel from '../../articles/models/articles.model'
+import { Article } from '../../articles/models/articles.model'
 
-class User extends bookshelf.Model {
-    public tableName() {
+export class User extends bookshelf.Model<User> {
+    public get tableName() {
         return 'users'
     }
 
     // relations
     public articles() {
-        return this.hasMany('ArticleModel', 'author_id')
+        return this.hasMany(Article, 'author_id')
     }
 
     // methods
     public async readUsers() {
-        return this.fetch()
+        return this.fetchAll()
     }
 
     public async readUser(userId: number) {
@@ -24,5 +24,3 @@ class User extends bookshelf.Model {
         return this.where('id', userId).fetch({ withRelated: ['articles'] })
     }
 }
-
-export default bookshelf.model('UserModel', User)

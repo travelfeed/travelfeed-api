@@ -16,7 +16,6 @@ export class Express {
 
     public constructor() {
         this.app = express()
-        this.router = express.Router()
 
         this.initConfig()
         this.initRoutes()
@@ -31,9 +30,9 @@ export class Express {
 
     // routes
     public initRoutes() {
-        this.app.use('/api/auth', new AuthRoutes(this.router).router)
-        this.app.use('/api/users', new UserRoutes(this.router).router)
-        this.app.use('/api/articles', new ArticleRoutes(this.router).router)
+        this.app.use('/api/auth', new AuthRoutes().router)
+        this.app.use('/api/users', new UserRoutes().router)
+        this.app.use('/api/articles', new ArticleRoutes().router)
 
         // error handling
         this.app.use((err, req, res, next) => {

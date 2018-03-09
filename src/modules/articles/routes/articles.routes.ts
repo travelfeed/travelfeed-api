@@ -4,8 +4,8 @@ import { ArticleHandler } from '../handlers/articles.handler'
 export class ArticleRoutes {
     public router: Router
 
-    public constructor(router: Router) {
-        this.router = router
+    public constructor() {
+        this.router = Router()
         this.initRoutes()
     }
 

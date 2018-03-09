@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
-import AuthModel from '../models/auth.model'
+import { Auth } from '../models/auth.model'
 
 export class AuthHandler {
     public signin(req: Request, res: Response, next: NextFunction) {
-        const data = AuthModel.forge().signin()
+        const data = new Auth().signin()
         res.json({
             status: res.statusCode,
             data: data
@@ -11,7 +11,7 @@ export class AuthHandler {
     }
 
     public register(req: Request, res: Response, next: NextFunction) {
-        const data = AuthModel.forge().register()
+        const data = new Auth().register()
         res.json({
             status: res.statusCode,
             data: data
