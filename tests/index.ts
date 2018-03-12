@@ -5,7 +5,7 @@ import { server } from '../src/server'
 test('GET /', async t => {
     t.plan(1)
 
-    const res = await supertest(server).get('/')
+    const res = await supertest(await server).get('/')
 
     t.is(res.status, 404)
 })
@@ -13,7 +13,7 @@ test('GET /', async t => {
 test('GET /api/auth', async t => {
     t.plan(3)
 
-    const res = await supertest(server).get('/api/auth')
+    const res = await supertest(await server).get('/api/auth')
 
     t.is(res.status, 200)
     t.is(res.body.status, 200)
@@ -23,7 +23,7 @@ test('GET /api/auth', async t => {
 test('GET /api/auth/signin', async t => {
     t.plan(3)
 
-    const res = await supertest(server).get('/api/auth/signin')
+    const res = await supertest(await server).get('/api/auth/signin')
 
     t.is(res.status, 200)
     t.is(res.body.status, 200)

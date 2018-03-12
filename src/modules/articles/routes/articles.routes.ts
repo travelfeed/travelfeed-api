@@ -1,7 +1,7 @@
 import * as passport from 'passport'
 import { Router } from 'express'
 import { ArticleHandler } from '../handlers/articles.handler'
-import { JwtStrategy } from '../../auth/strategies/jwt.strategy'
+// import { JwtStrategy } from '../../auth/strategies/jwt.strategy'
 
 export class ArticleRoutes {
     public router: Router

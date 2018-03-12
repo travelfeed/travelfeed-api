@@ -1,22 +1,15 @@
-import bookshelf from '../../../config/bookshelf'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm'
 import { User } from '../../users/models/users.model'
 
-export class Article extends bookshelf.Model<Article> {
-    public get tableName() {
-        return 'articles'
-    }
+@Entity()
+export class Article {
+    @PrimaryGeneratedColumn() public id: number
 
-    // relations
-    public users() {
-        return this.belongsTo(User, 'id')
-    }
+    @Column('text') public title: string
 
-    // methods
-    public async readArticles() {
-        return this.fetchAll()
-    }
+    @Column('text') public text: string
 
-    public async readArticle(articleId: number) {
-        return this.where('id', articleId).fetch()
-    }
+    @ManyToOne(type => User, user => user.articles)
+    @JoinColumn()
+    public author: User
 }

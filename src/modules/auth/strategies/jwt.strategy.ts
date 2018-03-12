@@ -1,11 +1,13 @@
 import { Strategy } from 'passport-jwt'
 import { jwtConfig } from '../../../config/auth'
-import { Auth } from '../models/auth.model'
+import { User } from '../../users/models/users.model'
+import { Repository, getManager } from 'typeorm'
 
-const JwtStrategy = new Strategy(jwtConfig, (payload, next) => {
+const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {
     console.log(`Payload received: ${JSON.stringify(payload)}`)
 
-    const user = new Auth().readAuthPayloadUser(payload.id, payload.username)
+    const repository: Repository<User> = getManager().getRepository(User)
+    const user: User = await repository.findOne({ id: payload.id, username: payload.username })
 
     if (user != null) {
         next(null, user)

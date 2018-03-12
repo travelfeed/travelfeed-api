@@ -1,14 +1,19 @@
 import { Request, Response, NextFunction } from 'express'
 import { User } from '../../users/models/users.model'
 
+import { getManager, Repository } from 'typeorm'
+
 export class UserHandler {
+    private repository: Repository<User>
+
+    public constructor() {
+        this.repository = getManager().getRepository(User)
+    }
+
     public async readUsers(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await new User().readUsers()
-            res.json({
-                status: res.statusCode,
-                data: data
-            })
+            const data = await this.repository.find()
+            res.json({ status: res.statusCode, data: data == null ? [] : data })
         } catch (err) {
             next(err)
         }
@@ -16,11 +21,8 @@ export class UserHandler {
 
     public async readUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await new User().readUser(req.params.userId)
-            res.json({
-                status: res.statusCode,
-                data: data
-            })
+            const data = await this.repository.findOneById(req.params.userId)
+            res.json({ status: res.statusCode, data: data == null ? [] : data })
         } catch (err) {
             next(err)
         }
@@ -28,11 +30,10 @@ export class UserHandler {
 
     public async readUserArticles(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await new User().readUserArticles(req.params.userId)
-            res.json({
-                status: res.statusCode,
-                data: data != null ? data.related('articles') : []
+            const data = await this.repository.findOneById(req.params.userId, {
+                relations: ['articles']
             })
+            res.json({ status: res.statusCode, data: data == null ? [] : data })
         } catch (err) {
             next(err)
         }
