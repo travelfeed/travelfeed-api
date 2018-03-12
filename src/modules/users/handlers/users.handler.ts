@@ -16,7 +16,7 @@ export class UserHandler {
 
     public async readUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await new User().readUser(req.params.id)
+            const data = await new User().readUser(req.params.userId)
             res.json({
                 status: res.statusCode,
                 data: data
@@ -28,7 +28,7 @@ export class UserHandler {
 
     public async readUserArticles(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await new User().readUserArticles(req.params.id)
+            const data = await new User().readUserArticles(req.params.userId)
             res.json({
                 status: res.statusCode,
                 data: data != null ? data.related('articles') : []

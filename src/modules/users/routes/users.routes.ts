@@ -3,16 +3,17 @@ import { UserHandler } from '../handlers/users.handler'
 
 export class UserRoutes {
     public router: Router
+    private handler: UserHandler
 
     public constructor() {
         this.router = Router()
+        this.handler = new UserHandler()
         this.initRoutes()
     }
 
     public initRoutes() {
-        const handler = new UserHandler()
-        this.router.get('/', handler.readUsers.bind(handler))
-        this.router.get('/:id', handler.readUser.bind(handler))
-        this.router.get('/:id/articles', handler.readUserArticles.bind(handler))
+        this.router.get('/', this.handler.readUsers.bind(this.handler))
+        this.router.get('/:userId', this.handler.readUser.bind(this.handler))
+        this.router.get('/:userId/articles', this.handler.readUserArticles.bind(this.handler))
     }
 }

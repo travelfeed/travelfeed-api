@@ -16,7 +16,7 @@ export class Article extends bookshelf.Model<Article> {
         return this.fetchAll()
     }
 
-    public async readArticle(id: number) {
-        return this.where('id', id).fetch()
+    public async readArticle(articleId: number) {
+        return this.where('id', articleId).fetch()
     }
 }

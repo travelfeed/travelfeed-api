@@ -1,7 +1,12 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
+import * as helmet from 'helmet'
+import * as passport from 'passport'
 import chalk from 'chalk'
+
+// passport strategy
+import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy'
 
 // routes
 import { AuthRoutes } from '../modules/auth/routes/auth.routes'
@@ -12,7 +17,6 @@ const log = console.log
 
 export class Express {
     public app: express.Application
-    public router: express.Router
 
     public constructor() {
         this.app = express()
@@ -26,6 +30,9 @@ export class Express {
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({ extended: true }))
         this.app.use(morgan('dev'))
+        this.app.use(helmet())
+
+        passport.use('strategy.jwt', JwtStrategy)
     }
 
     // routes

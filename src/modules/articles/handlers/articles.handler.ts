@@ -11,7 +11,7 @@ export class ArticleHandler {
     }
 
     public async readArticle(req: Request, res: Response, next: NextFunction) {
-        const data = await new Article().readArticle(req.params.id)
+        const data = await new Article().readArticle(req.params.articleId)
         res.json({
             status: res.statusCode,
             data: data

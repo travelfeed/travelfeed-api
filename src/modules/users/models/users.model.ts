@@ -12,15 +12,15 @@ export class User extends bookshelf.Model<User> {
     }
 
     // methods
-    public async readUsers() {
+    public readUsers() {
         return this.fetchAll()
     }
 
-    public async readUser(userId: number) {
+    public readUser(userId: number) {
         return this.where('id', userId).fetch()
     }
 
-    public async readUserArticles(userId: number) {
+    public readUserArticles(userId: number) {
         return this.where('id', userId).fetch({ withRelated: ['articles'] })
     }
 }

@@ -14,6 +14,6 @@ const knexInstance = knex({
 
 const bookshelfInstance = bookshelf(knexInstance)
 
-bookshelfInstance.plugin('registry')
+// bookshelfInstance.plugin('registry')
 
 export default bookshelfInstance
