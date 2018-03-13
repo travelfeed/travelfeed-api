@@ -13,7 +13,10 @@ export class UserHandler {
     public async readUsers(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.repository.find()
-            res.json({ status: res.statusCode, data: data == null ? [] : data })
+            res.json({
+                status: res.statusCode,
+                data: data == null ? [] : data
+            })
         } catch (err) {
             next(err)
         }
@@ -22,7 +25,10 @@ export class UserHandler {
     public async readUser(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.repository.findOneById(req.params.userId)
-            res.json({ status: res.statusCode, data: data == null ? [] : data })
+            res.json({
+                status: res.statusCode,
+                data: data == null ? [] : data
+            })
         } catch (err) {
             next(err)
         }
@@ -33,7 +39,10 @@ export class UserHandler {
             const data = await this.repository.findOneById(req.params.userId, {
                 relations: ['articles']
             })
-            res.json({ status: res.statusCode, data: data == null ? [] : data })
+            res.json({
+                status: res.statusCode,
+                data: data == null ? [] : data
+            })
         } catch (err) {
             next(err)
         }
