@@ -1,7 +1,6 @@
 import * as passport from 'passport'
 import { Router } from 'express'
 import { ArticleHandler } from '../handlers/articles.handler'
-// import { JwtStrategy } from '../../auth/strategies/jwt.strategy'
 
 export class ArticleRoutes {
     public router: Router
@@ -14,15 +13,24 @@ export class ArticleRoutes {
     }
 
     public initRoutes() {
-        this.router.get(
-            '/',
-            passport.authenticate('strategy.jwt', { session: false }),
-            this.handler.readArticles.bind(this.handler)
-        )
+        this.router.get('/', this.isAuthorized(), this.handler.readArticles.bind(this.handler))
         this.router.get(
             '/:articleId',
-            passport.authenticate('strategy.jwt', { session: false }),
+            this.isAuthorized(),
             this.handler.readArticle.bind(this.handler)
         )
+    }
+
+    private isAuthorized() {
+        return (req, res, next) => {
+            passport.authenticate('strategy.jwt', { session: false }, (err, user, info) => {
+                if (err) {
+                    next(err)
+                }
+                if (!user) {
+                    res.status(401).json({ status: 401, data: 'user is not authorized' })
+                }
+            })(req, res, next)
+        }
     }
 }

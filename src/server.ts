@@ -35,6 +35,8 @@ const con_app = new Promise((resolve, reject) => {
             console.log(err)
             reject(err)
         })
+}).catch(err => {
+    throw err
 })
 
 export { con_app as server }
