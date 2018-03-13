@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt-nodejs'
 import { Request, Response, NextFunction } from 'express'
 import { User } from '../../users/models/users.model'
@@ -29,13 +29,18 @@ export class AuthHandler {
 
                 // create jwt
                 const payload = { id: user.id, username: user.username }
-                const token = this.generateJwt(payload)
+                const token = sign(payload, jwtConfig.secretOrKey, signOpt)
 
-                res
-                    .status(res.statusCode)
-                    .json({ status: res.statusCode, token: token, data: user })
+                res.status(res.statusCode).json({
+                    status: res.statusCode,
+                    token: token,
+                    data: user
+                })
             } else {
-                res.status(401).json({ status: 401, error: 'wrong username or password' })
+                res.status(401).json({
+                    status: 401,
+                    error: 'wrong username or password'
+                })
             }
         } catch (err) {
             next(err)
@@ -44,11 +49,10 @@ export class AuthHandler {
 
     public register(req: Request, res: Response, next: NextFunction) {
         const data = {}
-        res.json({ status: res.statusCode, data: data })
-    }
-
-    private generateJwt(payload) {
-        return jwt.sign(payload, jwtConfig['secretOrKey'], signOpt)
+        res.json({
+            status: res.statusCode,
+            data: data
+        })
     }
 
     private encodePassword(password) {}

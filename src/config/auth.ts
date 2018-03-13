@@ -1,17 +1,23 @@
-import { ExtractJwt } from 'passport-jwt'
+import { ExtractJwt, StrategyOptions } from 'passport-jwt'
+import { Secret } from 'jsonwebtoken'
+
+export interface SignOpt {
+    expiresIn: string
+    audience: string
+    issuer: string
+}
 
 // passport stragegy options
-const jwtConfig = new Object()
-jwtConfig['jwtFromRequest'] = ExtractJwt.fromAuthHeaderAsBearerToken()
-jwtConfig['secretOrKey'] = 'secret-api-key-wow'
-jwtConfig['expiration'] = '1h'
-jwtConfig['audience'] = 'travelfeed-angular'
-jwtConfig['issuer'] = 'travelfeed-api'
+export const jwtConfig: StrategyOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'secret-api-key-wow',
+    audience: 'travelfeed-angular',
+    issuer: 'travelfeed-api'
+}
 
 // jsonwebtoken signing options
-const signOpt = new Object()
-signOpt['expiresIn'] = jwtConfig['expiration']
-signOpt['audience'] = jwtConfig['audience']
-signOpt['issuer'] = jwtConfig['issuer']
-
-export { jwtConfig, signOpt }
+export const signOpt: SignOpt = {
+    expiresIn: '1h',
+    audience: jwtConfig.audience,
+    issuer: jwtConfig.issuer
+}

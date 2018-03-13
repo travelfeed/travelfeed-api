@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --watch dist/ dist/src/server.js",
-    "build": "tsc -p tsconfig.json",
+    "build": "rm -r dist/src/ && tsc -p tsconfig.json",
     "watch": "nodemon --exec \"yarn run build\" --watch ./ --ext ts",
     "lint": "tslint -p tsconfig.json",
     "test": "ava dist/tests/**/*.js",
@@ -34,12 +34,17 @@
     "typeorm": "^0.1.16"
   },
   "devDependencies": {
+    "@types/bcrypt-nodejs": "0.0.30",
     "@types/body-parser": "^1.16.8",
     "@types/express": "^4.11.1",
+    "@types/helmet": "0.0.37",
+    "@types/jsonwebtoken": "^7.2.5",
     "@types/knex": "^0.14.8",
     "@types/morgan": "^1.7.35",
     "@types/mysql": "^2.15.2",
     "@types/node": "^9.4.6",
+    "@types/passport": "^0.4.3",
+    "@types/passport-jwt": "^3.0.1",
     "@types/supertest": "^2.0.4",
     "ava": "^0.25.0",
     "prettier": "^1.11.1",

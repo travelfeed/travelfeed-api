@@ -3,9 +3,9 @@
   "type": "mysql",
   "host": "127.0.0.1",
   "port": 3306,
-  "username": "root",
-  "password": "",
-  "database": "travelfeed",
+  "username": "%DBUSER%",
+  "password": "%DBPASS%",
+  "database": "%DBNAME%",
   "synchronize": true,
   "entities": [
     "dist/src/modules/**/models/*.js"
