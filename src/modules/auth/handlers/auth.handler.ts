@@ -1,7 +1,7 @@
 import { sign } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt-nodejs'
 import { Request, Response, NextFunction } from 'express'
-import { User } from '../../users/models/users.model'
+import { User } from '../../user/models/user.model'
 import { jwtConfig, signOpt } from '../../../config/auth'
 import { Repository, getManager } from 'typeorm'
 

@@ -1,6 +1,6 @@
 import { Strategy } from 'passport-jwt'
 import { jwtConfig } from '../../../config/auth'
-import { User } from '../../users/models/users.model'
+import { User } from '../../user/models/user.model'
 import { Repository, getManager } from 'typeorm'
 
 const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {

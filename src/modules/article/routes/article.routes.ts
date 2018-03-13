@@ -1,21 +1,24 @@
 import * as passport from 'passport'
 import { Router } from 'express'
-import { UserHandler } from '../handlers/users.handler'
+import { ArticleHandler } from '../handlers/article.handler'
 
-export class UserRoutes {
+export class ArticleRoutes {
     public router: Router
-    private handler: UserHandler
+    private handler: ArticleHandler
 
     public constructor() {
         this.router = Router()
-        this.handler = new UserHandler()
+        this.handler = new ArticleHandler()
         this.initRoutes()
     }
 
     public initRoutes() {
-        this.router.get('/', this.handler.readUsers.bind(this.handler))
-        this.router.get('/:userId', this.handler.readUser.bind(this.handler))
-        this.router.get('/:userId/articles', this.handler.readUserArticles.bind(this.handler))
+        this.router.get('/', this.isAuthorized(), this.handler.readArticles.bind(this.handler))
+        this.router.get(
+            '/:articleId',
+            this.isAuthorized(),
+            this.handler.readArticle.bind(this.handler)
+        )
     }
 
     private isAuthorized() {

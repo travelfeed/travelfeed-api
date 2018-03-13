@@ -10,8 +10,8 @@ import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy'
 
 // routes
 import { AuthRoutes } from '../modules/auth/routes/auth.routes'
-import { UserRoutes } from '../modules/users/routes/users.routes'
-import { ArticleRoutes } from '../modules/articles/routes/articles.routes'
+import { UserRoutes } from '../modules/user/routes/user.routes'
+import { ArticleRoutes } from '../modules/article/routes/article.routes'
 
 const log = console.log
 

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { User } from '../../users/models/users.model'
+import { User } from '../../user/models/user.model'
 
 import { getManager, Repository } from 'typeorm'
 
