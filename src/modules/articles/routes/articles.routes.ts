@@ -29,6 +29,8 @@ export class ArticleRoutes {
                 }
                 if (!user) {
                     res.status(401).json({ status: 401, data: 'user is not authorized' })
+                } else {
+                    next()
                 }
             })(req, res, next)
         }
