@@ -1,11 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, Index } from 'typeorm'
 import { Article } from '../../articles/models/articles.model'
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn() public id: number
 
-    @Column('text') public username: string
+    @Index({ unique: true })
+    @Column('varchar')
+    public username: string
 
     @Column('text') public email: string
 
