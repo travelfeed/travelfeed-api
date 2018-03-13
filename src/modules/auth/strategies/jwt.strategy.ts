@@ -3,11 +3,14 @@ import { jwtConfig } from '../../../config/auth'
 import { User } from '../../user/models/user.model'
 import { Repository, getManager } from 'typeorm'
 
-const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {
+export const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {
     console.log(`Payload received: ${JSON.stringify(payload)}`)
 
     const repository: Repository<User> = getManager().getRepository(User)
-    const user: User = await repository.findOne({ id: payload.id, username: payload.username })
+    const user: User = await repository.findOne({
+        id: payload.id,
+        username: payload.username
+    })
 
     if (user != null) {
         next(null, user)
@@ -20,5 +23,3 @@ const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {
         next(err, null)
     }
 })
-
-export { JwtStrategy }

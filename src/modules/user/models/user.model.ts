@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, Index } from 'typeorm'
 import { Article } from '../../article/models/article.model'
 
 @Entity()
@@ -6,7 +6,9 @@ export class User {
     /***** columns *****/
     @PrimaryGeneratedColumn() public id: number
 
-    @Column('varchar') public username: string
+    @Index({ unique: true })
+    @Column('varchar')
+    public username: string
 
     @Column('varchar') public email: string
 

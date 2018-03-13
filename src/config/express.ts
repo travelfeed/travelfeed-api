@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as cors from 'cors'
 import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
 import * as helmet from 'helmet'
@@ -16,9 +17,11 @@ import { ArticleRoutes } from '../modules/article/routes/article.routes'
 const log = console.log
 
 export class Express {
+    public env: string
     public app: express.Application
 
     public constructor() {
+        this.env = process.env.NODE_ENV || 'development'
         this.app = express()
 
         this.initConfig()
@@ -27,6 +30,12 @@ export class Express {
 
     // middleware
     public initConfig() {
+        const options: cors.CorsOptions = {
+            origin: ['http://localhost:4200']
+        }
+
+        this.app.options('*', cors(options))
+        this.app.use(cors(options))
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({ extended: true }))
         this.app.use(morgan('dev'))

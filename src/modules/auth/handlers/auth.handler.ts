@@ -28,7 +28,10 @@ export class AuthHandler {
                 console.log(user)
 
                 // create jwt
-                const payload = { id: user.id, username: user.username }
+                const payload = {
+                    id: user.id,
+                    username: user.username
+                }
                 const token = sign(payload, jwtConfig.secretOrKey, signOpt)
 
                 res.status(res.statusCode).json({
