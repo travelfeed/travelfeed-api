@@ -1,6 +1,6 @@
 import test from 'ava'
 import * as supertest from 'supertest'
-import { server } from '../src/server'
+import { server } from '../dist/server'
 
 test('GET /', async t => {
     t.plan(1)
