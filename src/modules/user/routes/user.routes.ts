@@ -13,22 +13,24 @@ export class UserRoutes {
     }
 
     public initRoutes() {
-        this.router.get('/', this.handler.readUsers.bind(this.handler))
-        this.router.get('/:userId', this.handler.readUser.bind(this.handler))
-        this.router.get('/:userId/articles', this.handler.readUserArticles.bind(this.handler))
+        this.router.get('/', this.isAuthorized(), this.handler.readUsers)
+        this.router.get('/:userId', this.isAuthorized(), this.handler.readUser)
+        this.router.get('/:userId/articles', this.isAuthorized(), this.handler.readUserArticles)
     }
 
     private isAuthorized() {
         return (req, res, next) => {
             passport.authenticate('strategy.jwt', { session: false }, (err, user, info) => {
-                if (err) {
-                    next(err)
+                console.info('==>', err, user, info)
+
+                if (err || !user) {
+                    res.status(401).json({
+                        status: 401,
+                        data: 'user is not authorized'
+                    })
                 }
-                if (!user) {
-                    res.status(401).json({ status: 401, data: 'user is not authorized' })
-                } else {
-                    next()
-                }
+
+                next()
             })(req, res, next)
         }
     }

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
-import { User } from '../../user/models/user.model'
-
 import { getManager, Repository } from 'typeorm'
+import { bind } from 'decko'
+import { User } from '../../user/models/user.model'
 
 export class UserHandler {
     private repository: Repository<User>
@@ -10,6 +10,7 @@ export class UserHandler {
         this.repository = getManager().getRepository(User)
     }
 
+    @bind
     public async readUsers(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.repository.find()
@@ -22,18 +23,26 @@ export class UserHandler {
         }
     }
 
+    @bind
     public async readUser(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.repository.findOneById(req.params.userId)
+
             res.json({
                 status: res.statusCode,
-                data: data == null ? [] : data
+                data: {
+                    id: data.id,
+                    username: data.username,
+                    email: data.email,
+                    articles: data.articles
+                }
             })
         } catch (err) {
             next(err)
         }
     }
 
+    @bind
     public async readUserArticles(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.repository.findOneById(req.params.userId, {

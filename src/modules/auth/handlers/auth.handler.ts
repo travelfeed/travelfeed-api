@@ -1,9 +1,10 @@
 import { sign } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt-nodejs'
 import { Request, Response, NextFunction } from 'express'
+import { Repository, getManager } from 'typeorm'
+import { bind } from 'decko'
 import { User } from '../../user/models/user.model'
 import { jwtConfig, signOpt } from '../../../config/auth'
-import { Repository, getManager } from 'typeorm'
 
 export class AuthHandler {
     private repository: Repository<User>
@@ -12,6 +13,7 @@ export class AuthHandler {
         this.repository = getManager().getRepository(User)
     }
 
+    @bind
     public async signin(req: Request, res: Response, next: NextFunction) {
         try {
             // todo: validation
@@ -30,16 +32,15 @@ export class AuthHandler {
             if (user != null && user.id > 0) {
                 // create jwt
                 const payload = {
-                    id: user.id,
-                    username: user.username
+                    userId: user.id
                 }
                 const token = sign(payload, jwtConfig.secretOrKey, signOpt)
 
                 res.status(res.statusCode).json({
                     status: res.statusCode,
                     data: {
-                        jwt: token,
-                        userId: user.id
+                        userId: user.id,
+                        authToken: token
                     }
                 })
             } else {
@@ -53,6 +54,7 @@ export class AuthHandler {
         }
     }
 
+    @bind
     public register(req: Request, res: Response, next: NextFunction) {
         const data = {}
         res.json({

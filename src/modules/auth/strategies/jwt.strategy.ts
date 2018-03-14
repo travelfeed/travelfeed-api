@@ -1,25 +1,21 @@
 import { Strategy } from 'passport-jwt'
+import { Repository, getManager } from 'typeorm'
 import { jwtConfig } from '../../../config/auth'
 import { User } from '../../user/models/user.model'
-import { Repository, getManager } from 'typeorm'
 
 export const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {
-    console.log(`Payload received: ${JSON.stringify(payload)}`)
-
-    const repository: Repository<User> = getManager().getRepository(User)
-    const user: User = await repository.findOne({
-        id: payload.id,
-        username: payload.username
-    })
-
-    if (user != null) {
-        next(null, user)
-    } else {
-        next({ error: 'wrong email or password' }, null)
-    }
-
     try {
-    } catch (err) {
-        next(err, null)
+        console.log(`Payload received: ${JSON.stringify(payload)}`)
+
+        const repository: Repository<User> = getManager().getRepository(User)
+        const user: User = await repository.findOneById(payload.userId)
+
+        if (user === null) {
+            throw new Error('wrong email or password')
+        }
+
+        next(null, user)
+    } catch (error) {
+        next(error)
     }
 })
