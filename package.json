@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --watch dist/ dist/src/server.js",
-    "build": "rm -r dist/src/ && tsc -p tsconfig.json",
+    "build": "rm -r dist/* && tsc -p tsconfig.json",
     "watch": "nodemon --exec \"yarn run build\" --watch ./ --ext ts",
     "lint": "tslint -p tsconfig.json",
     "test": "ava dist/tests/**/*.js",
