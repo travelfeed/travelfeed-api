@@ -1,6 +1,6 @@
-import * as passport from 'passport'
 import { Router } from 'express'
 import { UserHandler } from '../handlers/user.handler'
+import { isAuthorized } from '../../../config/auth'
 
 export class UserRoutes {
     public router: Router
@@ -13,23 +13,8 @@ export class UserRoutes {
     }
 
     public initRoutes() {
-        this.router.get('/', this.isAuthorized(), this.handler.readUsers)
-        this.router.get('/:userId', this.isAuthorized(), this.handler.readUser)
-        this.router.get('/:userId/articles', this.isAuthorized(), this.handler.readUserArticles)
-    }
-
-    private isAuthorized() {
-        return (req, res, next) => {
-            passport.authenticate('strategy.jwt', { session: false }, (err, user, info) => {
-                if (err || !user) {
-                    res.status(401).json({
-                        status: 401,
-                        data: 'user is not authorized'
-                    })
-                }
-
-                next()
-            })(req, res, next)
-        }
+        this.router.get('/', isAuthorized(), this.handler.readUsers)
+        this.router.get('/:userId', isAuthorized(), this.handler.readUser)
+        this.router.get('/:userId/articles', isAuthorized(), this.handler.readUserArticles)
     }
 }
