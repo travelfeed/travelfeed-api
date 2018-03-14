@@ -1,12 +1,4 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    ManyToOne,
-    JoinColumn,
-    OneToOne,
-    OneToMany
-} from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm'
 import { User } from '../../user/models/user.model'
 import { ArticleText } from './articleText.model'
 import { Picture } from '../../misc/models/picture.model'

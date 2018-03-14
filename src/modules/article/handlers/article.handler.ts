@@ -12,7 +12,9 @@ export class ArticleHandler {
 
     public async readArticles(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await this.repository.find({ relations: ['user', 'articleText'] })
+            const data = await this.repository.find({
+                relations: ['user', 'details', 'details.language', 'pictures']
+            })
             res.json({
                 status: res.statusCode,
                 data: data == null ? [] : data
