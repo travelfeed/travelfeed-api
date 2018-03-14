@@ -1,0 +1,13 @@
+{
+  "name": "default",
+  "type": "mysql",
+  "host": "127.0.0.1",
+  "port": 3306,
+  "username": "",
+  "password": "",
+  "database": "",
+  "synchronize": true,
+  "entities": [
+    "dist/modules/**/models/*.js"
+  ]
+}
