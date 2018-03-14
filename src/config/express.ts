@@ -47,8 +47,8 @@ export class Express {
     // routes
     public initRoutes() {
         this.app.use('/api/auth', new AuthRoutes().router)
-        this.app.use('/api/users', new UserRoutes().router)
-        this.app.use('/api/articles', new ArticleRoutes().router)
+        this.app.use('/api/user', new UserRoutes().router)
+        this.app.use('/api/article', new ArticleRoutes().router)
 
         // error handling
         this.app.use((err, req, res, next) => {
