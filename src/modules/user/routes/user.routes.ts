@@ -21,8 +21,6 @@ export class UserRoutes {
     private isAuthorized() {
         return (req, res, next) => {
             passport.authenticate('strategy.jwt', { session: false }, (err, user, info) => {
-                console.info('==>', err, user, info)
-
                 if (err || !user) {
                     res.status(401).json({
                         status: 401,

@@ -13,25 +13,21 @@ export class ArticleRoutes {
     }
 
     public initRoutes() {
-        this.router.get('/', this.isAuthorized(), this.handler.readArticles.bind(this.handler))
-        this.router.get(
-            '/:articleId',
-            this.isAuthorized(),
-            this.handler.readArticle.bind(this.handler)
-        )
+        this.router.get('/', this.isAuthorized(), this.handler.readArticles)
+        this.router.get('/:articleId', this.isAuthorized(), this.handler.readArticle)
     }
 
     private isAuthorized() {
         return (req, res, next) => {
             passport.authenticate('strategy.jwt', { session: false }, (err, user, info) => {
-                if (err) {
-                    next(err)
+                if (err || !user) {
+                    res.status(401).json({
+                        status: 401,
+                        data: 'user is not authorized'
+                    })
                 }
-                if (!user) {
-                    res.status(401).json({ status: 401, data: 'user is not authorized' })
-                } else {
-                    next()
-                }
+
+                next()
             })(req, res, next)
         }
     }

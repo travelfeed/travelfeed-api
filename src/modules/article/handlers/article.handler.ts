@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
-import { Article } from '../models/article.model'
-
 import { getManager, Repository } from 'typeorm'
+import { bind } from 'decko'
+import { Article } from '../models/article.model'
 
 export class ArticleHandler {
     private repository: Repository<Article>
@@ -10,6 +10,7 @@ export class ArticleHandler {
         this.repository = getManager().getRepository(Article)
     }
 
+    @bind
     public async readArticles(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.repository.find({
@@ -24,6 +25,7 @@ export class ArticleHandler {
         }
     }
 
+    @bind
     public async readArticle(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.repository.findOneById(req.params.articleId, {
