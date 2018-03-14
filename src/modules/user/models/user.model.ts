@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, Index } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
 import { Article } from '../../article/models/article.model'
 
 @Entity()
@@ -6,13 +6,26 @@ export class User {
     /***** columns *****/
     @PrimaryGeneratedColumn() public id: number
 
-    @Index({ unique: true })
-    @Column('varchar')
+    @Column({
+        type: 'varchar',
+        length: 30,
+        unique: true
+    })
     public username: string
 
-    @Column('varchar') public email: string
+    @Column({
+        type: 'varchar',
+        length: 40,
+        unique: true
+    })
+    public email: string
 
-    @Column('varchar') public password: string
+    @Column({
+        // todo: add select: false
+        type: 'varchar',
+        length: 50
+    })
+    public password: string
 
     /***** relations *****/
 

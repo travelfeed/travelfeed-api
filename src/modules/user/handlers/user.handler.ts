@@ -37,7 +37,12 @@ export class UserHandler {
     public async readUserArticles(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.repository.findOneById(req.params.userId, {
-                relations: ['articles']
+                relations: [
+                    'articles',
+                    'articles.details',
+                    'articles.details.language',
+                    'articles.pictures'
+                ]
             })
             res.json({
                 status: res.statusCode,

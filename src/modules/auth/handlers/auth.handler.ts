@@ -19,14 +19,15 @@ export class AuthHandler {
             const password = req.body.password
 
             const user: User = await this.repository.findOne({
-                username: username,
-                password: password
+                select: ['username', 'id'],
+                where: {
+                    username: username,
+                    password: password
+                }
             })
 
             // user found
             if (user != null && user.id > 0) {
-                console.log(user)
-
                 // create jwt
                 const payload = {
                     id: user.id,
@@ -36,8 +37,10 @@ export class AuthHandler {
 
                 res.status(res.statusCode).json({
                     status: res.statusCode,
-                    token: token,
-                    data: user
+                    data: {
+                        jwt: token,
+                        userId: user.id
+                    }
                 })
             } else {
                 res.status(401).json({
