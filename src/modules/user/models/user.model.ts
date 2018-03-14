@@ -21,7 +21,7 @@ export class User {
     public email: string
 
     @Column({
-        // todo: add select: false
+        select: false, // never read password
         type: 'varchar',
         length: 50
     })

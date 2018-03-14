@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express'
 import { Repository, getManager } from 'typeorm'
 import { bind } from 'decko'
 import { User } from '../../user/models/user.model'
-import { jwtConfig, signOpt } from '../../../config/auth'
+import { jwtConfig, signOpt, saltRounds } from '../../../config/auth'
 
 export class AuthHandler {
     private repository: Repository<User>
@@ -63,7 +63,25 @@ export class AuthHandler {
         })
     }
 
-    private encodePassword(password) {}
+    private encodePassword(plainPassword) {
+        return new Promise((resolve, reject) => {
+            bcrypt.genSalt(saltRounds, (err, salt) => {
+                bcrypt.hash(plainPassword, salt, null, (error, hash) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(hash)
+                })
+            })
+        })
+    }
 
-    private comparePassword(plainPassword, hashedPassword) {}
+    private comparePassword(plainPassword, hashedPassword) {
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(plainPassword, hashedPassword, (err, res) => {
+                if (err) reject(err)
+                resolve(res)
+            })
+        })
+    }
 }

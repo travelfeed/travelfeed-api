@@ -23,6 +23,8 @@ export const signOpt: SignOpt = {
     issuer: jwtConfig.issuer
 }
 
+export const saltRounds = 10
+
 /**
  * Middleware for checking if a user is authorized to access the endpoint.
  *
