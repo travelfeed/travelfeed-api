@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --watch dist/ dist/src/server.js",
-    "build": "rm -r dist/* && tsc -p tsconfig.json",
+    "start": "nodemon --watch dist/ dist/server.js",
+    "build": "tsc -p tsconfig.json",
     "watch": "nodemon --exec \"yarn run build\" --watch ./ --ext ts",
     "lint": "tslint -p tsconfig.json",
-    "test": "ava dist/tests/**/*.js",
+    "test": "ava tests/**/*.js",
     "format": "prettier --write \"src/**/*.{ts,scss,md}\"",
     "precommit": "lint-staged"
   },
