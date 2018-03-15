@@ -21,28 +21,37 @@ export class AuthHandler {
             const password = req.body.password
 
             const user: User = await this.repository.findOne({
-                select: ['username', 'id'],
+                select: ['username', 'password', 'id'],
                 where: {
-                    username: username,
-                    password: password
+                    username: username
                 }
             })
 
             // user found
             if (user != null && user.id > 0) {
-                // create jwt
-                const payload = {
-                    userId: user.id
-                }
-                const token = sign(payload, jwtConfig.secretOrKey, signOpt)
+                const validPassword = await this.comparePassword(password, user.password)
 
-                res.status(res.statusCode).json({
-                    status: res.statusCode,
-                    data: {
-                        userId: user.id,
-                        authToken: token
+                if (validPassword) {
+                    // create jwt
+                    const payload = {
+                        userId: user.id
                     }
-                })
+
+                    const token = sign(payload, jwtConfig.secretOrKey, signOpt)
+
+                    res.status(res.statusCode).json({
+                        status: res.statusCode,
+                        data: {
+                            userId: user.id,
+                            authToken: token
+                        }
+                    })
+                } else {
+                    res.status(401).json({
+                        status: 401,
+                        error: 'wrong username or password'
+                    })
+                }
             } else {
                 res.status(401).json({
                     status: 401,
@@ -55,15 +64,19 @@ export class AuthHandler {
     }
 
     @bind
-    public register(req: Request, res: Response, next: NextFunction) {
-        const data = {}
-        res.json({
-            status: res.statusCode,
-            data: data
-        })
+    public async register(req: Request, res: Response, next: NextFunction) {
+        const user = {
+            username: req.body.username,
+            email: req.body.email,
+            password: await this.encodePassword(req.body.password)
+        }
+
+        // save user and signin
+        await this.repository.save(user)
+        this.signin(req, res, next)
     }
 
-    private encodePassword(plainPassword) {
+    private encodePassword(plainPassword): Promise<string> {
         return new Promise((resolve, reject) => {
             bcrypt.genSalt(saltRounds, (err, salt) => {
                 bcrypt.hash(plainPassword, salt, null, (error, hash) => {
@@ -76,10 +89,12 @@ export class AuthHandler {
         })
     }
 
-    private comparePassword(plainPassword, hashedPassword) {
+    private comparePassword(plainPassword, hashedPassword): Promise<boolean> {
         return new Promise((resolve, reject) => {
             bcrypt.compare(plainPassword, hashedPassword, (err, res) => {
-                if (err) reject(err)
+                if (err) {
+                    reject(err)
+                }
                 resolve(res)
             })
         })
