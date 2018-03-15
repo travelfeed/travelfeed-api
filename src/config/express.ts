@@ -29,7 +29,7 @@ export class Express {
     }
 
     // middleware
-    public initConfig() {
+    private initConfig(): void {
         const options: cors.CorsOptions = {
             origin: ['http://localhost:4200']
         }
@@ -45,7 +45,7 @@ export class Express {
     }
 
     // routes
-    public initRoutes() {
+    private initRoutes(): void {
         this.app.use('/api/auth', new AuthRoutes().router)
         this.app.use('/api/user', new UserRoutes().router)
         this.app.use('/api/article', new ArticleRoutes().router)

@@ -11,9 +11,9 @@ export class UserHandler {
     }
 
     @bind
-    public async readUsers(req: Request, res: Response, next: NextFunction) {
+    public async readUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data = await this.repository.find()
+            const data: Array<User> = await this.repository.find()
             res.json({
                 status: res.statusCode,
                 data: data == null ? [] : data
@@ -24,9 +24,9 @@ export class UserHandler {
     }
 
     @bind
-    public async readUser(req: Request, res: Response, next: NextFunction) {
+    public async readUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data = await this.repository.findOneById(req.params.userId)
+            const data: User = await this.repository.findOneById(req.params.userId)
 
             res.json({
                 status: res.statusCode,
@@ -43,9 +43,9 @@ export class UserHandler {
     }
 
     @bind
-    public async readUserArticles(req: Request, res: Response, next: NextFunction) {
+    public async readUserArticles(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data = await this.repository.findOneById(req.params.userId, {
+            const data: User = await this.repository.findOneById(req.params.userId, {
                 relations: [
                     'articles',
                     'articles.details',

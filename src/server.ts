@@ -33,7 +33,7 @@ const con_app = new Promise((resolve, reject) => {
             resolve(app)
         })
         .catch(err => {
-            console.log(err)
+            log(chalk.red(err))
             reject(err)
         })
 }).catch(err => {

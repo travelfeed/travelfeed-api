@@ -14,7 +14,7 @@ export class AuthHandler {
     }
 
     @bind
-    public async signin(req: Request, res: Response, next: NextFunction) {
+    public async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             // todo: validation
             const username = req.body.username
@@ -64,7 +64,7 @@ export class AuthHandler {
     }
 
     @bind
-    public async register(req: Request, res: Response, next: NextFunction) {
+    public async register(req: Request, res: Response, next: NextFunction): Promise<void> {
         const user = {
             username: req.body.username,
             email: req.body.email,

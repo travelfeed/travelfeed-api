@@ -15,6 +15,6 @@ export class UserRoutes {
     public initRoutes() {
         this.router.get('/', isAuthorized(), this.handler.readUsers)
         this.router.get('/:userId', isAuthorized(), this.handler.readUser)
-        this.router.get('/:userId/articles', isAuthorized(), this.handler.readUserArticles)
+        this.router.get('/:userId/article', isAuthorized(), this.handler.readUserArticles)
     }
 }
