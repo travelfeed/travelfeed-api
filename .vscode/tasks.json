@@ -4,39 +4,39 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "yarn: start",
+            "label": "npm: start",
             "type": "shell",
-            "command": "yarn run start",
+            "command": "npm run start",
             "problemMatcher": []
         },
         {
-            "label": "yarn: build",
+            "label": "npm: build",
             "type": "shell",
-            "command": "yarn run build",
+            "command": "npm run build",
             "problemMatcher": []
         },
         {
-            "label": "yarn: watch",
+            "label": "npm: watch",
             "type": "shell",
-            "command": "yarn run watch",
+            "command": "npm run watch",
             "problemMatcher": []
         },
         {
-            "label": "yarn: format",
+            "label": "npm: format",
             "type": "shell",
-            "command": "yarn run format",
+            "command": "npm run format",
             "problemMatcher": []
         },
         {
-            "label": "yarn: lint",
+            "label": "npm: lint",
             "type": "shell",
-            "command": "yarn run lint",
+            "command": "npm run lint",
             "problemMatcher": []
         },
         {
-            "label": "yarn: test",
+            "label": "npm: test",
             "type": "shell",
-            "command": "yarn run test",
+            "command": "npm run test",
             "problemMatcher": []
         }
     ]

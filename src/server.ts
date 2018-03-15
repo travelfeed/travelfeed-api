@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import * as http from 'http'
 import chalk from 'chalk'
 import { Express } from './config/express'
