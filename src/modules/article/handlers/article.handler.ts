@@ -14,7 +14,7 @@ export class ArticleHandler {
     public async readArticles(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const data: Array<Article> = await this.repository.find({
-                relations: ['user', 'details', 'details.language', 'pictures']
+                relations: ['user', 'articleText', 'articleText.language', 'pictures']
             })
             res.json({
                 status: res.statusCode,
@@ -29,7 +29,7 @@ export class ArticleHandler {
     public async readArticle(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const data: Article = await this.repository.findOneById(req.params.articleId, {
-                relations: ['user', 'details', 'details.language', 'pictures']
+                relations: ['user', 'articleText', 'articleText.language', 'pictures']
             })
             res.json({
                 status: res.statusCode,

@@ -12,7 +12,7 @@ export class ArticleText {
 
     /***** relations *****/
 
-    @ManyToOne(type => Article, article => article.details)
+    @ManyToOne(type => Article, article => article.articleText)
     public article: Article
 
     @ManyToOne(type => Language, language => language.articleLanguage)

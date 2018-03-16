@@ -28,7 +28,7 @@ export class Article {
     public user: User
 
     @OneToMany(type => ArticleText, articleText => articleText.article)
-    public details: Array<ArticleText>
+    public articleText: Array<ArticleText>
 
     @OneToMany(type => Picture, picture => picture.article)
     public pictures: Array<Picture>
