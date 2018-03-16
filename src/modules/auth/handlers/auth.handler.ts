@@ -79,11 +79,13 @@ export class AuthHandler {
 
             // email is not taken
             if (user == null) {
-                // reate new user instance
+                // create new user instance
                 const newUser: User = this.repository.create()
+                newUser.email = req.body.email
+                newUser.password = await this.encodePassword(req.body.password)
 
                 // create userRole
-                const userRole: UserRole = await getManager()
+                newUser.userRole = await getManager()
                     .getRepository(UserRole)
                     .findOne({
                         where: {
@@ -92,9 +94,6 @@ export class AuthHandler {
                     })
 
                 // save new user
-                newUser.email = req.body.email
-                newUser.password = await this.encodePassword(req.body.password)
-                newUser.userRole = userRole
                 await this.repository.save(newUser)
 
                 // signin user
