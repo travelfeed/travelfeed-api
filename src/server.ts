@@ -1,8 +1,9 @@
 import 'reflect-metadata'
-import * as http from 'http'
 import chalk from 'chalk'
+import { Server, createServer } from 'http'
 import { Express } from './config/express'
 import { createConnection } from 'typeorm'
+import { Socket } from './config/socket'
 
 const log = console.log
 
@@ -13,8 +14,12 @@ const con_app = new Promise((resolve, reject) => {
 
             const app = new Express().app
 
-            const server = http.createServer(app)
+            // create server
+            const server: Server = createServer(app)
             const port = process.env.PORT || 3000
+
+            // create socket
+            const socket = new Socket(server)
 
             server.listen(port)
 
