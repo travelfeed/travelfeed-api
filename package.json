@@ -19,6 +19,7 @@
     ]
   },
   "dependencies": {
+    "acl": "^0.4.11",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "chalk": "^2.3.2",

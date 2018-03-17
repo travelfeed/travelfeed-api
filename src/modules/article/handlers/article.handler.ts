@@ -18,7 +18,7 @@ export class ArticleHandler {
             })
             res.json({
                 status: res.statusCode,
-                data: data == null ? [] : data
+                data: data
             })
         } catch (err) {
             next(err)
@@ -33,7 +33,7 @@ export class ArticleHandler {
             })
             res.json({
                 status: res.statusCode,
-                data: data == null ? [] : data
+                data: data
             })
         } catch (err) {
             next(err)

@@ -78,7 +78,7 @@ export class AuthHandler {
             })
 
             // email is not taken
-            if (user == null) {
+            if (!user) {
                 // create new user instance
                 const newUser: User = this.repository.create()
                 newUser.email = req.body.email

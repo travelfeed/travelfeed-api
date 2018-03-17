@@ -26,8 +26,6 @@ export class User {
     @OneToMany(type => Article, article => article.user)
     public articles: Array<Article>
 
-    @ManyToOne(type => UserRole, userRole => userRole.userRole, {
-        cascadeInsert: true
-    })
+    @ManyToOne(type => UserRole, userRole => userRole.userRole)
     public userRole: UserRole
 }
