@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm'
 import { User } from '../../user/models/user.model'
-import { ArticleText } from './articleText.model'
+import { ArticleText } from './article.text.model'
 import { Picture } from '../../misc/models/picture.model'
 import { Language } from '../../misc/models/language.model'
+import { ArticleComment } from './article.comment.model'
 
 @Entity()
 export class Article {
@@ -24,12 +25,15 @@ export class Article {
 
     /***** relations *****/
 
-    @ManyToOne(type => User, user => user.articles)
-    public user: User
-
     @OneToMany(type => ArticleText, articleText => articleText.article)
     public articleText: Array<ArticleText>
 
     @OneToMany(type => Picture, picture => picture.article)
     public pictures: Array<Picture>
+
+    @OneToMany(type => ArticleComment, articleComment => articleComment.article)
+    public comments: Array<ArticleComment>
+
+    @ManyToOne(type => User, user => user.articles)
+    public user: User
 }

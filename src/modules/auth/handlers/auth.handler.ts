@@ -1,11 +1,11 @@
-import { sign } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt-nodejs'
+import { sign } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { Repository, getManager } from 'typeorm'
 import { bind } from 'decko'
 import { User } from '../../user/models/user.model'
 import { jwtConfig, signOpt, saltRounds } from '../../../config/auth'
-import { UserRole } from '../../user/models/userRole'
+import { UserRole } from '../../user/models/user.role.model'
 
 export class AuthHandler {
     private repository: Repository<User>
@@ -79,8 +79,10 @@ export class AuthHandler {
 
             // email is not taken
             if (!user) {
-                // create new user instance
+                // create new empty user instance
                 const newUser: User = this.repository.create()
+
+                // set values
                 newUser.email = req.body.email
                 newUser.password = await this.encodePassword(req.body.password)
 

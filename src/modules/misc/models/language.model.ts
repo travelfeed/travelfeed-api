@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
 import { User } from '../../user/models/user.model'
-import { ArticleText } from '../../article/models/articleText.model'
+import { ArticleText } from '../../article/models/article.text.model'
 import { Textk } from './textk.model'
 
 @Entity()

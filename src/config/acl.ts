@@ -5,11 +5,14 @@ const aclInstance: acl = new acl(new acl.memoryBackend())
 aclInstance.allow([
     {
         roles: ['Admin'],
-        allows: [{ resources: ['user', 'article'], permissions: '*' }]
+        allows: [{ resources: ['user', 'article', 'comment'], permissions: '*' }]
     },
     {
         roles: ['User'],
-        allows: [{ resources: 'article', permissions: ['comment', 'react', 'read'] }]
+        allows: [
+            { resources: 'article', permissions: ['read'] },
+            { resources: 'comment', permissions: ['read', 'create', 'delete'] }
+        ]
     }
 ])
 

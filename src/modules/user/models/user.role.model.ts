@@ -14,12 +14,6 @@ export class UserRole {
     })
     public role: string
 
-    @Column({
-        type: 'tinyint',
-        default: true
-    })
-    public active: boolean
-
     /***** relations *****/
 
     @OneToMany(type => User, user => user.userRole)

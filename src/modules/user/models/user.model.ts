@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm'
 import { Article } from '../../article/models/article.model'
-import { UserRole } from './userRole'
+import { UserRole } from './user.role.model'
+import { ArticleComment } from '../../article/models/article.comment.model'
 
 @Entity()
 export class User {
@@ -25,6 +26,9 @@ export class User {
 
     @OneToMany(type => Article, article => article.user)
     public articles: Array<Article>
+
+    @OneToMany(type => ArticleComment, articleComment => articleComment.user)
+    public comments: Array<Comment>
 
     @ManyToOne(type => UserRole, userRole => userRole.userRole)
     public userRole: UserRole
