@@ -1,43 +1,25 @@
-import 'reflect-metadata'
-import * as http from 'http'
 import chalk from 'chalk'
+import { createServer, Server } from 'http'
+import { createConnection, Connection } from 'typeorm'
+import { logger } from './config/debug'
 import { Express } from './config/express'
-import { createConnection } from 'typeorm'
 
-const log = console.log
+const log = logger('server')
 
-const con_app = new Promise((resolve, reject) => {
-    createConnection()
-        .then(connection => {
-            log(chalk.green(`ORM connection initialized...`))
+export async function server(port: number | string): Promise<Server> {
+    try {
+        const conn: Connection = await createConnection()
+        const app = createServer(new Express().app)
 
-            const app = new Express().app
-
-            const server = http.createServer(app)
-            const port = process.env.PORT || 3000
-
-            server.listen(port)
-
-            server.on('listening', () => {
-                log(chalk.green(`Server is listening on port: ${port}`))
-            })
-
-            server.on('close', () => {
-                log(chalk.yellow(`Server closed`))
-            })
-
-            server.on('error', err => {
-                log(chalk.red(err.stack))
-            })
-
-            resolve(app)
+        app.listen(port)
+        app.on('listening', () => log(`listening on port ${chalk.cyan(port as string)}`))
+        app.on('close', () => log('closed successfully. bye!'))
+        app.on('error', error => {
+            throw new Error(error.message)
         })
-        .catch(err => {
-            log(chalk.red(err))
-            reject(err)
-        })
-}).catch(err => {
-    throw err
-})
 
-export { con_app as server }
+        return app
+    } catch (error) {
+        log(chalk.red(error))
+    }
+}

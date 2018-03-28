@@ -2,7 +2,7 @@ import { Strategy } from 'passport-jwt'
 import { Repository, getManager } from 'typeorm'
 import { jwtConfig } from '../../../config/auth'
 import { User } from '../../user/models/user.model'
-import acl from '../../../config/acl'
+import { permissions } from '../../../config/acl'
 
 export const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {
     try {
@@ -15,7 +15,7 @@ export const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {
         if (!user) {
             next('wrong email or password', null)
         } else {
-            acl.addUserRoles(user.id, user.userRole.role || 'User')
+            permissions.addUserRoles(user.id, user.userRole.role || 'User')
             return next(null, user)
         }
     } catch (error) {

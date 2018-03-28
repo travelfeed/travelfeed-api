@@ -1,5 +1,5 @@
 import * as passport from 'passport'
-import acl from '../config/acl'
+import { permissions } from '../config/acl'
 import { ExtractJwt, StrategyOptions } from 'passport-jwt'
 import { Secret } from 'jsonwebtoken'
 
@@ -52,7 +52,7 @@ export function checkUserRole(path, action) {
     return async (req, res, next) => {
         try {
             const uid = req.user.id
-            const access = await acl.isAllowed(uid, path, action)
+            const access = await permissions.isAllowed(uid, path, action)
 
             if (!access) {
                 res.status(401).json({ status: 401, error: 'user is not authorized' })

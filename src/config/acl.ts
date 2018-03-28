@@ -1,19 +1,30 @@
 import * as acl from 'acl'
 
-const aclInstance: acl = new acl(new acl.memoryBackend())
+const permissions: acl = new acl(new acl.memoryBackend())
 
-aclInstance.allow([
+permissions.allow([
     {
         roles: ['Admin'],
-        allows: [{ resources: ['user', 'article', 'comment'], permissions: '*' }]
+        allows: [
+            {
+                resources: ['user', 'article', 'comment'],
+                permissions: '*'
+            }
+        ]
     },
     {
         roles: ['User'],
         allows: [
-            { resources: 'article', permissions: ['read'] },
-            { resources: 'comment', permissions: ['read', 'create', 'delete'] }
+            {
+                resources: 'article',
+                permissions: ['read']
+            },
+            {
+                resources: 'comment',
+                permissions: ['read', 'create', 'delete']
+            }
         ]
     }
 ])
 
-export default aclInstance
+export { permissions }

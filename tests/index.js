@@ -23,7 +23,7 @@ test('GET /api/auth', async t => {
 test('GET /api/auth/signin', async t => {
     t.plan(3)
 
-    const res = await supertest(await server).get('/api/auth/signin')
+    const res = await supertest(await server(3000)).get('/')
 
     t.is(res.status, 200)
     t.is(res.body.status, 200)
