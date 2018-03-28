@@ -5,6 +5,7 @@ import * as morgan from 'morgan'
 import * as helmet from 'helmet'
 import * as passport from 'passport'
 import chalk from 'chalk'
+import { logger } from './debug'
 
 // passport strategy
 import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy'
@@ -14,7 +15,7 @@ import { AuthRoutes } from '../modules/auth/routes/auth.routes'
 import { UserRoutes } from '../modules/user/routes/user.routes'
 import { ArticleRoutes } from '../modules/article/routes/article.routes'
 
-const log = console.log
+const log = logger('express')
 
 export class Express {
     public env: string
