@@ -4,8 +4,7 @@ import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
 import * as helmet from 'helmet'
 import * as passport from 'passport'
-import chalk from 'chalk'
-import { logger } from './debug'
+import { logger } from '../logger'
 
 // passport strategy
 import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy'
@@ -15,7 +14,7 @@ import { AuthRoutes } from '../modules/auth/routes/auth.routes'
 import { UserRoutes } from '../modules/user/routes/user.routes'
 import { ArticleRoutes } from '../modules/article/routes/article.routes'
 
-const log = logger('express')
+const { error } = logger('express')
 
 export class Express {
     public env: string
@@ -64,7 +63,7 @@ export class Express {
 
         // error handling
         this.app.use((err, req, res, next) => {
-            log(chalk.red(err.stack))
+            error(err.stack)
             res.status(500).json({
                 status: 500,
                 error: err.stack
