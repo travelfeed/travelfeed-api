@@ -19,7 +19,6 @@ export class AuthHandler {
     public async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const email = escape(req.body.email)
-            const password = escape(req.body.password)
 
             const user: User = await this.repository.findOne({
                 select: ['password', 'id'],
@@ -31,7 +30,10 @@ export class AuthHandler {
 
             // user found
             if (user != null && user.id > 0) {
-                const validPassword = await this.comparePassword(password, user.password)
+                const validPassword = await this.comparePassword(
+                    escape(req.body.password),
+                    user.password
+                )
 
                 if (validPassword) {
                     // create jwt
@@ -70,7 +72,6 @@ export class AuthHandler {
     public async register(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const email = escape(req.body.email)
-            const password = escape(req.body.password)
 
             const user: User = await this.repository.findOne({
                 where: {
@@ -85,7 +86,7 @@ export class AuthHandler {
 
                 // set values
                 newUser.email = email
-                newUser.password = await this.encodePassword(password)
+                newUser.password = await this.encodePassword(escape(req.body.password))
 
                 // create userRole
                 newUser.userRole = await getManager()
