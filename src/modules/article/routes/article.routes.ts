@@ -17,7 +17,7 @@ export class ArticleRoutes {
         this.initCommentRoutes()
     }
 
-    public initArticleRoutes() {
+    private initArticleRoutes() {
         this.router.get(
             '/',
             isAuthorized(),
@@ -53,7 +53,7 @@ export class ArticleRoutes {
         )
     }
 
-    public initCommentRoutes() {
+    private initCommentRoutes() {
         this.router.get(
             '/:articleId/comment',
             isAuthorized(),

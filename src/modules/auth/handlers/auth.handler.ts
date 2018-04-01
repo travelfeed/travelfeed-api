@@ -6,6 +6,7 @@ import { bind } from 'decko'
 import { User } from '../../user/models/user.model'
 import { jwtConfig, signOpt, saltRounds } from '../../../config/auth'
 import { UserRole } from '../../user/models/user.role.model'
+import { escape } from 'validator'
 
 export class AuthHandler {
     private repository: Repository<User>
@@ -17,9 +18,8 @@ export class AuthHandler {
     @bind
     public async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            // todo: validation
-            const email = req.body.email
-            const password = req.body.password
+            const email = escape(req.body.email)
+            const password = escape(req.body.password)
 
             const user: User = await this.repository.findOne({
                 select: ['password', 'id'],
@@ -69,7 +69,8 @@ export class AuthHandler {
     @bind
     public async register(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const email = req.body.email
+            const email = escape(req.body.email)
+            const password = escape(req.body.password)
 
             const user: User = await this.repository.findOne({
                 where: {
@@ -83,8 +84,8 @@ export class AuthHandler {
                 const newUser: User = this.repository.create()
 
                 // set values
-                newUser.email = req.body.email
-                newUser.password = await this.encodePassword(req.body.password)
+                newUser.email = email
+                newUser.password = await this.encodePassword(password)
 
                 // create userRole
                 newUser.userRole = await getManager()

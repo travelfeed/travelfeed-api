@@ -13,7 +13,7 @@ export const JwtStrategy = new Strategy(jwtConfig, async (payload, next) => {
         })
 
         if (!user) {
-            next('wrong email or password', null)
+            return next('user is not authorized', null)
         } else {
             permissions.addUserRoles(user.id, user.userRole.role || 'User')
             return next(null, user)

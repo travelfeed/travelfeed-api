@@ -35,7 +35,9 @@ export function isAuthorized() {
     return (req, res, next) => {
         try {
             passport.authenticate('strategy.jwt', { session: false }, (err, user, info) => {
-                if (err || !user) {
+                if (err) {
+                    return next(err)
+                } else if (!user) {
                     res.status(401).json({ status: 401, data: 'user is not authorized' })
                 } else {
                     req.user = user // store user in req scope
@@ -55,7 +57,7 @@ export function checkUserRole(path, action) {
             const access = await permissions.isAllowed(uid, path, action)
 
             if (!access) {
-                res.status(401).json({ status: 401, error: 'user is not authorized' })
+                res.status(401).json({ status: 401, error: 'missing user rights' })
             } else {
                 return next()
             }

@@ -12,7 +12,7 @@ export class UserRoutes {
         this.initRoutes()
     }
 
-    public initRoutes() {
+    private initRoutes() {
         this.router.get('/', isAuthorized(), checkUserRole('user', 'read'), this.handler.readUsers)
         this.router.get(
             '/:userId',

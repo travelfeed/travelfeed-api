@@ -4,7 +4,7 @@ import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
 import * as helmet from 'helmet'
 import * as passport from 'passport'
-import { logger } from '../logger'
+import { logger } from './logger'
 
 // passport strategy
 import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy'

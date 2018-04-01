@@ -1,12 +1,12 @@
 import chalk from 'chalk'
 import { createServer, Server } from 'http'
 import { createConnection, Connection } from 'typeorm'
-import { logger } from './logger'
+import { logger } from './config/logger'
 import { Express } from './config/express'
 
 const { info, error } = logger('server')
 
-export async function server(port: number | string): Promise<Server> {
+export async function initServer(port: number | string): Promise<Server> {
     try {
         info('initializing orm connection')
 
