@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { UserHandler } from '../handlers/user.handler'
-import { isAuthorized } from '../../../config/auth'
+import { isAuthorized, checkUserRole } from '../../../config/auth'
 
 export class UserRoutes {
     public router: Router
@@ -12,9 +12,19 @@ export class UserRoutes {
         this.initRoutes()
     }
 
-    public initRoutes() {
-        this.router.get('/', isAuthorized(), this.handler.readUsers)
-        this.router.get('/:userId', isAuthorized(), this.handler.readUser)
-        this.router.get('/:userId/article', isAuthorized(), this.handler.readUserArticles)
+    private initRoutes() {
+        this.router.get('/', isAuthorized(), checkUserRole('user', 'read'), this.handler.readUsers)
+        this.router.get(
+            '/:userId',
+            isAuthorized(),
+            checkUserRole('user', 'read'),
+            this.handler.readUser
+        )
+        this.router.get(
+            '/:userId/article',
+            isAuthorized(),
+            checkUserRole('user', 'read'),
+            this.handler.readUserArticles
+        )
     }
 }

@@ -1,10 +1,12 @@
-import { sign } from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt-nodejs'
+import { sign } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { Repository, getManager } from 'typeorm'
 import { bind } from 'decko'
 import { User } from '../../user/models/user.model'
 import { jwtConfig, signOpt, saltRounds } from '../../../config/auth'
+import { UserRole } from '../../user/models/user.role.model'
+import { escape } from 'validator'
 
 export class AuthHandler {
     private repository: Repository<User>
@@ -16,20 +18,22 @@ export class AuthHandler {
     @bind
     public async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            // todo: validation
-            const username = req.body.username
-            const password = req.body.password
+            const email = escape(req.body.email)
 
             const user: User = await this.repository.findOne({
-                select: ['username', 'password', 'id'],
+                select: ['password', 'id'],
+                relations: ['userRole'],
                 where: {
-                    username: username
+                    email: email
                 }
             })
 
             // user found
             if (user != null && user.id > 0) {
-                const validPassword = await this.comparePassword(password, user.password)
+                const validPassword = await this.comparePassword(
+                    escape(req.body.password),
+                    user.password
+                )
 
                 if (validPassword) {
                     // create jwt
@@ -43,19 +47,20 @@ export class AuthHandler {
                         status: res.statusCode,
                         data: {
                             userId: user.id,
+                            userRole: user.userRole.role,
                             authToken: token
                         }
                     })
                 } else {
                     res.status(401).json({
                         status: 401,
-                        error: 'wrong username or password'
+                        error: 'wrong email or password'
                     })
                 }
             } else {
                 res.status(401).json({
                     status: 401,
-                    error: 'wrong username or password'
+                    error: 'wrong email or password'
                 })
             }
         } catch (err) {
@@ -65,15 +70,47 @@ export class AuthHandler {
 
     @bind
     public async register(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const user = {
-            username: req.body.username,
-            email: req.body.email,
-            password: await this.encodePassword(req.body.password)
-        }
+        try {
+            const email = escape(req.body.email)
 
-        // save user and signin
-        await this.repository.save(user)
-        this.signin(req, res, next)
+            const user: User = await this.repository.findOne({
+                where: {
+                    email: email
+                }
+            })
+
+            // email is not taken
+            if (!user) {
+                // create new empty user instance
+                const newUser: User = this.repository.create()
+
+                // set values
+                newUser.email = email
+                newUser.password = await this.encodePassword(escape(req.body.password))
+
+                // create userRole
+                newUser.userRole = await getManager()
+                    .getRepository(UserRole)
+                    .findOne({
+                        where: {
+                            role: 'User'
+                        }
+                    })
+
+                // save new user
+                await this.repository.save(newUser)
+
+                // signin user
+                this.signin(req, res, next)
+            } else {
+                res.status(401).json({
+                    status: 401,
+                    error: 'email is already taken'
+                })
+            }
+        } catch (err) {
+            next(err)
+        }
     }
 
     private encodePassword(plainPassword): Promise<string> {

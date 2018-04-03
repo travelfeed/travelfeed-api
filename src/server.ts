@@ -1,48 +1,35 @@
-import 'reflect-metadata'
 import chalk from 'chalk'
-import { Server, createServer } from 'http'
+import { createServer, Server } from 'http'
+import { createConnection, Connection } from 'typeorm'
+import { logger } from './config/logger'
 import { Express } from './config/express'
-import { createConnection } from 'typeorm'
 import { Socket } from './config/socket'
 
-const log = console.log
+const { info, error } = logger('server')
 
-const con_app = new Promise((resolve, reject) => {
-    createConnection()
-        .then(connection => {
-            log(chalk.green(`ORM connection initialized...`))
+export async function initServer(port: number | string): Promise<Server> {
+    try {
+        // init orm connection
+        info('initializing orm connection')
+        const conn: Connection = await createConnection()
 
-            const app = new Express().app
+        // init http server
+        info('initializing http server')
+        const app = createServer(new Express().app)
 
-            // create server
-            const server: Server = createServer(app)
-            const port = process.env.PORT || 3000
+        // init socket server
+        info('initializing socket server')
+        const socket = new Socket(app)
 
-            // create socket
-            const socket = new Socket(server)
-
-            server.listen(port)
-
-            server.on('listening', () => {
-                log(chalk.green(`Server is listening on port: ${port}`))
-            })
-
-            server.on('close', () => {
-                log(chalk.yellow(`Server closed`))
-            })
-
-            server.on('error', err => {
-                log(chalk.red(err.stack))
-            })
-
-            resolve(app)
+        app.listen(port)
+        app.on('listening', () => info(`listening on port ${chalk.cyan(port as string)}`))
+        app.on('close', () => info('closed successfully. bye!'))
+        app.on('error', err => {
+            throw new Error(err.message)
         })
-        .catch(err => {
-            log(chalk.red(err))
-            reject(err)
-        })
-}).catch(err => {
-    throw err
-})
 
-export { con_app as server }
+        return app
+    } catch (err) {
+        error(err)
+    }
+}

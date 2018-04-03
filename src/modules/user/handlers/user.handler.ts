@@ -13,10 +13,18 @@ export class UserHandler {
     @bind
     public async readUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data: Array<User> = await this.repository.find()
+            const data: Array<User> = await this.repository.find({
+                relations: [
+                    'userRole',
+                    'articles',
+                    'articles.articleText',
+                    'articles.articleText.language',
+                    'articles.pictures'
+                ]
+            })
             res.json({
                 status: res.statusCode,
-                data: data == null ? [] : data
+                data: data
             })
         } catch (err) {
             next(err)
@@ -26,16 +34,19 @@ export class UserHandler {
     @bind
     public async readUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data: User = await this.repository.findOneById(req.params.userId)
+            const data: User = await this.repository.findOneById(req.params.userId, {
+                relations: [
+                    'userRole',
+                    'articles',
+                    'articles.articleText',
+                    'articles.articleText.language',
+                    'articles.pictures'
+                ]
+            })
 
             res.json({
                 status: res.statusCode,
-                data: {
-                    id: data.id,
-                    username: data.username,
-                    email: data.email,
-                    articles: data.articles
-                }
+                data: data
             })
         } catch (err) {
             next(err)
@@ -48,8 +59,8 @@ export class UserHandler {
             const data: User = await this.repository.findOneById(req.params.userId, {
                 relations: [
                     'articles',
-                    'articles.details',
-                    'articles.details.language',
+                    'articles.articleText',
+                    'articles.articleText.language',
                     'articles.pictures'
                 ]
             })

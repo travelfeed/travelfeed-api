@@ -1,4 +1,5 @@
 import * as passport from 'passport'
+import { permissions } from '../config/acl'
 import { ExtractJwt, StrategyOptions } from 'passport-jwt'
 import { Secret } from 'jsonwebtoken'
 
@@ -32,12 +33,36 @@ export const saltRounds = 10
  */
 export function isAuthorized() {
     return (req, res, next) => {
-        passport.authenticate('strategy.jwt', { session: false }, (err, user, info) => {
-            if (err || !user) {
-                res.status(401).json({ status: 401, data: 'user is not authorized' })
-            }
+        try {
+            passport.authenticate('strategy.jwt', { session: false }, (err, user, info) => {
+                if (err) {
+                    return next(err)
+                } else if (!user) {
+                    res.status(401).json({ status: 401, data: 'user is not authorized' })
+                } else {
+                    req.user = user // store user in req scope
+                    return next()
+                }
+            })(req, res, next)
+        } catch (err) {
+            return next(err)
+        }
+    }
+}
 
-            next()
-        })(req, res, next)
+export function checkUserRole(path, action) {
+    return async (req, res, next) => {
+        try {
+            const uid = req.user.id
+            const access = await permissions.isAllowed(uid, path, action)
+
+            if (!access) {
+                res.status(401).json({ status: 401, error: 'missing user rights' })
+            } else {
+                return next()
+            }
+        } catch (err) {
+            return next(err)
+        }
     }
 }
