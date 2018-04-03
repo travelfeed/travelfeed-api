@@ -1,7 +1,7 @@
 import * as debug from 'debug'
 import chalk from 'chalk'
 
-const prefix: string = ''
+const prefix: string = 'api|'
 const suffix: string = ''
 const divider: string = '|'
 
@@ -26,7 +26,7 @@ export interface Handlers {
 }
 
 export function enableLogging(): void {
-    debug.enable(`${prefix}${divider}*`)
+    debug.enable(`${prefix}${divider}*,-socket.io*`)
     debug.formatters.h = (value: any): string => chalk.cyan(value)
 }
 

@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { enableLogging } from './config/logger'
+import { enableLogging } from './logger'
 import { initServer } from './server'
 
 if (process.env.NODE_ENV !== 'production') {
