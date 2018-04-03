@@ -26,7 +26,7 @@ export interface Handlers {
 }
 
 export function enableLogging(): void {
-    debug.enable(`${prefix}${divider}*,-socket.io*`)
+    debug.enable(`${prefix}${divider}*,-engine*,-socket.io*`)
     debug.formatters.h = (value: any): string => chalk.cyan(value)
 }
 
