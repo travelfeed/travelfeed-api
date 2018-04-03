@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { createServer, Server } from 'http'
 import { createConnection, Connection } from 'typeorm'
-import { logger } from './config/logger'
+import { logger } from './logger'
 import { Express } from './config/express'
 
 const { info, error } = logger('server')
