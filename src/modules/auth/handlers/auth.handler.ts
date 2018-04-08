@@ -64,7 +64,7 @@ export class AuthHandler {
                 })
             }
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -109,7 +109,7 @@ export class AuthHandler {
                 })
             }
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 

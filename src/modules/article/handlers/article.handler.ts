@@ -38,7 +38,7 @@ export class ArticleHandler {
             })
             res.json({ status: res.statusCode, data: data })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -60,7 +60,7 @@ export class ArticleHandler {
                 take: 10
             })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -98,8 +98,8 @@ export class ArticleHandler {
             newArticle.title = escape(req.body.title || '')
             newArticle.country = escape(req.body.country || '')
             newArticle.city = escape(req.body.city || '')
-            newArticle.latitude = req.body.latitude
-            newArticle.longitude = req.body.longitude
+            newArticle.latitude = req.body.latitude || ''
+            newArticle.longitude = req.body.longitude || ''
             newArticle.user = await this.userRepo.findOneById(req.user.id)
 
             // save new article
@@ -112,7 +112,7 @@ export class ArticleHandler {
 
                 // articleText details
                 newArticleText.article = newArticle
-                newArticleText.text = escape(articleText.text)
+                newArticleText.text = escape(articleText.text || '')
                 newArticleText.language = await this.langRepo.findOneById(articleText.language || 1)
                 newArticleText.article = newArticle
 
@@ -121,13 +121,13 @@ export class ArticleHandler {
             }
 
             // loop through article pictures and store each one
-            for (const articlePic of req.body.articlePicture) {
+            for (const articlePic of req.body.pictures) {
                 // create new empty picture instance
                 const newArticlePic: Picture = await this.picRepo.create()
 
                 // picture details
                 newArticlePic.article = newArticle
-                newArticlePic.link = articlePic.link
+                newArticlePic.link = articlePic.link || ''
                 newArticlePic.title = escape(articlePic.text || '')
                 newArticlePic.alt = escape(articlePic.alt || '')
 
@@ -140,9 +140,9 @@ export class ArticleHandler {
                 relations: ['user', 'articleText', 'articleText.language', 'pictures']
             })
 
-            res.json({ status: res.statusCode, data: data })
+            res.status(res.statusCode).json({ status: res.statusCode, data: data })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -162,26 +162,38 @@ export class ArticleHandler {
 
             res.json({ status: res.statusCode, data: data })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
     @bind
     public async updateArticle(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const article: Article = await this.articleRepo.findOneById(req.params.articleId, {
+            // create new article instance
+            const updatedArticle: Article = await this.articleRepo.findOneById(req.params.articleId)
+
+            // article details
+            updatedArticle.title = escape(req.body.title || '')
+            updatedArticle.country = escape(req.body.country || '')
+            updatedArticle.city = escape(req.body.city || '')
+            updatedArticle.latitude = req.body.latitude || ''
+            updatedArticle.longitude = req.body.longitude || ''
+
+            // save updated article
+            await this.articleRepo.save(updatedArticle)
+
+            /**
+             * TODO: Update articleTexts and pictures
+             */
+
+            // load updated article data
+            const data = await this.articleRepo.findOneById(updatedArticle.id, {
                 relations: ['user', 'articleText', 'articleText.language', 'pictures']
             })
 
-            // add further props here
-            article.title = req.body.title
-
-            // save updated article
-            const updatedArticle = await this.articleRepo.save(article)
-
-            res.json({ status: res.statusCode, data: updatedArticle })
+            res.json({ status: res.statusCode, data: data })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -202,7 +214,7 @@ export class ArticleHandler {
                 res.status(500).json({ status: 500, data: 'article was not deleted' })
             }
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 }
