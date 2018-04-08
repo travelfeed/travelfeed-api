@@ -1,13 +1,20 @@
 import { Request, Response, NextFunction } from 'express'
 import { getManager, Repository } from 'typeorm'
 import { bind } from 'decko'
+import { escape } from 'validator'
 import { ArticleComment } from '../models/article.comment.model'
+import { User } from '../../user/models/user.model'
+import { Article } from '../models/article.model'
 
 export class CommentHandler {
-    private repository: Repository<ArticleComment>
+    private commentRepo: Repository<ArticleComment>
+    private userRepo: Repository<User>
+    private articleRepo: Repository<Article>
 
     public constructor() {
-        this.repository = getManager().getRepository(ArticleComment)
+        this.commentRepo = getManager().getRepository(ArticleComment)
+        this.userRepo = getManager().getRepository(User)
+        this.articleRepo = getManager().getRepository(Article)
     }
 
     @bind
@@ -18,7 +25,7 @@ export class CommentHandler {
     ): Promise<void> {
         try {
             const articleId = req.params.articleId
-            const data: Array<ArticleComment> = await this.repository.find({
+            const data: Array<ArticleComment> = await this.commentRepo.find({
                 where: {
                     article: req.params.articleId
                 },
@@ -39,6 +46,35 @@ export class CommentHandler {
         next: NextFunction
     ): Promise<void> {
         try {
+            const article: Article = await this.articleRepo.findOneById(req.params.articleId)
+
+            if (article != null && article.id > 0) {
+                // create new empty articleComment instance
+                const newArticleComment: ArticleComment = this.commentRepo.create()
+
+                const date = new Date()
+                const now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+
+                // articleComment details
+                newArticleComment.article = article
+                newArticleComment.text = escape(req.body.text || '')
+                newArticleComment.date = now
+                newArticleComment.user = await this.userRepo.findOneById(req.user.id)
+
+                await this.commentRepo.save(newArticleComment)
+
+                // load new articleComment data
+                const data = await this.commentRepo.findOneById(newArticleComment.id, {
+                    relations: ['user']
+                })
+
+                res.status(res.statusCode).json({
+                    status: res.statusCode,
+                    data: data
+                })
+            } else {
+                res.status(400).json({ status: 400, error: 'article not found' })
+            }
         } catch (err) {
             next(err)
         }
@@ -51,7 +87,7 @@ export class CommentHandler {
         next: NextFunction
     ): Promise<void> {
         try {
-            const data: ArticleComment = await this.repository.findOneById(req.params.commentId, {
+            const data: ArticleComment = await this.commentRepo.findOneById(req.params.commentId, {
                 where: {
                     articleId: req.params.articleId
                 },

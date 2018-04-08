@@ -24,5 +24,5 @@ export class ArticleComment {
     public user: User
 
     @ManyToOne(type => Article, article => article.comments)
-    public article: ArticleComment
+    public article: Article
 }
