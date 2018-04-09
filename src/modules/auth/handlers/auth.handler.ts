@@ -69,6 +69,19 @@ export class AuthHandler {
     }
 
     @bind
+    public async signout(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            req.logout()
+            res.status(200).json({
+                status: 200,
+                data: null
+            })
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    @bind
     public async register(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const email = escape(req.body.email)

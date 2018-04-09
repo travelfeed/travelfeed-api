@@ -13,6 +13,7 @@ export class AuthRoutes {
 
     private initRoutes() {
         this.router.post('/signin', this.handler.signin)
+        this.router.post('/signout', this.handler.signout)
         this.router.post('/register', this.handler.register)
     }
 }
