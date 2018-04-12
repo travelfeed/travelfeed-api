@@ -82,7 +82,7 @@ export class ArticleHandler {
                 take: 10
             })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -172,26 +172,33 @@ export class ArticleHandler {
             // create new article instance
             const updatedArticle: Article = await this.articleRepo.findOneById(req.params.articleId)
 
-            // article details
-            updatedArticle.title = escape(req.body.title || '')
-            updatedArticle.country = escape(req.body.country || '')
-            updatedArticle.city = escape(req.body.city || '')
-            updatedArticle.latitude = req.body.latitude || ''
-            updatedArticle.longitude = req.body.longitude || ''
+            if (updatedArticle != null && updatedArticle.id > 0) {
+                // article details
+                updatedArticle.title = escape(req.body.title || '')
+                updatedArticle.country = escape(req.body.country || '')
+                updatedArticle.city = escape(req.body.city || '')
+                updatedArticle.latitude = req.body.latitude || ''
+                updatedArticle.longitude = req.body.longitude || ''
 
-            // save updated article
-            await this.articleRepo.save(updatedArticle)
+                // save updated article
+                await this.articleRepo.save(updatedArticle)
 
-            /**
-             * TODO: Update articleTexts and pictures
-             */
+                /**
+                 * TODO: Update articleTexts and pictures
+                 */
 
-            // load updated article data
-            const data = await this.articleRepo.findOneById(updatedArticle.id, {
-                relations: ['user', 'articleText', 'articleText.language', 'pictures']
-            })
+                // load updated article data
+                const data = await this.articleRepo.findOneById(updatedArticle.id, {
+                    relations: ['user', 'articleText', 'articleText.language', 'pictures']
+                })
 
-            res.json({ status: res.statusCode, data: data })
+                res.status(res.statusCode).json({ status: res.statusCode, data: data })
+            } else {
+                res.status(404).json({
+                    status: 404,
+                    error: 'article not found'
+                })
+            }
         } catch (err) {
             return next(err)
         }
@@ -200,18 +207,15 @@ export class ArticleHandler {
     @bind
     public async deleteArticle(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const article: Article = await this.articleRepo.findOneById(req.params.articleId)
+            const deletedArticle: Article = await this.articleRepo.findOneById(req.params.articleId)
 
-            // delete article
-            await this.articleRepo.delete(article)
+            if (deletedArticle != null && deletedArticle.id > 0) {
+                // delete article
+                await this.articleRepo.delete(deletedArticle)
 
-            // search for deleted article
-            const articleExists = await this.articleRepo.findOneById(req.params.articleId)
-
-            if (!articleExists) {
-                res.json({ status: res.statusCode, data: 'article was deleted' })
+                res.status(res.statusCode).json({ status: res.statusCode, data: 'article deleted' })
             } else {
-                res.status(500).json({ status: 500, data: 'article was not deleted' })
+                res.status(404).json({ status: 404, error: 'article not found' })
             }
         } catch (err) {
             return next(err)
