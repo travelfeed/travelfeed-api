@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { AuthHandler } from '../handlers/auth.handler'
+import { isAuthorized } from '../../../config/auth'
 
 export class AuthRoutes {
     public router: Router
@@ -15,5 +16,6 @@ export class AuthRoutes {
         this.router.post('/signin', this.handler.signin)
         this.router.post('/signout', this.handler.signout)
         this.router.post('/register', this.handler.register)
+        this.router.post('/unregister', isAuthorized(), this.handler.unregister)
     }
 }

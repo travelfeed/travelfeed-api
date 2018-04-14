@@ -3,10 +3,16 @@ import { sign } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { Repository, getManager } from 'typeorm'
 import { bind } from 'decko'
-import { User } from '../../user/models/user.model'
-import { jwtConfig, signOpt, saltRounds } from '../../../config/auth'
-import { UserRole } from '../../user/models/user.role.model'
 import { escape } from 'validator'
+
+import { MailConfig, Mailservice } from '../../../config/mailservice'
+import {
+    MailParams as regConfirmParams,
+    metadata as regConfirmMeta
+} from '../templates/register-confirm/config'
+import { User } from '../../user/models/user.model'
+import { UserRole } from '../../user/models/user.role.model'
+import { jwtConfig, signOpt, saltRounds } from '../../../config/auth'
 
 export class AuthHandler {
     private repository: Repository<User>
@@ -113,6 +119,29 @@ export class AuthHandler {
                 // save new user
                 await this.repository.save(newUser)
 
+                const mailservice = new Mailservice()
+
+                // params for html template
+                const mailParams: regConfirmParams = {
+                    confirmUrl: 'https://test.com'
+                }
+
+                // html template
+                const mailText = await mailservice.renderMail(
+                    './src/modules/auth/templates/register-confirm/register-confirm.html',
+                    mailParams
+                )
+
+                const mail: MailConfig = {
+                    from: regConfirmMeta.from,
+                    to: newUser.email,
+                    subject: regConfirmMeta.subject,
+                    html: mailText
+                }
+
+                // send mail to user
+                await mailservice.sendMail(mail)
+
                 // signin user
                 this.signin(req, res, next)
             } else {
@@ -124,6 +153,14 @@ export class AuthHandler {
         } catch (err) {
             return next(err)
         }
+    }
+
+    @bind
+    public async unregister(req: Request, res: Response, next: NextFunction): Promise<void> {
+        res.status(200).json({
+            status: res.statusCode,
+            data: 'test'
+        })
     }
 
     private encodePassword(plainPassword): Promise<string> {
