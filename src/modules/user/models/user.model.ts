@@ -22,8 +22,20 @@ export class User {
     })
     public password: string
 
-    /***** relations *****/
+    @Column({
+        type: 'tinyint',
+        default: false
+    })
+    public active: boolean
 
+    @Column({
+        select: false,
+        type: 'varchar',
+        length: 255
+    })
+    public hash: string
+
+    /***** relations *****/
     @OneToMany(type => Article, article => article.user)
     public articles: Array<Article>
 

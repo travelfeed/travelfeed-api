@@ -1,4 +1,6 @@
 import * as bcrypt from 'bcrypt-nodejs'
+import * as uuidv1 from 'uuid/v1'
+import * as crypto from 'crypto'
 import { sign } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { Repository, getManager } from 'typeorm'
@@ -24,19 +26,20 @@ export class AuthHandler {
     @bind
     public async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const email = escape(req.body.email)
+            const email = escape(req.body.email || '')
 
             const user: User = await this.repository.findOne({
                 select: ['password', 'id'],
                 relations: ['userRole'],
                 where: {
-                    email: email
+                    email: email,
+                    active: true
                 }
             })
 
             // user found
             if (user != null && user.id > 0) {
-                const validPassword = await this.comparePassword(
+                const validPassword = await this.verifyPassword(
                     escape(req.body.password),
                     user.password
                 )
@@ -102,19 +105,18 @@ export class AuthHandler {
             if (!user) {
                 // create new empty user instance
                 const newUser: User = this.repository.create()
+                const uuidHash = this.hashString(uuidv1()) // account activation mail
 
                 // set values
                 newUser.email = email
-                newUser.password = await this.encodePassword(escape(req.body.password))
+                newUser.password = await this.hashPassword(escape(req.body.password))
+                newUser.active = false
+                newUser.hash = uuidHash
 
                 // create userRole
                 newUser.userRole = await getManager()
                     .getRepository(UserRole)
-                    .findOne({
-                        where: {
-                            role: 'User'
-                        }
-                    })
+                    .findOne({ where: { role: 'User' } })
 
                 // save new user
                 await this.repository.save(newUser)
@@ -123,11 +125,11 @@ export class AuthHandler {
 
                 // params for html template
                 const mailParams: regConfirmParams = {
-                    confirmUrl: 'https://test.com'
+                    confirmUrl: `https://travelfeed.blog/auth/activate/${uuidHash}`
                 }
 
                 // html template
-                const mailText = await mailservice.renderMail(
+                const mailText = await mailservice.renderMailTemplate(
                     './src/modules/auth/templates/register-confirm/register-confirm.html',
                     mailParams
                 )
@@ -142,8 +144,10 @@ export class AuthHandler {
                 // send mail to user
                 await mailservice.sendMail(mail)
 
-                // signin user
-                this.signin(req, res, next)
+                res.status(res.statusCode).json({
+                    status: res.statusCode,
+                    data: 'user registered'
+                })
             } else {
                 res.status(401).json({
                     status: 401,
@@ -157,13 +161,53 @@ export class AuthHandler {
 
     @bind
     public async unregister(req: Request, res: Response, next: NextFunction): Promise<void> {
-        res.status(200).json({
-            status: res.statusCode,
-            data: 'test'
-        })
+        try {
+            const user: User = await this.repository.findOneById(req.user.id)
+
+            if (user != null && user.id > 0) {
+                await this.repository.delete(user)
+
+                res.status(200).json({ status: 200, data: 'user deleted' })
+            } else {
+                res.status(404).json({ status: 404, error: 'user not found' })
+            }
+        } catch (err) {
+            return next(err)
+        }
     }
 
-    private encodePassword(plainPassword): Promise<string> {
+    @bind
+    public async activate(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const user: User = await this.repository.findOne({
+                where: {
+                    hash: req.params.uuid || null,
+                    active: false
+                }
+            })
+
+            if (user != null && user.id > 0) {
+                user.active = true
+                user.hash = null
+
+                await this.repository.save(user)
+
+                res.status(200).json({
+                    status: res.statusCode,
+                    data: 'user activated'
+                })
+            } else {
+                res.status(404).json({
+                    status: res.statusCode,
+                    error: 'user not found'
+                })
+            }
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    private hashPassword(plainPassword): Promise<string> {
         return new Promise((resolve, reject) => {
             bcrypt.genSalt(saltRounds, (err, salt) => {
                 bcrypt.hash(plainPassword, salt, null, (error, hash) => {
@@ -176,7 +220,7 @@ export class AuthHandler {
         })
     }
 
-    private comparePassword(plainPassword, hashedPassword): Promise<boolean> {
+    private verifyPassword(plainPassword, hashedPassword): Promise<boolean> {
         return new Promise((resolve, reject) => {
             bcrypt.compare(plainPassword, hashedPassword, (err, res) => {
                 if (err) {
@@ -185,5 +229,13 @@ export class AuthHandler {
                 resolve(res)
             })
         })
+    }
+
+    // sha256 algorithm
+    private hashString(text: string) {
+        return crypto
+            .createHash('sha256')
+            .update(text)
+            .digest('hex')
     }
 }

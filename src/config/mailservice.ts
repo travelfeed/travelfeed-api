@@ -34,7 +34,7 @@ export class Mailservice {
         return this.transporter.sendMail(options)
     }
 
-    public async renderMail(path: string, options: object) {
+    public async renderMailTemplate(path: string, options: object) {
         return renderFile(resolve(path), options)
     }
 }

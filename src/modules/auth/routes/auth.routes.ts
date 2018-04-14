@@ -17,5 +17,6 @@ export class AuthRoutes {
         this.router.post('/signout', this.handler.signout)
         this.router.post('/register', this.handler.register)
         this.router.post('/unregister', isAuthorized(), this.handler.unregister)
+        this.router.get('/activate/:uuid', this.handler.activate)
     }
 }
