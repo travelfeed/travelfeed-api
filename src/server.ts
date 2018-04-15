@@ -1,25 +1,27 @@
-import * as http from 'http'
 import chalk from 'chalk'
+import { createServer, Server } from 'http'
+import { createConnection, Connection } from 'typeorm'
+import { logger } from './logger'
 import { Express } from './config/express'
 
-const log = console.log
-const app = new Express().app
+const { info, error } = logger('server')
 
-const server = http.createServer(app)
-const port = process.env.PORT || 3000
+export async function initServer(port: number | string): Promise<Server> {
+    try {
+        info('initializing orm connection')
 
-server.listen(port)
+        const conn: Connection = await createConnection()
+        const app = createServer(new Express(__dirname).app)
 
-server.on('listening', () => {
-    log(chalk.green(`Server is listening on port: ${port}`))
-})
+        app.listen(port)
+        app.on('listening', () => info(`listening on port ${chalk.cyan(port as string)}`))
+        app.on('close', () => info('closed successfully. bye!'))
+        app.on('error', err => {
+            throw new Error(err.message)
+        })
 
-server.on('close', () => {
-    log(chalk.yellow(`Server closed`))
-})
-
-server.on('error', err => {
-    log(chalk.red(err.stack))
-})
-
-export { app as server }
+        return app
+    } catch (err) {
+        error(err)
+    }
+}

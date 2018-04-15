@@ -2,12 +2,24 @@
     "folders": [
         {
             "path": "."
+        },
+        {
+            "path": "./src/modules"
+        },
+        {
+            "path": "./src/migrations"
         }
     ],
     "settings": {
         "editor.formatOnPaste": true,
         "editor.formatOnSave": true,
         "editor.formatOnType": true,
-        "tslint.autoFixOnSave": true
+        "gitblame.commitUrl": "https://github.com/travelfeed/travelfeed-api/commit/${hash}/",
+        "tslint.autoFixOnSave": true,
+        "[json]": {
+            "editor.formatOnPaste": false,
+            "editor.formatOnSave": false,
+            "editor.formatOnType": false
+        }
     }
 }

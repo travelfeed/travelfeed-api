@@ -1,42 +1,71 @@
+import { join } from 'path'
 import * as express from 'express'
+import * as cors from 'cors'
 import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
-import chalk from 'chalk'
+import * as helmet from 'helmet'
+import * as passport from 'passport'
+import { logger } from '../logger'
+
+// passport strategy
+import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy'
 
 // routes
 import { AuthRoutes } from '../modules/auth/routes/auth.routes'
-import { UserRoutes } from '../modules/users/routes/users.routes'
+import { UserRoutes } from '../modules/user/routes/user.routes'
+import { ArticleRoutes } from '../modules/article/routes/article.routes'
 
-const log = console.log
+const { error } = logger('express')
 
 export class Express {
+    public root: string
+    public env: string
     public app: express.Application
-    public router: express.Router
 
-    constructor() {
+    public constructor(root: string) {
+        this.root = root
+        this.env = process.env.NODE_ENV || 'development'
         this.app = express()
-        this.router = express.Router()
 
         this.initConfig()
         this.initRoutes()
     }
 
     // middleware
-    initConfig() {
+    private initConfig(): void {
+        const options: cors.CorsOptions = {
+            origin: ['http://localhost:4200']
+        }
+
+        this.app.options('*', cors(options))
+        this.app.use(cors(options))
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({ extended: true }))
         this.app.use(morgan('dev'))
+        this.app.use(helmet())
+        passport.use('strategy.jwt', JwtStrategy)
     }
 
     // routes
-    initRoutes() {
-        this.app.use('/api/auth', new AuthRoutes(this.router).router)
-        this.app.use('/api/users', new UserRoutes(this.router).router)
+    private initRoutes(): void {
+        // api routes
+        this.app.use('/api/auth', new AuthRoutes().router)
+        this.app.use('/api/user', new UserRoutes().router)
+        this.app.use('/api/article', new ArticleRoutes().router)
 
         // error handling
         this.app.use((err, req, res, next) => {
-            log(chalk.red(err.stack))
-            res.status(500).json({ error: err.stack })
+            error(err.stack)
+            res.status(500).json({
+                status: 500,
+                error: err.stack
+            })
+        })
+
+        // serve app
+        this.app.use(express.static(join(this.root, 'public')))
+        this.app.get('*', (req: express.Request, res: express.Response) => {
+            res.sendFile(join(this.root, 'public', 'index.html'))
         })
     }
 }

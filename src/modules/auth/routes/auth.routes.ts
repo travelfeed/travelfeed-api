@@ -3,15 +3,17 @@ import { AuthHandler } from '../handlers/auth.handler'
 
 export class AuthRoutes {
     public router: Router
+    private handler: AuthHandler
 
-    constructor(router: Router) {
-        this.router = router
+    public constructor() {
+        this.router = Router()
+        this.handler = new AuthHandler()
         this.initRoutes()
     }
 
-    public initRoutes() {
-        const handler = new AuthHandler()
-        this.router.get('/signin', handler.signin.bind(handler))
-        this.router.get('/register', handler.register.bind(handler))
+    private initRoutes() {
+        this.router.post('/signin', this.handler.signin)
+        this.router.post('/signout', this.handler.signout)
+        this.router.post('/register', this.handler.register)
     }
 }
