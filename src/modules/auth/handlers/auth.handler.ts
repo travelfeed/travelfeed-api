@@ -198,7 +198,62 @@ export class AuthHandler {
                 })
             } else {
                 res.status(404).json({
+                    status: 404,
+                    error: 'user not found'
+                })
+            }
+        } catch (err) {
+            return next(err)
+        }
+    }
+
+    @bind
+    public async activateResend(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const user: User = await this.repository.findOne({
+                where: {
+                    email: escape(req.params.email || ''),
+                    active: false
+                }
+            })
+
+            if (user != null && user.id > 0) {
+                const uuidHash = this.hashString(uuidv1()) // account activation mail
+
+                // assign new hash to use
+                user.hash = uuidHash
+                this.repository.save(user)
+
+                const mailservice = new Mailservice()
+
+                // params for html template
+                const mailParams: regConfirmParams = {
+                    confirmUrl: `https://travelfeed.blog/auth/activate/${uuidHash}`
+                }
+
+                // html template
+                const mailText = await mailservice.renderMailTemplate(
+                    './src/modules/auth/templates/register-confirm/register-confirm.html',
+                    mailParams
+                )
+
+                const mail: MailConfig = {
+                    from: regConfirmMeta.from,
+                    to: user.email,
+                    subject: regConfirmMeta.subject,
+                    html: mailText
+                }
+
+                // send mail to user
+                await mailservice.sendMail(mail)
+
+                res.status(res.statusCode).json({
                     status: res.statusCode,
+                    error: 'email sent'
+                })
+            } else {
+                res.status(404).json({
+                    status: 404,
                     error: 'user not found'
                 })
             }
