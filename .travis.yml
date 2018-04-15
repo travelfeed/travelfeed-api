@@ -11,7 +11,10 @@ script:
   - npm run lint
   - npm run test
 before_deploy:
-  - openssl aes-256-cbc -K $encrypted_cd9fc0385e21_key -iv $encrypted_cd9fc0385e21_iv -in id_travis.enc -out ~\/.ssh/id_travis -d
+  - openssl aes-256-cbc -K $encrypted_cd9fc0385e21_key -iv $encrypted_cd9fc0385e21_iv -in id_travis.enc -out /tmp/id_travis -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/deploy_rsa
+  - ssh-add /tmp/deploy_rsa
 deploy:
   - provider: script
     skip_cleanup: true
