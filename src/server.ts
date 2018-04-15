@@ -11,7 +11,7 @@ export async function initServer(port: number | string): Promise<Server> {
         info('initializing orm connection')
 
         const conn: Connection = await createConnection()
-        const app = createServer(new Express().app)
+        const app = createServer(new Express(__dirname).app)
 
         app.listen(port)
         app.on('listening', () => info(`listening on port ${chalk.cyan(port as string)}`))
