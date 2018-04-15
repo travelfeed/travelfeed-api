@@ -18,9 +18,11 @@ import { jwtConfig, signOpt, saltRounds } from '../../../config/auth'
 
 export class AuthHandler {
     private repository: Repository<User>
+    private mailservice: Mailservice
 
     public constructor() {
         this.repository = getManager().getRepository(User)
+        this.mailservice = new Mailservice()
     }
 
     @bind
@@ -121,15 +123,13 @@ export class AuthHandler {
                 // save new user
                 await this.repository.save(newUser)
 
-                const mailservice = new Mailservice()
-
                 // params for html template
                 const mailParams: regConfirmParams = {
                     confirmUrl: `https://travelfeed.blog/auth/activate/${uuidHash}`
                 }
 
                 // html template
-                const mailText = await mailservice.renderMailTemplate(
+                const mailText = await this.mailservice.renderMailTemplate(
                     './src/modules/auth/templates/register-confirm/register-confirm.html',
                     mailParams
                 )
@@ -142,7 +142,7 @@ export class AuthHandler {
                 }
 
                 // send mail to user
-                await mailservice.sendMail(mail)
+                await this.mailservice.sendMail(mail)
 
                 res.status(res.statusCode).json({
                     status: res.statusCode,
@@ -224,15 +224,13 @@ export class AuthHandler {
                 user.hash = uuidHash
                 this.repository.save(user)
 
-                const mailservice = new Mailservice()
-
                 // params for html template
                 const mailParams: regConfirmParams = {
                     confirmUrl: `https://travelfeed.blog/auth/activate/${uuidHash}`
                 }
 
                 // html template
-                const mailText = await mailservice.renderMailTemplate(
+                const mailText = await this.mailservice.renderMailTemplate(
                     './src/modules/auth/templates/register-confirm/register-confirm.html',
                     mailParams
                 )
@@ -245,7 +243,7 @@ export class AuthHandler {
                 }
 
                 // send mail to user
-                await mailservice.sendMail(mail)
+                await this.mailservice.sendMail(mail)
 
                 res.status(res.statusCode).json({
                     status: res.statusCode,
