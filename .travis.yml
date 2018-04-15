@@ -15,6 +15,6 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rsync -avrcq --delete-after --exclude /public $TRAVIS_BUILD_DIR/dist $DEPLOY_USER_STAGING@$DEPLOY_HOST_STAGING:/home/pibase/html/tf-staging
+    script: rsync -avrcq --delete-after --exclude /public $TRAVIS_BUILD_DIR/dist $DEPLOY_USER_STAGING@$DEPLOY_HOST_STAGING:/home/pibase/html/tf-staging.pascal-iske.de
     on:
       branch: preview/staging
