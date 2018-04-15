@@ -24,16 +24,15 @@ export class CommentHandler {
         next: NextFunction
     ): Promise<void> {
         try {
-            const articleId = req.params.articleId
             const data: Array<ArticleComment> = await this.commentRepo.find({
                 where: {
                     article: req.params.articleId
                 },
                 relations: ['user']
             })
-            res.json({ status: res.statusCode, data: data })
+            res.status(res.statusCode).json({ status: res.statusCode, data: data })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -61,6 +60,7 @@ export class CommentHandler {
                 newArticleComment.date = now
                 newArticleComment.user = await this.userRepo.findOneById(req.user.id)
 
+                // save new articleComment
                 await this.commentRepo.save(newArticleComment)
 
                 // load new articleComment data
@@ -73,10 +73,10 @@ export class CommentHandler {
                     data: data
                 })
             } else {
-                res.status(400).json({ status: 400, error: 'article not found' })
+                res.status(404).json({ status: 404, error: 'article not found' })
             }
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -96,7 +96,7 @@ export class CommentHandler {
 
             res.json({ status: res.statusCode, data: data })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -107,8 +107,45 @@ export class CommentHandler {
         next: NextFunction
     ): Promise<void> {
         try {
+            const article: Article = await this.articleRepo.findOneById(req.params.articleId)
+            const updatedArticleComment: ArticleComment = await this.commentRepo.findOneById(
+                req.params.commentId,
+                {
+                    where: {
+                        user: await this.userRepo.findOneById(req.user.id)
+                    }
+                }
+            )
+
+            if (
+                article != null &&
+                article.id > 0 &&
+                updatedArticleComment != null &&
+                updatedArticleComment.id > 0
+            ) {
+                // updatedArticleComment details
+                updatedArticleComment.text = escape(req.body.text || '')
+
+                // save updatedArticleComment
+                this.commentRepo.save(updatedArticleComment)
+
+                // load updated articleComment data
+                const data = await this.commentRepo.findOneById(updatedArticleComment.id, {
+                    relations: ['user']
+                })
+
+                res.status(res.statusCode).json({
+                    status: res.statusCode,
+                    data: data
+                })
+            } else {
+                res.status(404).json({
+                    status: 404,
+                    error: 'article or comment not found'
+                })
+            }
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -119,8 +156,37 @@ export class CommentHandler {
         next: NextFunction
     ): Promise<void> {
         try {
+            const article: Article = await this.articleRepo.findOneById(req.params.articleId)
+            const deletedArticleComment: ArticleComment = await this.commentRepo.findOneById(
+                req.params.commentId,
+                {
+                    where: {
+                        user: await this.userRepo.findOneById(req.user.id)
+                    }
+                }
+            )
+
+            if (
+                article != null &&
+                article.id > 0 &&
+                deletedArticleComment != null &&
+                deletedArticleComment.id > 0
+            ) {
+                // delete articleComment
+                await this.commentRepo.delete(deletedArticleComment)
+
+                res.status(res.statusCode).json({
+                    status: res.statusCode,
+                    data: 'comment deleted'
+                })
+            } else {
+                res.status(404).json({
+                    status: 404,
+                    error: 'article or comment not found'
+                })
+            }
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 }
