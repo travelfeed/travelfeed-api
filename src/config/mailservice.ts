@@ -2,7 +2,7 @@ import { createTransport, Transporter } from 'nodemailer'
 import { renderFile } from 'ejs'
 import { resolve } from 'path'
 
-const SmtpConfig = {
+const smtpConfig = {
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
@@ -12,8 +12,9 @@ const SmtpConfig = {
 }
 
 export const mailAddresses = {
-    blogMail: 'blog@travelfeed.com',
-    supportMail: 'support@travelfeed.com'
+    blogMail: 'blog@travelfeed.blog',
+    supportMail: 'support@travelfeed.blog',
+    newsletterMail: 'newsletter@travelfeed.blog'
 }
 
 export interface MailConfig {
@@ -27,7 +28,7 @@ export class Mailservice {
     private transporter: Transporter
 
     public constructor() {
-        this.transporter = createTransport(SmtpConfig)
+        this.transporter = createTransport(smtpConfig)
     }
 
     public async sendMail(options: MailConfig) {
