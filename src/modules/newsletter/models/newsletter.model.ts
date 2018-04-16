@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
-import { User } from '../../user/models/user.model'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm'
 
 @Entity()
 export class Newsletter {
@@ -8,19 +7,22 @@ export class Newsletter {
 
     @Column({
         type: 'varchar',
-        length: 50
+        length: 40,
+        unique: true
     })
-    public subject: string
+    public email: string
 
-    @Column('text') public text: string
+    @Column({
+        type: 'tinyint',
+        default: false
+    })
+    public active: boolean
 
-    @Column('int') public receivers: number
-
-    @Column('date') public date: string
-
-    @Column('int') public action: number
-
-    /***** relations *****/
-    @ManyToOne(type => User, user => user.newsletters)
-    public user: User
+    @Column({
+        select: false,
+        type: 'varchar',
+        length: 255,
+        unique: true
+    })
+    public hash: string
 }

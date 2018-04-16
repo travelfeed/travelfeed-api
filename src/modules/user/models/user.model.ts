@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'ty
 import { Article } from '../../article/models/article.model'
 import { UserRole } from './user.role.model'
 import { ArticleComment } from '../../article/models/article.comment.model'
-import { Newsletter } from '../../newsletter/models/newsletter.model'
+import { MailHistory } from '../../misc/models/mail.history.model'
 
 @Entity()
 export class User {
@@ -36,12 +36,6 @@ export class User {
     })
     public hash: string
 
-    @Column({
-        type: 'tinyint',
-        default: false
-    })
-    public newsletter: boolean
-
     /***** relations *****/
     @OneToMany(type => Article, article => article.user)
     public articles: Array<Article>
@@ -49,8 +43,8 @@ export class User {
     @OneToMany(type => ArticleComment, articleComment => articleComment.user)
     public comments: Array<Comment>
 
-    @OneToMany(type => Newsletter, newsletter => newsletter.user)
-    public newsletters: Array<Newsletter>
+    @OneToMany(type => MailHistory, mailHistory => mailHistory.user)
+    public mailHistory: Array<MailHistory>
 
     @ManyToOne(type => UserRole, userRole => userRole.userRole)
     public userRole: UserRole

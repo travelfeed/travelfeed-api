@@ -1,6 +1,4 @@
-import * as bcrypt from 'bcrypt-nodejs'
 import * as uuidv1 from 'uuid/v1'
-import * as crypto from 'crypto'
 import { sign } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { Repository, getManager } from 'typeorm'
@@ -12,15 +10,18 @@ import {
     MailParams as regConfirmParams,
     metadata as regConfirmMeta
 } from '../templates/register-confirm/config'
+import { jwtConfig, signOpt } from '../../../config/auth'
+
 import { User } from '../../user/models/user.model'
 import { UserRole } from '../../user/models/user.role.model'
-import { jwtConfig, signOpt, saltRounds } from '../../../config/auth'
+import { HelperHandler } from '../../misc/handlers/helper.handler'
 
-export class AuthHandler {
+export class AuthHandler extends HelperHandler {
     private repository: Repository<User>
     private mailservice: Mailservice
 
     public constructor() {
+        super()
         this.repository = getManager().getRepository(User)
         this.mailservice = new Mailservice()
     }
@@ -130,7 +131,7 @@ export class AuthHandler {
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    './src/modules/auth/templates/register-confirm/register-confirm.html',
+                    './src/modules/auth/templates/register-confirm/index.html',
                     mailParams
                 )
 
@@ -231,7 +232,7 @@ export class AuthHandler {
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    './src/modules/auth/templates/register-confirm/register-confirm.html',
+                    './src/modules/auth/templates/register-confirm/index.html',
                     mailParams
                 )
 
@@ -258,37 +259,5 @@ export class AuthHandler {
         } catch (err) {
             return next(err)
         }
-    }
-
-    private hashPassword(plainPassword): Promise<string> {
-        return new Promise((resolve, reject) => {
-            bcrypt.genSalt(saltRounds, (err, salt) => {
-                bcrypt.hash(plainPassword, salt, null, (error, hash) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(hash)
-                })
-            })
-        })
-    }
-
-    private verifyPassword(plainPassword, hashedPassword): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            bcrypt.compare(plainPassword, hashedPassword, (err, res) => {
-                if (err) {
-                    reject(err)
-                }
-                resolve(res)
-            })
-        })
-    }
-
-    // sha256 algorithm
-    private hashString(text: string) {
-        return crypto
-            .createHash('sha256')
-            .update(text)
-            .digest('hex')
     }
 }

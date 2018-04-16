@@ -13,18 +13,9 @@ export class NewsletterRoutes {
     }
 
     private initRoutes() {
-        this.router.get(
-            '/subscribe',
-            isAuthorized(),
-            checkUserRole('newsletter', 'subscribe'),
-            this.handler.subNewsletter
-        )
-        this.router.get(
-            '/unsubscribe',
-            isAuthorized(),
-            checkUserRole('newsletter', 'unsubscribe'),
-            this.handler.unsubNewsletter
-        )
+        this.router.get('/subscribe/:email', this.handler.subNewsletter)
+        this.router.get('/unsubscribe/:uuid', this.handler.unsubNewsletter)
+        this.router.get('/activate/:uuid', this.handler.activateNewsletter)
         this.router.post(
             '/send',
             isAuthorized(),

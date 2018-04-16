@@ -1,18 +1,30 @@
+import * as uuidv1 from 'uuid/v1'
 import { Request, Response, NextFunction } from 'express'
 import { getManager, Repository } from 'typeorm'
 import { bind } from 'decko'
+import { escape, isEmail } from 'validator'
+
+import { Mailservice, MailConfig } from '../../../config/mailservice'
+import {
+    MailParams as nlChannelParams,
+    metadata as nlChannelMeta
+} from '../templates/newsletter-channel/config'
+import {
+    MailParams as nlSubParams,
+    metadata as nlSubMeta
+} from '../templates/newsletter-subscribe/config'
+
 import { Newsletter } from '../models/newsletter.model'
 import { User } from '../../user/models/user.model'
-import { Mailservice, MailConfig } from '../../../config/mailservice'
-import { MailParams as newsletterParams, metadata as newsletterMeta } from '../templates/config'
-import { runInNewContext } from 'vm'
+import { HelperHandler } from '../../misc/handlers/helper.handler'
 
-export class NewsletterHandler {
+export class NewsletterHandler extends HelperHandler {
     private newsletterRepo: Repository<Newsletter>
     private userRepo: Repository<User>
     private mailservice: Mailservice
 
     public constructor() {
+        super()
         this.newsletterRepo = getManager().getRepository(Newsletter)
         this.userRepo = getManager().getRepository(User)
         this.mailservice = new Mailservice()
@@ -21,26 +33,58 @@ export class NewsletterHandler {
     @bind
     public async subNewsletter(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const user: User = await this.userRepo.findOne({
+            const userExists: Newsletter = await this.newsletterRepo.findOne({
                 where: {
-                    id: req.user.id,
-                    newsletter: false
+                    email: req.params.email
                 }
             })
 
-            if (user != null && user.id > 0) {
-                // subscribe to newsletter and save user
-                user.newsletter = true
-                this.userRepo.save(user)
+            // check if user already subscribed to newsletter
+            if (!userExists) {
+                if (isEmail(req.params.email || '')) {
+                    const uuidHash = this.hashString(uuidv1()) // nl activation mail
 
-                res.status(res.statusCode).json({
-                    status: res.statusCode,
-                    data: 'subscribed to newsletter'
-                })
+                    // create new empty newsletter instance
+                    const nlUser: Newsletter = this.newsletterRepo.create()
+                    nlUser.email = req.params.email
+                    nlUser.hash = uuidHash
+                    nlUser.active = false
+
+                    await this.newsletterRepo.save(nlUser)
+
+                    const mailParams: nlSubParams = {
+                        subLink: `https://travelfeed.blog/newsletter/activate/${uuidHash}`
+                    }
+
+                    // html template
+                    const mailText = await this.mailservice.renderMailTemplate(
+                        `./src/modules/newsletter/templates/newsletter-subscribe/index.html`,
+                        mailParams
+                    )
+
+                    const mail: MailConfig = {
+                        from: nlSubMeta.from,
+                        to: nlUser.email,
+                        subject: nlSubMeta.subject,
+                        html: mailText
+                    }
+
+                    await this.mailservice.sendMail(mail)
+
+                    res.status(res.statusCode).json({
+                        status: res.statusCode,
+                        data: 'subscribed to newsletter'
+                    })
+                } else {
+                    res.status(400).json({
+                        status: 400,
+                        error: 'invalid email address'
+                    })
+                }
             } else {
-                res.status(404).json({
-                    status: 404,
-                    error: 'user not found'
+                res.status(400).json({
+                    status: 400,
+                    error: 'user already subscribed'
                 })
             }
         } catch (err) {
@@ -51,26 +95,24 @@ export class NewsletterHandler {
     @bind
     public async unsubNewsletter(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const user: User = await this.userRepo.findOne({
+            const nlUser: Newsletter = await this.newsletterRepo.findOne({
                 where: {
-                    id: req.user.id,
-                    newsletter: true
+                    hash: escape(req.params.uuid || ''),
+                    active: true
                 }
             })
 
-            if (user != null && user.id > 0) {
-                // unsubscribe from newsletter and save user
-                user.newsletter = false
-                this.userRepo.save(user)
+            if (nlUser != null && nlUser.id > 0) {
+                await this.newsletterRepo.delete(nlUser)
 
                 res.status(res.statusCode).json({
                     status: res.statusCode,
-                    data: 'unsubscribed to newsletter'
+                    data: 'unsubscribed from newsletter'
                 })
             } else {
                 res.status(404).json({
                     status: 404,
-                    error: 'user not found'
+                    data: 'user not found'
                 })
             }
         } catch (err) {
@@ -79,32 +121,67 @@ export class NewsletterHandler {
     }
 
     @bind
+    public async activateNewsletter(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> {
+        const nlUser: Newsletter = await this.newsletterRepo.findOne({
+            where: {
+                hash: req.params.uuid
+            }
+        })
+
+        if (nlUser != null && nlUser.id > 0) {
+            nlUser.active = true
+            nlUser.hash = null
+
+            await this.newsletterRepo.save(nlUser)
+
+            res.status(res.statusCode).json({
+                status: res.statusCode,
+                data: 'subscribed to newsletter'
+            })
+        } else {
+            res.status(404).json({
+                status: 404,
+                error: 'user not found'
+            })
+        }
+    }
+
+    @bind
     public async sendNewsletterAll(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const author: User = await this.userRepo.findOneById(req.user.id)
-            const [users, receiversCount] = await this.userRepo.findAndCount({
+            const [users, receiversCount] = await this.newsletterRepo.findAndCount({
                 where: {
-                    active: true,
-                    newsletter: true
+                    active: true
                 }
             })
 
             // send newsletter to each user
             for (const user of users) {
-                const mailParams: newsletterParams = {
-                    text: req.body.text
+                const uuidHash = this.hashString(uuidv1()) // account activation mail
+
+                user.hash = uuidHash
+                await this.newsletterRepo.save(user)
+
+                const mailParams: nlChannelParams = {
+                    text: req.body.text,
+                    unsubLink: `https://travelfeed.blog/newsletter/unsubscribe/${uuidHash}`
                 }
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    './src/modules/newsletter/templates/newsletter.html',
+                    './src/modules/newsletter/templates/newsletter-channel/index.html',
                     mailParams
                 )
 
                 const mail: MailConfig = {
-                    from: newsletterMeta.from,
+                    from: nlChannelMeta.from,
                     to: user.email,
-                    subject: newsletterMeta.subject,
+                    subject: nlChannelMeta.subject,
                     html: mailText
                 }
 
@@ -112,8 +189,8 @@ export class NewsletterHandler {
                 await this.mailservice.sendMail(mail)
             }
 
-            // log newsletter
-            await this.logNewsletter(req.body.subject, req.body.text, receiversCount, 1, author)
+            // TODO: log newsletter
+            await this.logMail()
 
             res.status(res.statusCode).json({
                 status: res.statusCode,
@@ -132,29 +209,34 @@ export class NewsletterHandler {
     ): Promise<void> {
         try {
             const author: User = await this.userRepo.findOneById(req.user.id)
-            const user: User = await this.userRepo.findOne({
+            const nlUser: Newsletter = await this.newsletterRepo.findOne({
                 where: {
-                    active: true,
-                    newsletter: true,
-                    email: req.params.email
+                    email: req.params.email,
+                    active: true
                 }
             })
 
-            if (user != null && user.id > 0) {
-                const mailParams: newsletterParams = {
-                    text: req.body.text
+            if (nlUser != null && nlUser.id > 0) {
+                const uuidHash = this.hashString(uuidv1()) // nl unsubscribe link
+
+                nlUser.hash = uuidHash
+                await this.newsletterRepo.save(nlUser)
+
+                const mailParams: nlChannelParams = {
+                    text: req.body.text,
+                    unsubLink: `https://travelfeed.blog/newsletter/unsubscribe/${uuidHash}`
                 }
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    './src/modules/newsletter/templates/newsletter.html',
+                    './src/modules/newsletter/templates/newsletter-channel/index.html',
                     mailParams
                 )
 
                 const mail: MailConfig = {
-                    from: newsletterMeta.from,
-                    to: user.email,
-                    subject: newsletterMeta.subject,
+                    from: nlChannelMeta.from,
+                    to: nlUser.email,
+                    subject: nlChannelMeta.subject,
                     html: mailText
                 }
 
@@ -172,33 +254,10 @@ export class NewsletterHandler {
                 })
             }
 
-            // log newsletter
-            await this.logNewsletter(req.body.subject, req.body.text, 1, 2, author)
+            // TODO: log newsletter
+            await this.logMail()
         } catch (err) {
             return next(err)
         }
-    }
-
-    private async logNewsletter(
-        subject: string,
-        text: string,
-        receivers: number,
-        action: number,
-        author: User
-    ) {
-        // create new empty newsletter instance
-        const log = this.newsletterRepo.create()
-
-        const date = new Date()
-        const now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-
-        log.subject = subject
-        log.text = text
-        log.receivers = receivers
-        log.date = now
-        log.action = action
-        log.user = author
-
-        await this.newsletterRepo.save(log)
     }
 }
