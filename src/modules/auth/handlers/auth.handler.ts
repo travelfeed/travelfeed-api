@@ -147,7 +147,7 @@ export class AuthHandler extends HelperHandler {
 
                 res.status(res.statusCode).json({
                     status: res.statusCode,
-                    data: 'user registered'
+                    data: 'user registration link sent'
                 })
             } else {
                 res.status(401).json({
@@ -248,7 +248,7 @@ export class AuthHandler extends HelperHandler {
 
                 res.status(res.statusCode).json({
                     status: res.statusCode,
-                    error: 'email sent'
+                    data: 'user registration link sent'
                 })
             } else {
                 res.status(404).json({

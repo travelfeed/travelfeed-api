@@ -73,7 +73,7 @@ export class NewsletterHandler extends HelperHandler {
 
                     res.status(res.statusCode).json({
                         status: res.statusCode,
-                        data: 'subscribed to newsletter'
+                        data: 'newsletter activation link sent'
                     })
                 } else {
                     res.status(400).json({
@@ -81,6 +81,37 @@ export class NewsletterHandler extends HelperHandler {
                         error: 'invalid email address'
                     })
                 }
+            } else if (userExists != null && userExists.id > 0 && !userExists.active) {
+                // resend activation link if not active
+
+                const uuidHash = this.hashString(uuidv1()) // nl activation mail
+
+                userExists.hash = uuidHash
+                await this.newsletterRepo.save(userExists)
+
+                const mailParams: nlSubParams = {
+                    subLink: `https://travelfeed.blog/newsletter/activate/${uuidHash}`
+                }
+
+                // html template
+                const mailText = await this.mailservice.renderMailTemplate(
+                    `./src/modules/newsletter/templates/newsletter-subscribe/index.html`,
+                    mailParams
+                )
+
+                const mail: MailConfig = {
+                    from: nlSubMeta.from,
+                    to: userExists.email,
+                    subject: nlSubMeta.subject,
+                    html: mailText
+                }
+
+                await this.mailservice.sendMail(mail)
+
+                res.status(res.statusCode).json({
+                    status: res.statusCode,
+                    data: 'newsletter activation link sent'
+                })
             } else {
                 res.status(400).json({
                     status: 400,
@@ -107,12 +138,12 @@ export class NewsletterHandler extends HelperHandler {
 
                 res.status(res.statusCode).json({
                     status: res.statusCode,
-                    data: 'unsubscribed from newsletter'
+                    data: 'user unsubscribed from newsletter'
                 })
             } else {
                 res.status(404).json({
                     status: 404,
-                    data: 'user not found'
+                    error: 'user not found'
                 })
             }
         } catch (err) {
@@ -140,7 +171,7 @@ export class NewsletterHandler extends HelperHandler {
 
             res.status(res.statusCode).json({
                 status: res.statusCode,
-                data: 'subscribed to newsletter'
+                data: 'user subscribed to newsletter'
             })
         } else {
             res.status(404).json({
