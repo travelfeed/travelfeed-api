@@ -1,5 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
 import { MailHistory } from './mail.history.model'
+
+/**
+ *      1: NewsletterAll
+ *      2: NewsletterSingle
+ */
 
 @Entity()
 export class MailAction {
@@ -10,7 +15,7 @@ export class MailAction {
         type: 'varchar',
         length: 50
     })
-    public desc: string
+    public action: string
 
     /***** relations *****/
     @OneToMany(type => MailHistory, mailHistory => mailHistory.mailAction)

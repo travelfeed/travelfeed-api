@@ -35,6 +35,4 @@ export class HelperHandler {
             .update(text)
             .digest('hex')
     }
-
-    protected async logMail() {}
 }

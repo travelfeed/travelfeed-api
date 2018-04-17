@@ -17,16 +17,19 @@ import {
 import { Newsletter } from '../models/newsletter.model'
 import { User } from '../../user/models/user.model'
 import { HelperHandler } from '../../misc/handlers/helper.handler'
+import { MailAction } from '../../misc/models/mail.action.model'
 
 export class NewsletterHandler extends HelperHandler {
     private newsletterRepo: Repository<Newsletter>
     private userRepo: Repository<User>
+    private mailActionRepo: Repository<MailAction>
     private mailservice: Mailservice
 
     public constructor() {
         super()
         this.newsletterRepo = getManager().getRepository(Newsletter)
         this.userRepo = getManager().getRepository(User)
+        this.mailActionRepo = getManager().getRepository(MailAction)
         this.mailservice = new Mailservice()
     }
 
@@ -220,8 +223,13 @@ export class NewsletterHandler extends HelperHandler {
                 await this.mailservice.sendMail(mail)
             }
 
-            // TODO: log newsletter
-            await this.logMail()
+            // log mail
+            const mailAction: MailAction = await this.mailActionRepo.findOne({
+                where: {
+                    action: 'NewsletterAll'
+                }
+            })
+            await this.mailservice.logMail(req.path, nlChannelMeta.subject, author, mailAction)
 
             res.status(res.statusCode).json({
                 status: res.statusCode,
@@ -274,6 +282,14 @@ export class NewsletterHandler extends HelperHandler {
                 // send mail to user
                 await this.mailservice.sendMail(mail)
 
+                // log mail
+                const mailAction: MailAction = await this.mailActionRepo.findOne({
+                    where: {
+                        action: 'NewsletterSingle'
+                    }
+                })
+                await this.mailservice.logMail(req.path, nlChannelMeta.subject, author, mailAction)
+
                 res.status(res.statusCode).json({
                     status: res.statusCode,
                     data: 'newsletter sent'
@@ -284,9 +300,6 @@ export class NewsletterHandler extends HelperHandler {
                     error: 'user not found'
                 })
             }
-
-            // TODO: log newsletter
-            await this.logMail()
         } catch (err) {
             return next(err)
         }

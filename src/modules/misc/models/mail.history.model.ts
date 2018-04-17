@@ -13,6 +13,12 @@ export class MailHistory {
     })
     public endpoint: string
 
+    @Column({
+        type: 'varchar',
+        length: 100
+    })
+    public subject: string
+
     @Column('text') public text: string
 
     @Column('date') public date: string
