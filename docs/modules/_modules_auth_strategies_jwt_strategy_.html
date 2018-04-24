@@ -87,7 +87,7 @@
 					<div class="tsd-signature tsd-kind-icon">Jwt<wbr>Strategy<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Strategy</span><span class="tsd-signature-symbol"> =&nbsp;new Strategy(jwtConfig, async (payload, next) &#x3D;&gt; {try {const repository: Repository&lt;User&gt; &#x3D; getManager().getRepository(User)const user: User &#x3D; await repository.findOneById(payload.userId, {select: [&#x27;id&#x27;],relations: [&#x27;userRole&#x27;]})if (!user) {return next(&#x27;user is not authorized&#x27;, null)} else {permissions.addUserRoles(user.id, user.userRole.role || &#x27;User&#x27;)return next(null, user)}} catch (error) {return next(error)}})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/149bef7/src/modules/auth/strategies/jwt.strategy.ts#L7">modules/auth/strategies/jwt.strategy.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/27c8ef4/src/modules/auth/strategies/jwt.strategy.ts#L7">modules/auth/strategies/jwt.strategy.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
