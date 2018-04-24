@@ -3,9 +3,7 @@
     "tslint:latest",
     "tslint-config-prettier"
   ],
-  "rulesDirectory": [
-    "node_modules/codelyzer"
-  ],
+  "rulesDirectory": [],
   "rules": {
     "array-type": [
       true,
@@ -120,24 +118,6 @@
       "single"
     ],
     "radix": true,
-    "rxjs-no-add": {
-      "options": [
-        {
-          "allowObservables": false,
-          "allowOperators": false
-        }
-      ],
-      "severity": "error"
-    },
-    "rxjs-no-patched": {
-      "options": [
-        {
-          "allowObservables": false,
-          "allowOperators": false
-        }
-      ],
-      "severity": "error"
-    },
     "semicolon": [
       true,
       "never"
@@ -166,28 +146,6 @@
       "check-separator",
       "check-type"
     ],
-    "directive-selector": [
-      true,
-      "attribute",
-      "cmp",
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      "cmp",
-      "kebab-case"
-    ],
-    "no-output-on-prefix": true,
-    "use-input-property-decorator": true,
-    "use-output-property-decorator": true,
-    "use-host-property-decorator": true,
-    "no-input-rename": true,
-    "no-implicit-dependencies": false,
-    "no-output-rename": true,
-    "use-life-cycle-interface": true,
-    "use-pipe-transform-interface": true,
-    "component-class-suffix": true,
-    "directive-class-suffix": true
+    "no-implicit-dependencies": false
   }
 }

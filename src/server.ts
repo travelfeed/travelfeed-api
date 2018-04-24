@@ -1,23 +1,27 @@
-import * as express from 'express'
-import * as bodyParser from 'body-parser'
-import { routes } from './routes'
+import chalk from 'chalk'
+import { createServer, Server } from 'http'
+import { createConnection, Connection } from 'typeorm'
+import { logger } from './logger'
+import { Express } from './config/express'
 
-const port: number = 9001
-const server: express.Application = express()
+const { info, error } = logger('server')
 
-server.use(bodyParser.text())
-server.use(bodyParser.json())
-server.use(bodyParser.urlencoded({ extended: true }))
-server.use('/api', routes)
-server.use((req: express.Request, res: express.Response) => {
-    res.status(500).json({
-        status: 500,
-        message: 'Internal server error'
-    })
-})
+export async function initServer(port: number | string): Promise<Server> {
+    try {
+        info('initializing orm connection')
 
-server.listen(port, () => {
-    console.log(`server listening at port ${port}`)
-})
+        const conn: Connection = await createConnection()
+        const app = createServer(new Express(__dirname).app)
 
-export { server }
+        app.listen(port)
+        app.on('listening', () => info(`listening on port ${chalk.cyan(port as string)}`))
+        app.on('close', () => info('closed successfully. bye!'))
+        app.on('error', err => {
+            throw new Error(err.message)
+        })
+
+        return app
+    } catch (err) {
+        error(err)
+    }
+}

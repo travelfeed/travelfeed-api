@@ -1,0 +1,11 @@
+# staging password auth
+AuthType Basic
+AuthName "TF Staging"
+AuthUserFile /var/www/virtual/pibase/html/tf-staging.pascal-iske.de/.htpasswd
+require user tf-staging
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteEngine On
+    RewriteRule ^(.*) http://localhost:61000/$1 [P]
+</IfModule>
