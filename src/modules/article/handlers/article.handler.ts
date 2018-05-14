@@ -108,7 +108,7 @@ export class ArticleHandler {
             // loop through article texts and store each one
             for (const articleText of req.body.articleText) {
                 // create new empty articleText instance
-                const newArticleText: ArticleText = await this.textRepo.create()
+                const newArticleText: ArticleText = this.textRepo.create()
 
                 // articleText details
                 newArticleText.article = newArticle
@@ -123,7 +123,7 @@ export class ArticleHandler {
             // loop through article pictures and store each one
             for (const articlePic of req.body.pictures) {
                 // create new empty picture instance
-                const newArticlePic: Picture = await this.picRepo.create()
+                const newArticlePic: Picture = this.picRepo.create()
 
                 // picture details
                 newArticlePic.article = newArticle

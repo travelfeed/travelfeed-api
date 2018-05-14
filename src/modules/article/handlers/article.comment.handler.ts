@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { getManager, Repository } from 'typeorm'
 import { bind } from 'decko'
 import { escape } from 'validator'
+import { permissions } from '../../../config/acl'
 import { ArticleComment } from '../models/article.comment.model'
 import { User } from '../../user/models/user.model'
 import { Article } from '../models/article.model'
@@ -108,14 +109,17 @@ export class CommentHandler {
     ): Promise<void> {
         try {
             const article: Article = await this.articleRepo.findOneById(req.params.articleId)
-            const updatedArticleComment: ArticleComment = await this.commentRepo.findOneById(
-                req.params.commentId,
-                {
+            let updatedArticleComment: ArticleComment
+
+            if (permissions.hasRole(req.user.id, 'Admin')) {
+                updatedArticleComment = await this.commentRepo.findOneById(req.params.commentId)
+            } else {
+                updatedArticleComment = await this.commentRepo.findOneById(req.params.commentId, {
                     where: {
                         user: await this.userRepo.findOneById(req.user.id)
                     }
-                }
-            )
+                })
+            }
 
             if (
                 article != null &&
@@ -157,14 +161,17 @@ export class CommentHandler {
     ): Promise<void> {
         try {
             const article: Article = await this.articleRepo.findOneById(req.params.articleId)
-            const deletedArticleComment: ArticleComment = await this.commentRepo.findOneById(
-                req.params.commentId,
-                {
+            let deletedArticleComment: ArticleComment
+
+            if (permissions.hasRole(req.user.id, 'Admin')) {
+                deletedArticleComment = await this.commentRepo.findOneById(req.params.commentId)
+            } else {
+                deletedArticleComment = await this.commentRepo.findOneById(req.params.commentId, {
                     where: {
                         user: await this.userRepo.findOneById(req.user.id)
                     }
-                }
-            )
+                })
+            }
 
             if (
                 article != null &&
