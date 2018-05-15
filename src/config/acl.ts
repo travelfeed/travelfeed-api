@@ -7,7 +7,7 @@ permissions.allow([
         roles: ['Admin'],
         allows: [
             {
-                resources: ['user', 'article', 'comment', 'newsletter'],
+                resources: ['user', 'article', 'comment', 'newsletter', 'translation'],
                 permissions: '*'
             }
         ]
