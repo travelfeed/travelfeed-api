@@ -1,3 +1,4 @@
+import { join } from 'path'
 import * as express from 'express'
 import * as cors from 'cors'
 import * as bodyParser from 'body-parser'
@@ -13,14 +14,17 @@ import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy'
 import { AuthRoutes } from '../modules/auth/routes/auth.routes'
 import { UserRoutes } from '../modules/user/routes/user.routes'
 import { ArticleRoutes } from '../modules/article/routes/article.routes'
+import { NewsletterRoutes } from '../modules/newsletter/routes/newsletter.routes'
 
 const { error } = logger('express')
 
 export class Express {
+    public root: string
     public env: string
     public app: express.Application
 
-    public constructor() {
+    public constructor(root: string) {
+        this.root = root
         this.env = process.env.NODE_ENV || 'development'
         this.app = express()
 
@@ -40,26 +44,16 @@ export class Express {
         this.app.use(bodyParser.urlencoded({ extended: true }))
         this.app.use(morgan('dev'))
         this.app.use(helmet())
-
         passport.use('strategy.jwt', JwtStrategy)
     }
 
     // routes
     private initRoutes(): void {
-        // root route
-        this.app.all('/', (req: express.Request, res: express.Response) => {
-            res.status(200).json({
-                status: 200,
-                data: {
-                    message: 'success!'
-                }
-            })
-        })
-
         // api routes
         this.app.use('/api/auth', new AuthRoutes().router)
         this.app.use('/api/user', new UserRoutes().router)
         this.app.use('/api/article', new ArticleRoutes().router)
+        this.app.use('/api/newsletter', new NewsletterRoutes().router)
 
         // error handling
         this.app.use((err, req, res, next) => {
@@ -68,6 +62,12 @@ export class Express {
                 status: 500,
                 error: err.stack
             })
+        })
+
+        // serve app
+        this.app.use(express.static(join(this.root, 'public')))
+        this.app.get('*', (req: express.Request, res: express.Response) => {
+            res.sendFile(join(this.root, 'public', 'index.html'))
         })
     }
 }

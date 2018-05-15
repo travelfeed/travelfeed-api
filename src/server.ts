@@ -15,7 +15,7 @@ export async function initServer(port: number | string): Promise<Server> {
 
         // init http server
         info('initializing http server')
-        const app = createServer(new Express().app)
+        const app = createServer(new Express(__dirname).app)
 
         // init socket server
         info('initializing socket server')

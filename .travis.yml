@@ -1,9 +1,25 @@
 language: node_js
 node_js:
   - '9'
+addons:
+  ssh_known_hosts:
+    - $DEPLOY_HOST_STAGING
+    - $DEPLOY_HOST_IP_STAGING
 install:
   - npm install
-script:
+before_script:
   - npm run build
+script:
   - npm run lint
   - npm run test
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_cd9fc0385e21_key -iv $encrypted_cd9fc0385e21_iv -in id_travis.enc -out /tmp/id_travis -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/id_travis
+  - ssh-add /tmp/id_travis
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: rsync -avrcq --delete-after --exclude /public $TRAVIS_BUILD_DIR/dist $DEPLOY_USER_STAGING@$DEPLOY_HOST_STAGING:/home/pibase/html/tf-staging.pascal-iske.de
+    on:
+      branch: preview/staging

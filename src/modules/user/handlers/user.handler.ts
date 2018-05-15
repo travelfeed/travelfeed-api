@@ -22,12 +22,12 @@ export class UserHandler {
                     'articles.pictures'
                 ]
             })
-            res.json({
+            res.status(res.statusCode).json({
                 status: res.statusCode,
                 data: data
             })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -44,12 +44,12 @@ export class UserHandler {
                 ]
             })
 
-            res.json({
+            res.status(res.statusCode).json({
                 status: res.statusCode,
                 data: data
             })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 
@@ -64,12 +64,12 @@ export class UserHandler {
                     'articles.pictures'
                 ]
             })
-            res.json({
+            res.status(res.statusCode).json({
                 status: res.statusCode,
                 data: data == null ? [] : data
             })
         } catch (err) {
-            next(err)
+            return next(err)
         }
     }
 }

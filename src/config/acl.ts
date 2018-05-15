@@ -7,7 +7,7 @@ permissions.allow([
         roles: ['Admin'],
         allows: [
             {
-                resources: ['user', 'article', 'comment'],
+                resources: ['user', 'article', 'comment', 'newsletter'],
                 permissions: '*'
             }
         ]
@@ -22,6 +22,10 @@ permissions.allow([
             {
                 resources: 'comment',
                 permissions: ['read', 'create', 'delete']
+            },
+            {
+                resources: 'newsletter',
+                permissions: ['subscribe', 'unsubscribe']
             }
         ]
     }
