@@ -35,18 +35,30 @@ export const saltRounds = 10
 export function isAuthorized(): Handler {
     return (req, res, next) => {
         try {
-            authenticate('strategy.jwt', { session: false }, (err, user, info) => {
+            authenticate('strategy.jwt', { session: false }, (error, user, info) => {
                 // general error
-                if (err) {
-                    return next(err)
+                if (error) {
+                    return res.status(500).json({
+                        status: 500,
+                        error: error
+                    })
                 }
 
                 // token expired
                 if (info) {
-                    return res.status(403).json({
-                        status: 403,
-                        error: info.name
-                    })
+                    switch (info.message) {
+                        case 'No auth token':
+                            return res.status(401).json({
+                                status: 401,
+                                error: 'Not authorized.'
+                            })
+
+                        case 'jwt expired':
+                            return res.status(403).json({
+                                status: 403,
+                                error: 'Auth token expired.'
+                            })
+                    }
                 }
 
                 // user not authorized
