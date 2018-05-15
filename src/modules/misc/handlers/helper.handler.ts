@@ -1,9 +1,26 @@
 import * as bcrypt from 'bcrypt-nodejs'
 import * as crypto from 'crypto'
+import { v1 as uuidv1, v4 as uuidv4 } from 'uuid'
+import { sign } from 'jsonwebtoken'
+import { saltRounds, jwtConfig, signOptions } from '../../../config/auth'
 
-import { saltRounds } from '../../../config/auth'
+export interface TokenPair {
+    auth: string
+    refresh: string
+}
+
+export interface RefreshCounts {
+    [key: number]: number
+}
+
+export interface RefreshTokens {
+    [key: string]: number
+}
 
 export class HelperHandler {
+    protected refreshCounts: RefreshCounts = {}
+    protected refreshTokens: RefreshTokens = {}
+
     protected hashPassword(plainPassword): Promise<string> {
         return new Promise((resolve, reject) => {
             bcrypt.genSalt(saltRounds, (err, salt) => {
@@ -34,5 +51,33 @@ export class HelperHandler {
             .createHash('sha256')
             .update(text)
             .digest('hex')
+    }
+
+    protected createTokenPair(userId: number): TokenPair {
+        const payload = { userId: userId }
+        const auth = sign(payload, jwtConfig.secretOrKey, signOptions)
+        const refresh = `${uuidv1()}-${uuidv4()}`
+
+        // store new refresh token and increase count
+        this.refreshCounts[userId] = (this.refreshCounts[userId] || 0) + 1
+        this.refreshTokens[refresh] = userId
+
+        return { auth, refresh }
+    }
+
+    protected validRefreshToken(refreshToken: string, userId: number): boolean {
+        // only allow refresh 3 times
+        if (this.refreshCounts[userId] > 3) {
+            delete this.refreshCounts[userId]
+            return false
+        }
+
+        // check if refresh token is valid
+        if (this.refreshTokens[refreshToken] && this.refreshTokens[refreshToken] === userId) {
+            delete this.refreshTokens[refreshToken]
+            return true
+        }
+
+        return false
     }
 }

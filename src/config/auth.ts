@@ -20,7 +20,7 @@ export const jwtConfig: StrategyOptions = {
 
 // jsonwebtoken signing options
 export const signOptions: SignOptions = {
-    expiresIn: '30s',
+    expiresIn: '10m',
     audience: jwtConfig.audience,
     issuer: jwtConfig.issuer
 }
