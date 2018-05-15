@@ -15,6 +15,7 @@ export class AuthRoutes {
     private initRoutes() {
         this.router.post('/signin', this.handler.signin)
         this.router.post('/signout', this.handler.signout)
+        this.router.post('/refresh', this.handler.refresh)
         this.router.post('/register', this.handler.register)
         this.router.post('/unregister', isAuthorized(), this.handler.unregister)
         this.router.get('/activate/:uuid', this.handler.activate)

@@ -4,6 +4,9 @@
             "path": "."
         },
         {
+            "path": "./src/config"
+        },
+        {
             "path": "./src/modules"
         },
         {
@@ -17,6 +20,11 @@
         "gitblame.commitUrl": "https://github.com/travelfeed/travelfeed-api/commit/${hash}/",
         "tslint.autoFixOnSave": true,
         "[json]": {
+            "editor.formatOnPaste": false,
+            "editor.formatOnSave": false,
+            "editor.formatOnType": false
+        },
+        "[jsonc]": {
             "editor.formatOnPaste": false,
             "editor.formatOnSave": false,
             "editor.formatOnType": false
