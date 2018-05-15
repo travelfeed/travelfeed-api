@@ -16,6 +16,7 @@
   "lint-staged": {
     "{e2e,src}/**/*.{ts,scss,md}": [
       "prettier --write",
+      "tslint -p tsconfig.json --fix",
       "git add"
     ]
   },
