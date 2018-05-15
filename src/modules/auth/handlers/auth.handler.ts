@@ -1,5 +1,4 @@
-import { v1 as uuidv1, v4 as uuidv4 } from 'uuid'
-import { sign } from 'jsonwebtoken'
+import { v1 as uuidv1 } from 'uuid'
 import { Request, Response, NextFunction } from 'express'
 import { Repository, getManager } from 'typeorm'
 import { bind } from 'decko'
@@ -9,19 +8,13 @@ import {
     MailParams as regConfirmParams,
     metadata as regConfirmMeta
 } from '../templates/register-confirm/config'
-import { jwtConfig, signOptions } from '../../../config/auth'
 import { User } from '../../user/models/user.model'
 import { UserRole } from '../../user/models/user.role.model'
 import { HelperHandler } from '../../misc/handlers/helper.handler'
 
-export interface RefreshTokens {
-    [username: string]: number
-}
-
 export class AuthHandler extends HelperHandler {
     private repository: Repository<User>
     private mailservice: Mailservice
-    private refreshTokens: RefreshTokens = {}
 
     public constructor() {
         super()
@@ -52,22 +45,15 @@ export class AuthHandler extends HelperHandler {
 
                 if (validPassword) {
                     // create jwt
-                    const payload = {
-                        userId: user.id
-                    }
-
-                    const token = sign(payload, jwtConfig.secretOrKey, signOptions)
-                    const refreshToken = `${uuidv1()}-${uuidv4()}`
-
-                    this.refreshTokens[refreshToken] = user.id
+                    const tokens = this.createTokenPair(user.id)
 
                     res.status(200).json({
                         status: 200,
                         data: {
                             userId: user.id,
                             userRole: user.userRole.role,
-                            authToken: token,
-                            refreshToken: refreshToken
+                            authToken: tokens.auth,
+                            refreshToken: tokens.refresh
                         }
                     })
                 } else {
@@ -92,23 +78,20 @@ export class AuthHandler extends HelperHandler {
         try {
             const { userId, refreshToken } = req.body as any
 
-            if (!this.refreshTokens[refreshToken] || this.refreshTokens[refreshToken] !== userId) {
+            if (!this.validRefreshToken(refreshToken, userId)) {
                 return res.status(401).json({
                     status: 401,
                     error: 'Not authorized.'
                 })
             }
 
-            const payload = {
-                userId: userId
-            }
-
-            const token = sign(payload, jwtConfig.secretOrKey, signOptions)
+            const tokens = this.createTokenPair(userId)
 
             return res.status(200).json({
                 status: 200,
                 data: {
-                    authToken: token
+                    authToken: tokens.auth,
+                    refreshToken: tokens.refresh
                 }
             })
         } catch (err) {
