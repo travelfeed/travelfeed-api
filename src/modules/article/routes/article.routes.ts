@@ -39,7 +39,7 @@ export class ArticleRoutes {
             checkUserRole('article', 'read'),
             this.articleHandler.readArticle
         )
-        this.router.put(
+        this.router.post(
             '/:articleId',
             isAuthorized(),
             checkUserRole('article', 'update'),

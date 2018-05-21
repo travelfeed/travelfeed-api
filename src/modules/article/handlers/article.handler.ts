@@ -9,19 +9,13 @@ import { Language } from '../../misc/models/language.model'
 import { Picture } from '../../misc/models/picture.model'
 
 export class ArticleHandler {
-    private articleRepo: Repository<Article>
-    private userRepo: Repository<User>
-    private textRepo: Repository<ArticleText>
-    private langRepo: Repository<Language>
-    private picRepo: Repository<Picture>
+    private articleRepo: Repository<Article> = getManager().getRepository(Article)
+    private userRepo: Repository<User> = getManager().getRepository(User)
+    private textRepo: Repository<ArticleText> = getManager().getRepository(ArticleText)
+    private langRepo: Repository<Language> = getManager().getRepository(Language)
+    private picRepo: Repository<Picture> = getManager().getRepository(Picture)
 
-    public constructor() {
-        this.articleRepo = getManager().getRepository(Article)
-        this.userRepo = getManager().getRepository(User)
-        this.textRepo = getManager().getRepository(ArticleText)
-        this.langRepo = getManager().getRepository(Language)
-        this.picRepo = getManager().getRepository(Picture)
-    }
+    public constructor() {}
 
     @bind // read all articles
     public async readArticles(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -36,7 +30,10 @@ export class ArticleHandler {
                     'comments.user'
                 ]
             })
-            res.json({ status: res.statusCode, data: data })
+            res.json({
+                status: res.statusCode,
+                data: data
+            })
         } catch (err) {
             return next(err)
         }
@@ -91,45 +88,41 @@ export class ArticleHandler {
     @bind
     public async createArticle(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            // create new empty article instance
-            const newArticle: Article = this.articleRepo.create()
-
-            // article details
-            newArticle.title = escape(req.body.title || '')
-            newArticle.country = escape(req.body.country || '')
-            newArticle.city = escape(req.body.city || '')
-            newArticle.latitude = req.body.latitude || ''
-            newArticle.longitude = req.body.longitude || ''
-            newArticle.user = await this.userRepo.findOneById(req.user.id)
+            // create new article instance
+            const newArticle: Article = this.articleRepo.create({
+                title: escape(req.body.title || ''),
+                country: escape(req.body.country || ''),
+                city: escape(req.body.city || ''),
+                latitude: req.body.latitude,
+                longitude: req.body.longitude,
+                user: await this.userRepo.findOneById(req.user.id)
+            })
 
             // save new article
             await this.articleRepo.save(newArticle)
 
             // loop through article texts and store each one
-            for (const articleText of req.body.articleText) {
-                // create new empty articleText instance
-                const newArticleText: ArticleText = this.textRepo.create()
-
-                // articleText details
-                newArticleText.article = newArticle
-                newArticleText.text = escape(articleText.text || '')
-                newArticleText.language = await this.langRepo.findOneById(articleText.language || 1)
-                newArticleText.article = newArticle
+            for (const articleText of req.body.articleText || []) {
+                // create new articleText instance
+                const newArticleText: ArticleText = this.textRepo.create({
+                    article: newArticle,
+                    text: escape(articleText.text || ''),
+                    language: await this.langRepo.findOneById(articleText.language || 1)
+                })
 
                 // save new articleText
                 await this.textRepo.save(newArticleText)
             }
 
             // loop through article pictures and store each one
-            for (const articlePic of req.body.pictures) {
+            for (const articlePic of req.body.pictures || []) {
                 // create new empty picture instance
-                const newArticlePic: Picture = this.picRepo.create()
-
-                // picture details
-                newArticlePic.article = newArticle
-                newArticlePic.link = articlePic.link || ''
-                newArticlePic.title = escape(articlePic.text || '')
-                newArticlePic.alt = escape(articlePic.alt || '')
+                const newArticlePic: Picture = this.picRepo.create({
+                    article: newArticle,
+                    link: articlePic.link,
+                    title: escape(articlePic.text || ''),
+                    alt: escape(articlePic.alt || '')
+                })
 
                 // save new picture
                 await this.picRepo.save(newArticlePic)
@@ -140,7 +133,10 @@ export class ArticleHandler {
                 relations: ['user', 'articleText', 'articleText.language', 'pictures']
             })
 
-            res.status(res.statusCode).json({ status: res.statusCode, data: data })
+            res.status(201).json({
+                status: 201,
+                data: data
+            })
         } catch (err) {
             return next(err)
         }
@@ -172,7 +168,9 @@ export class ArticleHandler {
             // create new article instance
             const updatedArticle: Article = await this.articleRepo.findOneById(req.params.articleId)
 
-            if (updatedArticle != null && updatedArticle.id > 0) {
+            console.log('==> post article', req.params.articleId, updatedArticle)
+
+            if (updatedArticle !== null && updatedArticle.id > 0) {
                 // article details
                 updatedArticle.title = escape(req.body.title || '')
                 updatedArticle.country = escape(req.body.country || '')
@@ -192,7 +190,7 @@ export class ArticleHandler {
                     relations: ['user', 'articleText', 'articleText.language', 'pictures']
                 })
 
-                res.status(res.statusCode).json({ status: res.statusCode, data: data })
+                res.status(204).send()
             } else {
                 res.status(404).json({
                     status: 404,
@@ -213,7 +211,7 @@ export class ArticleHandler {
                 // delete article
                 await this.articleRepo.delete(deletedArticle)
 
-                res.status(res.statusCode).json({ status: res.statusCode, data: 'article deleted' })
+                res.status(204).send()
             } else {
                 res.status(404).json({ status: 404, error: 'article not found' })
             }
