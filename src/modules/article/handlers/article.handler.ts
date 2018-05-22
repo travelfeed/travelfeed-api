@@ -168,8 +168,6 @@ export class ArticleHandler {
             // create new article instance
             const updatedArticle: Article = await this.articleRepo.findOneById(req.params.articleId)
 
-            console.log('==> post article', req.params.articleId, updatedArticle)
-
             if (updatedArticle !== null && updatedArticle.id > 0) {
                 // article details
                 updatedArticle.title = escape(req.body.title || '')
@@ -177,6 +175,7 @@ export class ArticleHandler {
                 updatedArticle.city = escape(req.body.city || '')
                 updatedArticle.latitude = req.body.latitude || ''
                 updatedArticle.longitude = req.body.longitude || ''
+                updatedArticle.published = req.body.published || false
 
                 // save updated article
                 await this.articleRepo.save(updatedArticle)
