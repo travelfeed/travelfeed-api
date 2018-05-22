@@ -19,39 +19,41 @@ import { User } from '../../user/models/user.model'
 import { HelperHandler } from '../../misc/handlers/helper.handler'
 import { MailAction } from '../../misc/models/mail.action.model'
 
-export class NewsletterHandler extends HelperHandler {
+export class NewsletterHandler {
     private newsletterRepo: Repository<Newsletter>
     private userRepo: Repository<User>
     private mailActionRepo: Repository<MailAction>
     private mailservice: Mailservice
+    private helperHandler: HelperHandler
 
     public constructor() {
-        super()
         this.newsletterRepo = getManager().getRepository(Newsletter)
         this.userRepo = getManager().getRepository(User)
         this.mailActionRepo = getManager().getRepository(MailAction)
         this.mailservice = new Mailservice()
+        this.helperHandler = new HelperHandler()
     }
 
     @bind
     public async subNewsletter(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const userExists: Newsletter = await this.newsletterRepo.findOne({
+            const subUser: Newsletter = await this.newsletterRepo.findOne({
                 where: {
                     email: req.params.email
                 }
             })
 
             // check if user already subscribed to newsletter
-            if (!userExists) {
+            if (!subUser) {
                 if (isEmail(req.params.email || '')) {
-                    const uuidHash = this.hashString(uuidv1()) // nl activation mail
+                    const uuidHash = this.helperHandler.hashString(uuidv1()) // activation hash
 
-                    // create new empty newsletter instance
-                    const nlUser: Newsletter = this.newsletterRepo.create()
-                    nlUser.email = req.params.email
-                    nlUser.hash = uuidHash
-                    nlUser.active = false
+                    // create new newsletter instance
+                    const nlUser: Newsletter = this.newsletterRepo.create({
+                        email: req.params.email,
+                        hash: uuidHash,
+                        active: false
+                    })
 
                     await this.newsletterRepo.save(nlUser)
 
@@ -84,13 +86,13 @@ export class NewsletterHandler extends HelperHandler {
                         error: 'invalid email address'
                     })
                 }
-            } else if (userExists != null && userExists.id > 0 && !userExists.active) {
+            } else if (subUser != null && subUser.id > 0 && !subUser.active) {
                 // resend activation link if not active
 
-                const uuidHash = this.hashString(uuidv1()) // nl activation mail
+                const uuidHash = this.helperHandler.hashString(uuidv1()) // activation hash
 
-                userExists.hash = uuidHash
-                await this.newsletterRepo.save(userExists)
+                subUser.hash = uuidHash
+                await this.newsletterRepo.save(subUser)
 
                 const mailParams: nlSubParams = {
                     subLink: `https://travelfeed.blog/newsletter/activate/${uuidHash}`
@@ -104,7 +106,7 @@ export class NewsletterHandler extends HelperHandler {
 
                 const mail: MailConfig = {
                     from: nlSubMeta.from,
-                    to: userExists.email,
+                    to: subUser.email,
                     subject: nlSubMeta.subject,
                     html: mailText
                 }
@@ -116,10 +118,7 @@ export class NewsletterHandler extends HelperHandler {
                     data: 'newsletter activation link sent'
                 })
             } else {
-                res.status(400).json({
-                    status: 400,
-                    error: 'user already subscribed'
-                })
+                res.status(400).json({ status: 400, error: 'user already subscribed' })
             }
         } catch (err) {
             return next(err)
@@ -162,7 +161,8 @@ export class NewsletterHandler extends HelperHandler {
     ): Promise<void> {
         const nlUser: Newsletter = await this.newsletterRepo.findOne({
             where: {
-                hash: req.params.uuid
+                hash: req.params.uuid,
+                active: false
             }
         })
 
@@ -196,7 +196,7 @@ export class NewsletterHandler extends HelperHandler {
 
             // send newsletter to each user
             for (const user of users) {
-                const uuidHash = this.hashString(uuidv1()) // account activation mail
+                const uuidHash = this.helperHandler.hashString(uuidv1()) // account activation mail
 
                 user.hash = uuidHash
                 await this.newsletterRepo.save(user)
@@ -256,7 +256,7 @@ export class NewsletterHandler extends HelperHandler {
             })
 
             if (nlUser != null && nlUser.id > 0) {
-                const uuidHash = this.hashString(uuidv1()) // nl unsubscribe link
+                const uuidHash = this.helperHandler.hashString(uuidv1()) // nl unsubscribe link
 
                 nlUser.hash = uuidHash
                 await this.newsletterRepo.save(nlUser)

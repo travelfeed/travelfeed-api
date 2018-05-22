@@ -8,7 +8,7 @@ import * as passport from 'passport'
 import { logger } from '../logger'
 
 // passport strategy
-import { JwtStrategy } from '../modules/auth/strategies/jwt.strategy'
+import { PassportStrategy } from '../modules/auth/strategies/passport.strategy'
 
 // routes
 import { AuthRoutes } from '../modules/auth/routes/auth.routes'
@@ -22,11 +22,13 @@ export class Express {
     public root: string
     public env: string
     public app: express.Application
+    private strategies: PassportStrategy
 
     public constructor(root: string) {
         this.root = root
         this.env = process.env.NODE_ENV || 'development'
         this.app = express()
+        this.strategies = new PassportStrategy()
 
         this.initConfig()
         this.initRoutes()
@@ -44,7 +46,7 @@ export class Express {
         this.app.use(bodyParser.urlencoded({ extended: true }))
         this.app.use(morgan('dev'))
         this.app.use(helmet())
-        passport.use('strategy.jwt', JwtStrategy)
+        passport.use('strategy.jwt', this.strategies.jwt)
     }
 
     // routes

@@ -18,10 +18,10 @@ export interface RefreshTokens {
 }
 
 export class HelperHandler {
-    protected refreshCounts: RefreshCounts = {}
-    protected refreshTokens: RefreshTokens = {}
+    public refreshCounts: RefreshCounts = {}
+    public refreshTokens: RefreshTokens = {}
 
-    protected hashPassword(plainPassword): Promise<string> {
+    public hashPassword(plainPassword): Promise<string> {
         return new Promise((resolve, reject) => {
             bcrypt.genSalt(saltRounds, (err, salt) => {
                 bcrypt.hash(plainPassword, salt, null, (error, hash) => {
@@ -34,7 +34,7 @@ export class HelperHandler {
         })
     }
 
-    protected verifyPassword(plainPassword, hashedPassword): Promise<boolean> {
+    public verifyPassword(plainPassword, hashedPassword): Promise<boolean> {
         return new Promise((resolve, reject) => {
             bcrypt.compare(plainPassword, hashedPassword, (err, res) => {
                 if (err) {
@@ -46,14 +46,14 @@ export class HelperHandler {
     }
 
     // sha256 algorithm
-    protected hashString(text: string) {
+    public hashString(text: string) {
         return crypto
             .createHash('sha256')
             .update(text)
             .digest('hex')
     }
 
-    protected createTokenPair(userId: number): TokenPair {
+    public createTokenPair(userId: number): TokenPair {
         const payload = { userId: userId }
         const auth = sign(payload, jwtConfig.secretOrKey, signOptions)
         const refresh = `${uuidv1()}-${uuidv4()}`
@@ -65,7 +65,7 @@ export class HelperHandler {
         return { auth, refresh }
     }
 
-    protected validRefreshToken(refreshToken: string, userId: number): boolean {
+    public validRefreshToken(refreshToken: string, userId: number): boolean {
         // only allow refresh 3 times
         if (this.refreshCounts[userId] > 3) {
             delete this.refreshCounts[userId]

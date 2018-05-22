@@ -12,14 +12,15 @@ import { User } from '../../user/models/user.model'
 import { UserRole } from '../../user/models/user.role.model'
 import { HelperHandler } from '../../misc/handlers/helper.handler'
 
-export class AuthHandler extends HelperHandler {
+export class AuthHandler {
     private repository: Repository<User>
     private mailservice: Mailservice
+    private helperHandler: HelperHandler
 
     public constructor() {
-        super()
         this.repository = getManager().getRepository(User)
         this.mailservice = new Mailservice()
+        this.helperHandler = new HelperHandler()
     }
 
     @bind
@@ -38,14 +39,14 @@ export class AuthHandler extends HelperHandler {
 
             // user found
             if (user != null && user.id > 0) {
-                const validPassword = await this.verifyPassword(
+                const validPassword = await this.helperHandler.verifyPassword(
                     escape(req.body.password),
                     user.password
                 )
 
                 if (validPassword) {
                     // create jwt
-                    const tokens = this.createTokenPair(user.id)
+                    const tokens = this.helperHandler.createTokenPair(user.id)
 
                     res.status(200).json({
                         status: 200,
@@ -78,14 +79,14 @@ export class AuthHandler extends HelperHandler {
         try {
             const { userId, refreshToken } = req.body as any
 
-            if (!this.validRefreshToken(refreshToken, userId)) {
+            if (!this.helperHandler.validRefreshToken(refreshToken, userId)) {
                 return res.status(401).json({
                     status: 401,
                     error: 'Not authorized.'
                 })
             }
 
-            const tokens = this.createTokenPair(userId)
+            const tokens = this.helperHandler.createTokenPair(userId)
 
             return res.status(200).json({
                 status: 200,
@@ -124,11 +125,11 @@ export class AuthHandler extends HelperHandler {
             if (!user) {
                 // create new empty user instance
                 const newUser: User = this.repository.create()
-                const uuidHash = this.hashString(uuidv1()) // account activation mail
+                const uuidHash = this.helperHandler.hashString(uuidv1()) // account activation mail
 
                 // set values
                 newUser.email = email
-                newUser.password = await this.hashPassword(escape(req.body.password))
+                newUser.password = await this.helperHandler.hashPassword(escape(req.body.password))
                 newUser.active = false
                 newUser.hash = uuidHash
 
@@ -229,7 +230,7 @@ export class AuthHandler extends HelperHandler {
             })
 
             if (user != null && user.id > 0) {
-                const uuidHash = this.hashString(uuidv1()) // account activation mail
+                const uuidHash = this.helperHandler.hashString(uuidv1()) // account activation mail
 
                 // assign new hash to use
                 user.hash = uuidHash
