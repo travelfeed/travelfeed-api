@@ -14,6 +14,7 @@ import { PassportStrategy } from '../modules/auth/strategies/passport.strategy'
 import { AuthRoutes } from '../modules/auth/routes/auth.routes'
 import { UserRoutes } from '../modules/user/routes/user.routes'
 import { ArticleRoutes } from '../modules/article/routes/article.routes'
+import { TranslationRoutes } from '../modules/translation/routes/translation.routes'
 import { NewsletterRoutes } from '../modules/newsletter/routes/newsletter.routes'
 
 const { error } = logger('express')
@@ -55,6 +56,7 @@ export class Express {
         this.app.use('/api/auth', new AuthRoutes().router)
         this.app.use('/api/user', new UserRoutes().router)
         this.app.use('/api/article', new ArticleRoutes().router)
+        this.app.use('/api/translation', new TranslationRoutes().router)
         this.app.use('/api/newsletter', new NewsletterRoutes().router)
 
         // error handling

@@ -23,6 +23,8 @@ export class Article {
 
     @Column('varchar') public peaces: string
 
+    @Column() public published: boolean
+
     /***** relations *****/
 
     @OneToMany(type => ArticleText, articleText => articleText.article)

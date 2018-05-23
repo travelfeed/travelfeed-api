@@ -16,12 +16,8 @@ permissions.allow([
         roles: ['User'],
         allows: [
             {
-                resources: 'article',
-                permissions: ['read']
-            },
-            {
                 resources: 'comment',
-                permissions: ['read', 'create', 'delete']
+                permissions: ['create', 'delete']
             },
             {
                 resources: 'newsletter',
