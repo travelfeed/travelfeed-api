@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { TranslationHandler } from '../handler/translation.handler'
+import { isAuthorized, checkUserRole } from '../../../config/auth'
 
 export class TranslationRoutes {
     public router: Router
@@ -13,6 +14,36 @@ export class TranslationRoutes {
     }
 
     private initTranslationsRoutes() {
-        this.router.get('/:language', this.translationHandler.readTranslation)
+        /**
+         * GET / => readLanguages
+         */
+        this.router.get('/', this.translationHandler.readLanguages)
+
+        /**
+         * GET /:lang => readTranslations
+         */
+        this.router.get('/:lang', this.translationHandler.readTranslations)
+
+        /**
+         * POST /:id => saveTranslation
+         */
+        this.router.post(
+            '/:id',
+            isAuthorized(),
+            checkUserRole('translation', 'update'),
+            this.translationHandler.saveTranslation
+        )
+
+        /**
+         * DELETE /:id => deleteTranslation
+         */
+        this.router.delete(
+            '/:id',
+            isAuthorized(),
+            checkUserRole('translation', 'delete'),
+            this.translationHandler.deleteTranslation
+        )
+
+        /***** Translation CRUD *****/
     }
 }
