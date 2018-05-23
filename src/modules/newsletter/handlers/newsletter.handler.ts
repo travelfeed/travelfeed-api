@@ -5,14 +5,7 @@ import { bind } from 'decko'
 import { escape, isEmail } from 'validator'
 
 import { Mailservice, MailConfig } from '../../../config/mailservice'
-import {
-    MailParams as nlChannelParams,
-    metadata as nlChannelMeta
-} from '../templates/newsletter-channel/config'
-import {
-    MailParams as nlSubParams,
-    metadata as nlSubMeta
-} from '../templates/newsletter-subscribe/config'
+import { channelMetadata, subscribeMetadata } from '../templates/config.template'
 
 import { Newsletter } from '../models/newsletter.model'
 import { User } from '../../user/models/user.model'
@@ -20,19 +13,11 @@ import { HelperHandler } from '../../misc/handlers/helper.handler'
 import { MailAction } from '../../misc/models/mail.action.model'
 
 export class NewsletterHandler {
-    private newsletterRepo: Repository<Newsletter>
-    private userRepo: Repository<User>
-    private mailActionRepo: Repository<MailAction>
-    private mailservice: Mailservice
-    private helperHandler: HelperHandler
-
-    public constructor() {
-        this.newsletterRepo = getManager().getRepository(Newsletter)
-        this.userRepo = getManager().getRepository(User)
-        this.mailActionRepo = getManager().getRepository(MailAction)
-        this.mailservice = new Mailservice()
-        this.helperHandler = new HelperHandler()
-    }
+    private newsletterRepo: Repository<Newsletter> = getManager().getRepository(Newsletter)
+    private userRepo: Repository<User> = getManager().getRepository(User)
+    private mailActionRepo: Repository<MailAction> = getManager().getRepository(MailAction)
+    private mailservice: Mailservice = new Mailservice()
+    private helperHandler: HelperHandler = new HelperHandler()
 
     @bind
     public async subNewsletter(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -57,66 +42,60 @@ export class NewsletterHandler {
 
                     await this.newsletterRepo.save(nlUser)
 
-                    const mailParams: nlSubParams = {
+                    const mailParams = {
                         subLink: `https://travelfeed.blog/newsletter/activate/${uuidHash}`
                     }
 
                     // html template
                     const mailText = await this.mailservice.renderMailTemplate(
-                        `./src/modules/newsletter/templates/newsletter-subscribe/index.html`,
+                        `./src/modules/newsletter/templates/subscribe.template.html`,
                         mailParams
                     )
 
                     const mail: MailConfig = {
-                        from: nlSubMeta.from,
+                        from: subscribeMetadata.from,
                         to: nlUser.email,
-                        subject: nlSubMeta.subject,
+                        subject: subscribeMetadata.subject,
                         html: mailText
                     }
 
                     await this.mailservice.sendMail(mail)
 
-                    res.status(res.statusCode).json({
-                        status: res.statusCode,
-                        data: 'newsletter activation link sent'
-                    })
+                    res.status(204).send()
                 } else {
                     res.status(400).json({
                         status: 400,
                         error: 'invalid email address'
                     })
                 }
-            } else if (subUser != null && subUser.id > 0 && !subUser.active) {
+            } else if (subUser !== undefined && subUser.id > 0 && !subUser.active) {
                 // resend activation link if not active
 
                 const uuidHash = this.helperHandler.hashString(uuidv1()) // activation hash
-
                 subUser.hash = uuidHash
+
                 await this.newsletterRepo.save(subUser)
 
-                const mailParams: nlSubParams = {
+                const mailParams = {
                     subLink: `https://travelfeed.blog/newsletter/activate/${uuidHash}`
                 }
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    `./src/modules/newsletter/templates/newsletter-subscribe/index.html`,
+                    `./src/modules/newsletter/templates/subscribe.template.html`,
                     mailParams
                 )
 
                 const mail: MailConfig = {
-                    from: nlSubMeta.from,
+                    from: subscribeMetadata.from,
                     to: subUser.email,
-                    subject: nlSubMeta.subject,
+                    subject: subscribeMetadata.subject,
                     html: mailText
                 }
 
                 await this.mailservice.sendMail(mail)
 
-                res.status(res.statusCode).json({
-                    status: res.statusCode,
-                    data: 'newsletter activation link sent'
-                })
+                res.status(204).send()
             } else {
                 res.status(400).json({ status: 400, error: 'user already subscribed' })
             }
@@ -135,18 +114,12 @@ export class NewsletterHandler {
                 }
             })
 
-            if (nlUser != null && nlUser.id > 0) {
+            if (nlUser !== undefined && nlUser.id > 0) {
                 await this.newsletterRepo.delete(nlUser)
 
-                res.status(res.statusCode).json({
-                    status: res.statusCode,
-                    data: 'user unsubscribed from newsletter'
-                })
+                res.status(204).send()
             } else {
-                res.status(404).json({
-                    status: 404,
-                    error: 'user not found'
-                })
+                res.status(404).json({ status: 404, error: 'user not found' })
             }
         } catch (err) {
             return next(err)
@@ -166,21 +139,15 @@ export class NewsletterHandler {
             }
         })
 
-        if (nlUser != null && nlUser.id > 0) {
+        if (nlUser !== undefined && nlUser.id > 0) {
             nlUser.active = true
             nlUser.hash = null
 
             await this.newsletterRepo.save(nlUser)
 
-            res.status(res.statusCode).json({
-                status: res.statusCode,
-                data: 'user subscribed to newsletter'
-            })
+            res.status(204).send()
         } else {
-            res.status(404).json({
-                status: 404,
-                error: 'user not found'
-            })
+            res.status(404).json({ status: 404, error: 'user not found' })
         }
     }
 
@@ -201,21 +168,21 @@ export class NewsletterHandler {
                 user.hash = uuidHash
                 await this.newsletterRepo.save(user)
 
-                const mailParams: nlChannelParams = {
+                const mailParams = {
                     text: req.body.text,
                     unsubLink: `https://travelfeed.blog/newsletter/unsubscribe/${uuidHash}`
                 }
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    './src/modules/newsletter/templates/newsletter-channel/index.html',
+                    `./src/modules/newsletter/templates/channel.template.html`,
                     mailParams
                 )
 
                 const mail: MailConfig = {
-                    from: nlChannelMeta.from,
+                    from: channelMetadata.from,
                     to: user.email,
-                    subject: nlChannelMeta.subject,
+                    subject: channelMetadata.subject,
                     html: mailText
                 }
 
@@ -229,12 +196,10 @@ export class NewsletterHandler {
                     action: 'NewsletterAll'
                 }
             })
-            await this.mailservice.logMail(req.path, nlChannelMeta.subject, author, mailAction)
 
-            res.status(res.statusCode).json({
-                status: res.statusCode,
-                data: 'newsletter sent'
-            })
+            await this.mailservice.logMail(req.path, channelMetadata.subject, author, mailAction)
+
+            res.status(204).send()
         } catch (err) {
             return next(err)
         }
@@ -255,27 +220,27 @@ export class NewsletterHandler {
                 }
             })
 
-            if (nlUser != null && nlUser.id > 0) {
+            if (nlUser !== undefined && nlUser.id > 0) {
                 const uuidHash = this.helperHandler.hashString(uuidv1()) // nl unsubscribe link
 
                 nlUser.hash = uuidHash
                 await this.newsletterRepo.save(nlUser)
 
-                const mailParams: nlChannelParams = {
+                const mailParams = {
                     text: req.body.text,
                     unsubLink: `https://travelfeed.blog/newsletter/unsubscribe/${uuidHash}`
                 }
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    './src/modules/newsletter/templates/newsletter-channel/index.html',
+                    `./src/modules/newsletter/templates/channel.template.html`,
                     mailParams
                 )
 
                 const mail: MailConfig = {
-                    from: nlChannelMeta.from,
+                    from: channelMetadata.from,
                     to: nlUser.email,
-                    subject: nlChannelMeta.subject,
+                    subject: channelMetadata.subject,
                     html: mailText
                 }
 
@@ -288,17 +253,16 @@ export class NewsletterHandler {
                         action: 'NewsletterSingle'
                     }
                 })
-                await this.mailservice.logMail(req.path, nlChannelMeta.subject, author, mailAction)
+                await this.mailservice.logMail(
+                    req.path,
+                    channelMetadata.subject,
+                    author,
+                    mailAction
+                )
 
-                res.status(res.statusCode).json({
-                    status: res.statusCode,
-                    data: 'newsletter sent'
-                })
+                res.status(204).send()
             } else {
-                res.status(404).json({
-                    status: 404,
-                    error: 'user not found'
-                })
+                res.status(404).json({ status: 404, error: 'user not found' })
             }
         } catch (err) {
             return next(err)

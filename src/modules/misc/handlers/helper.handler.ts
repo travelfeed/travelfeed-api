@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt-nodejs'
 import * as crypto from 'crypto'
+
 import { v1 as uuidv1, v4 as uuidv4 } from 'uuid'
 import { sign } from 'jsonwebtoken'
 import { saltRounds, jwtConfig, signOptions } from '../../../config/auth'

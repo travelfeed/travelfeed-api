@@ -1,19 +1,16 @@
 import { Request, Response, NextFunction } from 'express'
 import { getManager, Repository } from 'typeorm'
 import { bind } from 'decko'
+
 import { User } from '../../user/models/user.model'
 
 export class UserHandler {
-    private repository: Repository<User>
-
-    public constructor() {
-        this.repository = getManager().getRepository(User)
-    }
+    private userRepo: Repository<User> = getManager().getRepository(User)
 
     @bind
     public async readUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data: Array<User> = await this.repository.find({
+            const users: Array<User> = await this.userRepo.find({
                 relations: [
                     'userRole',
                     'articles',
@@ -22,9 +19,9 @@ export class UserHandler {
                     'articles.pictures'
                 ]
             })
-            res.status(res.statusCode).json({
+            res.json({
                 status: res.statusCode,
-                data: data
+                data: users
             })
         } catch (err) {
             return next(err)
@@ -34,7 +31,7 @@ export class UserHandler {
     @bind
     public async readUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data: User = await this.repository.findOneById(req.params.userId, {
+            const user: User = await this.userRepo.findOneById(req.params.userId, {
                 relations: [
                     'userRole',
                     'articles',
@@ -44,9 +41,9 @@ export class UserHandler {
                 ]
             })
 
-            res.status(res.statusCode).json({
+            res.json({
                 status: res.statusCode,
-                data: data
+                data: user
             })
         } catch (err) {
             return next(err)
@@ -56,7 +53,7 @@ export class UserHandler {
     @bind
     public async readUserArticles(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data: User = await this.repository.findOneById(req.params.userId, {
+            const userArticles: User = await this.userRepo.findOneById(req.params.userId, {
                 relations: [
                     'articles',
                     'articles.articleText',
@@ -64,9 +61,9 @@ export class UserHandler {
                     'articles.pictures'
                 ]
             })
-            res.status(res.statusCode).json({
+            res.json({
                 status: res.statusCode,
-                data: data == null ? [] : data
+                data: userArticles
             })
         } catch (err) {
             return next(err)

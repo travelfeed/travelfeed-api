@@ -3,32 +3,26 @@ import { Request, Response, NextFunction } from 'express'
 import { Repository, getManager } from 'typeorm'
 import { bind } from 'decko'
 import { escape } from 'validator'
+
 import { MailConfig, Mailservice } from '../../../config/mailservice'
-import {
-    MailParams as regConfirmParams,
-    metadata as regConfirmMeta
-} from '../templates/register-confirm/config'
+import { registerMetadata } from '../templates/config.template'
+
 import { User } from '../../user/models/user.model'
 import { UserRole } from '../../user/models/user.role.model'
 import { HelperHandler } from '../../misc/handlers/helper.handler'
 
 export class AuthHandler {
-    private repository: Repository<User>
-    private mailservice: Mailservice
-    private helperHandler: HelperHandler
-
-    public constructor() {
-        this.repository = getManager().getRepository(User)
-        this.mailservice = new Mailservice()
-        this.helperHandler = new HelperHandler()
-    }
+    private userRepo: Repository<User> = getManager().getRepository(User)
+    private userRoleRepo: Repository<UserRole> = getManager().getRepository(UserRole)
+    private mailservice: Mailservice = new Mailservice()
+    private helperHandler: HelperHandler = new HelperHandler()
 
     @bind
     public async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const email = escape(req.body.email || '')
 
-            const user: User = await this.repository.findOne({
+            const user: User = await this.userRepo.findOne({
                 select: ['password', 'id'],
                 relations: ['userRole'],
                 where: {
@@ -38,7 +32,7 @@ export class AuthHandler {
             })
 
             // user found
-            if (user != null && user.id > 0) {
+            if (user !== undefined && user.id > 0) {
                 const validPassword = await this.helperHandler.verifyPassword(
                     escape(req.body.password),
                     user.password
@@ -48,8 +42,8 @@ export class AuthHandler {
                     // create jwt
                     const tokens = this.helperHandler.createTokenPair(user.id)
 
-                    res.status(200).json({
-                        status: 200,
+                    res.json({
+                        status: res.statusCode,
                         data: {
                             userId: user.id,
                             userRole: user.userRole.role,
@@ -80,16 +74,13 @@ export class AuthHandler {
             const { userId, refreshToken } = req.body as any
 
             if (!this.helperHandler.validRefreshToken(refreshToken, userId)) {
-                return res.status(401).json({
-                    status: 401,
-                    error: 'Not authorized.'
-                })
+                return res.status(401).json({ status: 401, error: 'Not authorized.' })
             }
 
             const tokens = this.helperHandler.createTokenPair(userId)
 
-            return res.status(200).json({
-                status: 200,
+            return res.json({
+                status: res.statusCode,
                 data: {
                     authToken: tokens.auth,
                     refreshToken: tokens.refresh
@@ -115,7 +106,7 @@ export class AuthHandler {
         try {
             const email = escape(req.body.email)
 
-            const user: User = await this.repository.findOne({
+            const user: User = await this.userRepo.findOne({
                 where: {
                     email: email
                 }
@@ -123,49 +114,43 @@ export class AuthHandler {
 
             // email is not taken
             if (!user) {
-                // create new empty user instance
-                const newUser: User = this.repository.create()
-                const uuidHash = this.helperHandler.hashString(uuidv1()) // account activation mail
+                // account activation hash
+                const uuidHash = this.helperHandler.hashString(uuidv1())
 
-                // set values
-                newUser.email = email
-                newUser.password = await this.helperHandler.hashPassword(escape(req.body.password))
-                newUser.active = false
-                newUser.hash = uuidHash
-
-                // create userRole
-                newUser.userRole = await getManager()
-                    .getRepository(UserRole)
-                    .findOne({ where: { role: 'User' } })
+                // create new user instance
+                const newUser: User = this.userRepo.create({
+                    email: email,
+                    password: await this.helperHandler.hashPassword(escape(req.body.password)),
+                    active: false,
+                    hash: uuidHash,
+                    userRole: await this.userRoleRepo.findOne({ where: { role: 'User' } })
+                })
 
                 // save new user
-                await this.repository.save(newUser)
+                await this.userRepo.save(newUser)
 
                 // params for html template
-                const mailParams: regConfirmParams = {
+                const mailParams = {
                     confirmUrl: `https://travelfeed.blog/auth/activate/${uuidHash}`
                 }
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    './src/modules/auth/templates/register-confirm/index.html',
+                    './src/modules/auth/templates/register.template.html',
                     mailParams
                 )
 
                 const mail: MailConfig = {
-                    from: regConfirmMeta.from,
+                    from: registerMetadata.from,
                     to: newUser.email,
-                    subject: regConfirmMeta.subject,
+                    subject: registerMetadata.subject,
                     html: mailText
                 }
 
                 // send mail to user
                 await this.mailservice.sendMail(mail)
 
-                res.status(res.statusCode).json({
-                    status: res.statusCode,
-                    data: 'user registration link sent'
-                })
+                res.status(201).send()
             } else {
                 res.status(401).json({ status: 401, error: 'email is already taken' })
             }
@@ -177,12 +162,12 @@ export class AuthHandler {
     @bind
     public async unregister(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const user: User = await this.repository.findOneById(req.user.id)
+            const user: User = await this.userRepo.findOneById(req.user.id)
 
-            if (user != null && user.id > 0) {
-                await this.repository.delete(user)
+            if (user !== undefined && user.id > 0) {
+                await this.userRepo.delete(user)
 
-                res.status(200).json({ status: 200, data: 'user deleted' })
+                res.status(204).send()
             } else {
                 res.status(404).json({ status: 404, error: 'user not found' })
             }
@@ -194,23 +179,20 @@ export class AuthHandler {
     @bind
     public async activate(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const user: User = await this.repository.findOne({
+            const user: User = await this.userRepo.findOne({
                 where: {
                     hash: req.params.uuid || null,
                     active: false
                 }
             })
 
-            if (user != null && user.id > 0) {
+            if (user !== undefined && user.id > 0) {
                 user.active = true
                 user.hash = null
 
-                await this.repository.save(user)
+                await this.userRepo.save(user)
 
-                res.status(200).json({
-                    status: res.statusCode,
-                    data: 'user activated'
-                })
+                res.status(204).send()
             } else {
                 res.status(404).json({ status: 404, error: 'user not found' })
             }
@@ -222,45 +204,42 @@ export class AuthHandler {
     @bind
     public async activateResend(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const user: User = await this.repository.findOne({
+            const user: User = await this.userRepo.findOne({
                 where: {
                     email: escape(req.params.email || ''),
                     active: false
                 }
             })
 
-            if (user != null && user.id > 0) {
+            if (user !== undefined && user.id > 0) {
                 const uuidHash = this.helperHandler.hashString(uuidv1()) // account activation mail
 
-                // assign new hash to use
+                // assign new hash to user
                 user.hash = uuidHash
-                this.repository.save(user)
+                this.userRepo.save(user)
 
                 // params for html template
-                const mailParams: regConfirmParams = {
+                const mailParams = {
                     confirmUrl: `https://travelfeed.blog/auth/activate/${uuidHash}`
                 }
 
                 // html template
                 const mailText = await this.mailservice.renderMailTemplate(
-                    './src/modules/auth/templates/register-confirm/index.html',
+                    './src/modules/auth/templates/register.template.html',
                     mailParams
                 )
 
                 const mail: MailConfig = {
-                    from: regConfirmMeta.from,
+                    from: registerMetadata.from,
                     to: user.email,
-                    subject: regConfirmMeta.subject,
+                    subject: registerMetadata.subject,
                     html: mailText
                 }
 
                 // send mail to user
                 await this.mailservice.sendMail(mail)
 
-                res.status(res.statusCode).json({
-                    status: res.statusCode,
-                    data: 'user registration link sent'
-                })
+                res.status(204).send()
             } else {
                 res.status(404).json({ status: 404, error: 'user not found' })
             }

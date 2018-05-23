@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { TranslationHandler } from '../handler/translation.handler'
+import { TranslationHandler } from '../handlers/translation.handler'
 import { isAuthorized, checkUserRole } from '../../../config/auth'
 
 export class TranslationRoutes {

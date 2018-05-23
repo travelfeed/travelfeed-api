@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { getManager, Repository } from 'typeorm'
 import { bind } from 'decko'
 import { escape } from 'validator'
+
 import { Article } from '../models/article.model'
 import { User } from '../../user/models/user.model'
 import { ArticleText } from '../models/article.text.model'
@@ -15,12 +16,10 @@ export class ArticleHandler {
     private langRepo: Repository<Language> = getManager().getRepository(Language)
     private picRepo: Repository<Picture> = getManager().getRepository(Picture)
 
-    public constructor() {}
-
     @bind // read all articles
     public async readArticles(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data: Array<Article> = await this.articleRepo.find({
+            const articles: Array<Article> = await this.articleRepo.find({
                 relations: [
                     'user',
                     'articleText',
@@ -32,7 +31,7 @@ export class ArticleHandler {
             })
             res.json({
                 status: res.statusCode,
-                data: data
+                data: articles
             })
         } catch (err) {
             return next(err)
@@ -42,7 +41,7 @@ export class ArticleHandler {
     @bind // read ten newest articles
     public async readNewestArticles(req: Request, res: Response, next: NextFunction) {
         try {
-            const data: Array<Article> = await this.articleRepo.find({
+            const newestArticles: Array<Article> = await this.articleRepo.find({
                 relations: [
                     'user',
                     'articleText',
@@ -56,6 +55,11 @@ export class ArticleHandler {
                 },
                 take: 10
             })
+
+            res.json({
+                status: res.statusCode,
+                data: newestArticles
+            })
         } catch (err) {
             return next(err)
         }
@@ -64,19 +68,9 @@ export class ArticleHandler {
     @bind // read ten best rated articles
     public async readBestRatedArticles(req: Request, res: Response, next: NextFunction) {
         try {
-            const data: Array<Article> = await this.articleRepo.find({
-                relations: [
-                    'user',
-                    'articleText',
-                    'articleText.language',
-                    'pictures',
-                    'comments',
-                    'comments.user'
-                ],
-                order: {
-                    peaces: 'DESC'
-                },
-                take: 10
+            res.json({
+                status: res.statusCode,
+                data: []
             })
         } catch (err) {
             return next(err)
@@ -129,14 +123,11 @@ export class ArticleHandler {
             }
 
             // load new article data
-            const data = await this.articleRepo.findOneById(newArticle.id, {
+            const article: Article = await this.articleRepo.findOneById(newArticle.id, {
                 relations: ['user', 'articleText', 'articleText.language', 'pictures']
             })
 
-            res.status(201).json({
-                status: 201,
-                data: data
-            })
+            res.status(201).json({ status: 201, data: article })
         } catch (err) {
             return next(err)
         }
@@ -145,7 +136,7 @@ export class ArticleHandler {
     @bind
     public async readArticle(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data: Article = await this.articleRepo.findOneById(req.params.articleId, {
+            const article: Article = await this.articleRepo.findOneById(req.params.articleId, {
                 relations: [
                     'user',
                     'articleText',
@@ -156,7 +147,7 @@ export class ArticleHandler {
                 ]
             })
 
-            res.json({ status: res.statusCode, data: data })
+            res.json({ status: res.statusCode, data: article })
         } catch (err) {
             return next(err)
         }
@@ -168,7 +159,7 @@ export class ArticleHandler {
             // create new article instance
             const updatedArticle: Article = await this.articleRepo.findOneById(req.params.articleId)
 
-            if (updatedArticle !== null && updatedArticle.id > 0) {
+            if (updatedArticle !== undefined && updatedArticle.id > 0) {
                 // article details
                 updatedArticle.title = escape(req.body.title || '')
                 updatedArticle.country = escape(req.body.country || '')
@@ -183,11 +174,6 @@ export class ArticleHandler {
                 /**
                  * TODO: Update articleTexts and pictures
                  */
-
-                // load updated article data
-                const data = await this.articleRepo.findOneById(updatedArticle.id, {
-                    relations: ['user', 'articleText', 'articleText.language', 'pictures']
-                })
 
                 res.status(204).send()
             } else {
@@ -206,7 +192,7 @@ export class ArticleHandler {
         try {
             const deletedArticle: Article = await this.articleRepo.findOneById(req.params.articleId)
 
-            if (deletedArticle != null && deletedArticle.id > 0) {
+            if (deletedArticle !== undefined && deletedArticle.id > 0) {
                 // delete article
                 await this.articleRepo.delete(deletedArticle)
 

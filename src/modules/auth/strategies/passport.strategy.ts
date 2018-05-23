@@ -29,8 +29,8 @@ export class PassportStrategy {
                     permissions.addUserRoles(user.id, user.userRole.role || 'User')
                     return next(null, user)
                 }
-            } catch (error) {
-                return next(error)
+            } catch (err) {
+                return next(err)
             }
         })
     }

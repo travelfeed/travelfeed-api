@@ -16,7 +16,7 @@ const smtpConfig = {
     }
 }
 
-export const mailAddresses = {
+export const MailAddresses = {
     blogMail: 'blog@travelfeed.blog',
     supportMail: 'support@travelfeed.blog',
     newsletterMail: 'newsletter@travelfeed.blog'
@@ -29,33 +29,39 @@ export interface MailConfig {
     html: string
 }
 
+export interface MailMetadata {
+    from: string
+    subject: string
+}
+
 export class Mailservice {
-    private transporter: Transporter
-    private mailHistoryRepo: Repository<MailHistory>
+    private transporter: Transporter = createTransport(smtpConfig)
+    private mailHistoryRepo: Repository<MailHistory> = getManager().getRepository(MailHistory)
 
-    public constructor() {
-        this.transporter = createTransport(smtpConfig)
-        this.mailHistoryRepo = getManager().getRepository(MailHistory)
-    }
-
-    public async sendMail(options: MailConfig) {
+    public sendMail(options: MailConfig) {
         return this.transporter.sendMail(options)
     }
 
-    public async renderMailTemplate(path: string, options: object) {
+    public renderMailTemplate(path: string, options: object) {
         return renderFile(resolve(path), options)
     }
 
-    public async logMail(endpoint: string, subject: string, user: User, action: MailAction) {
+    public async logMail(
+        endpoint: string,
+        subject: string,
+        user: User,
+        action: MailAction
+    ): Promise<void> {
         const date = new Date()
         const now = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 
-        const mailLog = this.mailHistoryRepo.create()
-        mailLog.endpoint = endpoint
-        mailLog.subject = subject
-        mailLog.date = now
-        mailLog.user = user
-        mailLog.mailAction = action
+        const mailLog = this.mailHistoryRepo.create({
+            endpoint: endpoint,
+            subject: subject,
+            date: now,
+            user: user,
+            mailAction: action
+        })
 
         await this.mailHistoryRepo.save(mailLog)
     }
