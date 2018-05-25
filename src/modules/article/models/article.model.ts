@@ -1,9 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm'
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    Timestamp,
+    ManyToOne,
+    ManyToMany,
+    JoinColumn,
+    JoinTable,
+} from 'typeorm'
 import { User } from '../../user/models/user.model'
-import { ArticleText } from './article.text.model'
-import { Picture } from '../../misc/models/picture.model'
-import { Language } from '../../misc/models/language.model'
-import { ArticleComment } from './article.comment.model'
+import { Picture } from '../../picture/models/picture.model'
 
 @Entity()
 export class Article {
@@ -11,31 +19,39 @@ export class Article {
 
     @PrimaryGeneratedColumn() public id: number
 
-    @Column('varchar') public title: string
+    @Column() public title: string
 
-    @Column('varchar') public city: string
+    @Column('text') public text: string
 
-    @Column('varchar') public country: string
+    @Column() public city: string
 
-    @Column('varchar') public latitude: string
+    @Column() public country: string
 
-    @Column('varchar') public longitude: string
+    @Column() public latitude: string
 
-    @Column('varchar') public peaces: string
+    @Column() public longitude: string
+
+    @Column() public peaces: string
 
     @Column() public published: boolean
 
+    @CreateDateColumn() public created: Timestamp
+
+    @UpdateDateColumn() public updated: Timestamp
+
     /***** relations *****/
 
-    @OneToMany(type => ArticleText, articleText => articleText.article)
-    public articleText: Array<ArticleText>
-
-    @OneToMany(type => Picture, picture => picture.article)
-    public pictures: Array<Picture>
-
-    @OneToMany(type => ArticleComment, articleComment => articleComment.article)
-    public comments: Array<ArticleComment>
-
-    @ManyToOne(type => User, user => user.articles)
+    @ManyToOne(() => User, {
+        nullable: false,
+    })
+    @JoinColumn({
+        name: 'user',
+    })
     public user: User
+
+    @ManyToMany(() => Picture, picture => picture.articles)
+    @JoinTable({
+        name: 'article_picture',
+    })
+    public pictures: Array<Picture>
 }

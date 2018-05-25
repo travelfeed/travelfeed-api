@@ -13,11 +13,11 @@ export class MailAction {
 
     @Column({
         type: 'varchar',
-        length: 50
+        length: 50,
     })
     public action: string
 
     /***** relations *****/
-    @OneToMany(type => MailHistory, mailHistory => mailHistory.mailAction)
+    @OneToMany(() => MailHistory, mailHistory => mailHistory.mailAction)
     public mailHistory: Array<MailHistory>
 }
