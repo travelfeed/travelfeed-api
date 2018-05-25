@@ -1,13 +1,12 @@
-// tslint:disable-next-line:max-line-length
 import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
-    Timestamp,
     UpdateDateColumn,
+    Timestamp,
     ManyToOne,
-    JoinColumn
+    JoinColumn,
 } from 'typeorm'
 import { TranslationLanguage } from './translation.language.model'
 import { TranslationKey } from './transaltion.key.model'
@@ -18,7 +17,7 @@ export class Translation {
     @PrimaryGeneratedColumn() public id: number
 
     @Column({
-        nullable: false
+        nullable: false,
     })
     public value: string
 
@@ -28,19 +27,19 @@ export class Translation {
 
     /***** relations *****/
 
-    @ManyToOne(type => TranslationLanguage, {
-        nullable: false
+    @ManyToOne(() => TranslationLanguage, {
+        nullable: false,
     })
     @JoinColumn({
-        name: 'lang'
+        name: 'lang',
     })
     public lang: TranslationLanguage
 
-    @ManyToOne(type => TranslationKey, {
-        nullable: false
+    @ManyToOne(() => TranslationKey, {
+        nullable: false,
     })
     @JoinColumn({
-        name: 'key'
+        name: 'key',
     })
     public key: TranslationKey
 }
