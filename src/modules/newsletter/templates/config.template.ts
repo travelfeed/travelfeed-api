@@ -1,11 +1,11 @@
-import { MailAddresses, MailMetadata } from '../../../config/mailservice'
+import { mailAddresses, MailMetadata } from '../../../services/mail'
 
 export const channelMetadata: MailMetadata = {
-    from: MailAddresses.newsletterMail,
-    subject: 'Travelfeed.blog newsletter'
+    from: mailAddresses.newsletter,
+    subject: 'Travelfeed.blog newsletter',
 }
 
 export const subscribeMetadata: MailMetadata = {
-    from: MailAddresses.newsletterMail,
-    subject: 'Your travelfeed.blog newsletter registration'
+    from: mailAddresses.newsletter,
+    subject: 'Your travelfeed.blog newsletter registration',
 }
