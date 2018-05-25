@@ -1,28 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm'
+import { Entity, PrimaryColumn, Column } from 'typeorm'
 
 @Entity()
 export class Newsletter {
     /***** columns *****/
-    @PrimaryGeneratedColumn() public id: number
-
-    @Column({
-        type: 'varchar',
-        length: 40,
-        unique: true
-    })
-    public email: string
+    @PrimaryColumn() public email: string
 
     @Column({
         type: 'tinyint',
-        default: false
+        default: false,
     })
     public active: boolean
 
     @Column({
         select: false,
-        type: 'varchar',
-        length: 255,
-        unique: true
+        unique: true,
     })
     public hash: string
 }

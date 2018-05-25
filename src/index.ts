@@ -1,9 +1,20 @@
 import 'reflect-metadata'
-import { enableLogging } from './logger'
-import { initServer } from './server'
+import { Container } from 'typedi'
+import { useContainer as useContainerDatabase, createConnection } from 'typeorm'
+import { useContainer as useContainerRouting } from 'routing-controllers'
+import { useContainer as useContainerSocket } from 'socket-controllers'
+import { Server } from './server'
 
-if (process.env.NODE_ENV !== 'production') {
-    enableLogging()
-}
+// enable di on 3rd party libraries
+useContainerDatabase(Container)
+useContainerRouting(Container)
+useContainerSocket(Container)
 
-initServer(process.env.PORT || 3000)
+// try fetching port from env
+const port = parseInt(process.env.PORT, 10) || 3000
+
+// connect to database and start listening
+createConnection()
+    .then(() => Container.get(Server))
+    .then(server => server.prepare().listen(port))
+    .catch(error => console.error(error))

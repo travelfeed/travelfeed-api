@@ -1,35 +1,141 @@
-import chalk from 'chalk'
-import { createServer, Server } from 'http'
-import { createConnection, Connection } from 'typeorm'
-import { logger } from './logger'
-import { Express } from './config/express'
-import { Socket } from './config/socket'
+import { Service, Inject } from 'typedi'
+import { useExpressServer } from 'routing-controllers'
+import { useSocketServer } from 'socket-controllers'
+import { createServer } from 'http'
+import * as express from 'express'
+import * as io from 'socket.io'
+import * as compression from 'compression'
+import * as helmet from 'helmet'
+import * as morgan from 'morgan'
+import * as cors from 'cors'
+import { Logger } from './services/logger'
+import { Authentication } from './services/authentication'
 
-const { info, error } = logger('server')
+@Service()
+export class Server {
+    /**
+     * Logger service.
+     *
+     * @param {Logger} logger
+     */
+    @Inject() private logger: Logger
 
-export async function initServer(port: number | string): Promise<Server> {
-    try {
-        // init orm connection
-        info('initializing orm connection')
-        const conn: Connection = await createConnection()
+    /**
+     * Authentication service.
+     *
+     * @param {Authentication} authentication
+     */
+    @Inject() private authentication: Authentication
 
-        // init http server
-        info('initializing http server')
-        const app = createServer(new Express(__dirname).app)
+    /**
+     * Express server instance.
+     *
+     * @param {express.Application} app
+     */
+    private app: express.Application
+
+    /**
+     * Socket server instance.
+     *
+     * @param {io.Server} io
+     */
+    private io: io.Server
+
+    /**
+     * Cors options for security.
+     *
+     * @param {cors.CorsOptions} corsOptions
+     */
+    private corsOptions: cors.CorsOptions = {
+        origin: ['http://localhost:4200'],
+    }
+
+    /**
+     * Configures the express server instance.
+     *
+     * @returns {Server}
+     */
+    public prepare(): Server {
+        this.app = express()
+        this.app.options('*', cors(this.corsOptions))
+        this.app.use(cors(this.corsOptions))
+        this.app.use(compression())
+        this.app.use(helmet())
+        this.app.use(
+            morgan((tokens, req, res) => {
+                const zerofy = (value: number): string => `0${value}`.slice(-2)
+                const date = new Date()
+                const hours = zerofy(date.getHours())
+                const minutes = zerofy(date.getMinutes())
+                const seconds = zerofy(date.getSeconds())
+                const sections = [
+                    `[http/${hours}:${minutes}:${seconds}]:`,
+                    tokens.method(req, res),
+                    tokens.url(req, res),
+                    tokens.status(req, res),
+                    '-',
+                    tokens['response-time'](req, res),
+                    'ms',
+                ]
+
+                return sections.join(' ')
+            }),
+        )
+
+        // prepare jwt auth
+        this.authentication.prepare()
 
         // init socket server
-        info('initializing socket server')
-        const socket = new Socket(app)
+        this.io = io(createServer(this.app), {
+            origins: 'localhost:*',
+        })
+        this.io.on('connect', (socket: io.Socket) => {
+            this.logger.debug(`user connected (#${socket.id})`)
 
-        app.listen(port)
-        app.on('listening', () => info(`listening on port ${chalk.cyan(port as string)}`))
-        app.on('close', () => info('closed successfully. bye!'))
-        app.on('error', err => {
-            throw new Error(err.message)
+            socket.on('message', event => {
+                this.logger.silly('message', event)
+            })
+
+            socket.on('custom', event => {
+                this.logger.silly('custom', event)
+            })
+
+            socket.on('disconnect', () => {
+                this.logger.debug(`user disconnected (#${socket.id})`)
+            })
         })
 
-        return app
-    } catch (err) {
-        error(err)
+        // init socket controllers
+        useSocketServer(this.io, {
+            controllers: [`${__dirname}/modules/*/*.controller.js`],
+        })
+
+        // init routing controllers
+        useExpressServer(this.app, {
+            controllers: [`${__dirname}/modules/*/*.controller.js`],
+            middlewares: [`${__dirname}/**/*.middleware.js`],
+            interceptors: [`${__dirname}/**/*.interceptor.js`],
+            routePrefix: '/api',
+            cors: this.corsOptions,
+        })
+
+        return this
+    }
+
+    /**
+     * Starts listening on the given port.
+     *
+     * @param {number} port
+     * @returns {Promise<void>}
+     */
+    public async listen(port: number): Promise<void> {
+        this.app.listen(port)
+        this.app.on('listening', () => this.logger.info(`listening on port {${port}}`))
+        this.app.on('close', () => this.logger.info('closed successfully. bye!'))
+        this.app.on('error', error => {
+            throw new Error(error.message)
+        })
+
+        this.logger.info(`server is listening on port {${port}}`)
     }
 }
