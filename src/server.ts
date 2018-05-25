@@ -63,7 +63,6 @@ export class Server {
                     tokens.method(req, res),
                     tokens.url(req, res),
                     tokens.status(req, res),
-                    tokens.res(req, res, 'content-length'),
                     '-',
                     tokens['response-time'](req, res),
                     'ms',
@@ -94,6 +93,6 @@ export class Server {
      */
     public async listen(port: number): Promise<void> {
         this.app.listen(port)
-        this.logger.info(`server is listening on port ${port}`)
+        this.logger.info(`server is listening on port {${port}}`)
     }
 }

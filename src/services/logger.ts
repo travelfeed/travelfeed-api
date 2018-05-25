@@ -1,6 +1,11 @@
 import { Service } from 'typedi'
 import { createLogger, Logger as LoggerInstance, transports, format } from 'winston'
 import { Format } from 'logform'
+import chalk from 'chalk'
+
+export interface LogMetadata {
+    [key: string]: any
+}
 
 @Service({
     global: true,
@@ -18,28 +23,28 @@ export class Logger {
         })
     }
 
-    public error(message: string): void {
-        this.winston.error(message)
+    public error(message: string, metadata?: LogMetadata): void {
+        this.winston.error(chalk.red(message), metadata)
     }
 
-    public warn(message: string): void {
-        this.winston.warn(message)
+    public warn(message: string, metadata?: LogMetadata): void {
+        this.winston.warn(chalk.yellow(message), metadata)
     }
 
-    public info(message: string): void {
-        this.winston.info(message)
+    public info(message: string, metadata?: LogMetadata): void {
+        this.winston.info(message, metadata)
     }
 
-    public verbose(message: string): void {
-        this.winston.verbose(message)
+    public verbose(message: string, metadata?: LogMetadata): void {
+        this.winston.verbose(chalk.grey(message), metadata)
     }
 
-    public debug(message: string): void {
-        this.winston.debug(message)
+    public debug(message: string, metadata?: LogMetadata): void {
+        this.winston.debug(chalk.grey(message), metadata)
     }
 
-    public silly(message: string): void {
-        this.winston.silly(message)
+    public silly(message: string, metadata?: LogMetadata): void {
+        this.winston.silly(chalk.grey(message), metadata)
     }
 
     private fetchVerbosity(defaultValue: string = 'info'): string {
@@ -61,10 +66,24 @@ export class Logger {
     }
 
     private formatMessage(): Format {
-        const { printf } = format
-        const date = this.formatTime(new Date())
+        return format.printf(info => {
+            const level = info.level
+            const date = this.formatTime(new Date())
+            const message = this.highlight(info.message)
 
-        return printf(info => `[${info.level}/${date}]: ${info.message}`)
+            if (Object.entries(info).length === 2) {
+                return `[${level}/${date}]: ${message}`
+            }
+
+            try {
+                delete info.level
+                delete info.message
+
+                return `[${level}/${date}]: ${message}\n${JSON.stringify(info, null, 2)}`
+            } catch (error) {
+                return `[${level}/${date}]: ${message}`
+            }
+        })
     }
 
     private formatTime(date: Date): string {
@@ -74,5 +93,11 @@ export class Logger {
         const seconds = zerofy(date.getSeconds())
 
         return `${hours}:${minutes}:${seconds}`
+    }
+
+    private highlight(message: string): string {
+        return message.replace(/\{.*?\}/g, matches => {
+            return chalk.cyan(matches.replace('{', '').replace('}', ''))
+        })
     }
 }
