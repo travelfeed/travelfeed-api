@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
 import { UserRole } from './user.role.model'
 import { MailHistory } from '../../misc/models/mail.history.model'
+import { Z_DEFAULT_STRATEGY } from 'zlib'
 
 @Entity()
 export class User {
@@ -26,6 +27,21 @@ export class User {
         default: false,
     })
     public active: boolean
+
+    @Column({
+        nullable: false,
+    })
+    public username: string
+
+    @Column({
+        nullable: false,
+    })
+    public firstname: string
+
+    @Column({
+        nullable: false,
+    })
+    public lastname: string
 
     /***** relations *****/
 
