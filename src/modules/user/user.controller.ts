@@ -26,7 +26,8 @@ export class UserController {
     @Authorized('admin')
     public async readUser(@Param('id') id: number) {
         return this.userRepository.findOne(id, {
-            relations: ['role', 'mailHistory'],
+            select: ['id', 'email', 'role', 'active'],
+            relations: ['role'],
         })
     }
 
@@ -48,7 +49,8 @@ export class UserController {
     @Get('/')
     public async readUsers() {
         return this.userRepository.find({
-            relations: ['role', 'mailHistory'],
+            select: ['id', 'email', 'role', 'active'],
+            relations: ['role'],
         })
     }
 }
