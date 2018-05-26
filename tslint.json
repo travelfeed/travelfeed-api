@@ -10,7 +10,7 @@
       "generic"
     ],
     "arrow-return-shorthand": true,
-    "await-promise": true,
+    "await-promise": [true, "Bluebird"],
     "callable-types": true,
     "class-name": true,
     "comment-format": [

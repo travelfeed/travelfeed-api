@@ -24,16 +24,6 @@ export interface RefreshTokens {
     [key: string]: number
 }
 
-export function Authorized(resource?: string, permission?: string) {
-    const middlewares = [Authentication.isAuthorized]
-
-    if (resource && permission) {
-        middlewares.push(Authentication.checkUserRole(resource, permission))
-    }
-
-    return UseBefore(...middlewares)
-}
-
 @Service()
 export class Authentication {
     private strategyOptions: StrategyOptions = {
@@ -219,4 +209,14 @@ export class Authentication {
             return next(error)
         }
     }
+}
+
+export function Authorized(resource?: string, permission?: string) {
+    const middlewares = [Authentication.isAuthorized]
+
+    if (resource && permission) {
+        middlewares.push(Authentication.checkUserRole(resource, permission))
+    }
+
+    return UseBefore(...middlewares)
 }
