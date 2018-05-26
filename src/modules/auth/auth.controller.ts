@@ -57,13 +57,10 @@ export class AuthController {
         const tokens = this.authentication.createTokenPair(user.id)
 
         return {
-            status: 200,
-            data: {
-                userEmail: user.email,
-                userRole: user.role.name,
-                authToken: tokens.auth,
-                refreshToken: tokens.refresh,
-            },
+            userId: user.id,
+            userRole: user.role.name,
+            authToken: tokens.auth,
+            refreshToken: tokens.refresh,
         }
     }
 
@@ -76,11 +73,8 @@ export class AuthController {
         const tokens = this.authentication.createTokenPair(body.userId)
 
         return {
-            status: 200,
-            data: {
-                authToken: tokens.auth,
-                refreshToken: tokens.refresh,
-            },
+            authToken: tokens.auth,
+            refreshToken: tokens.refresh,
         }
     }
 

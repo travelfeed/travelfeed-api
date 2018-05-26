@@ -155,7 +155,6 @@ export class Authentication {
     }
 
     public verifyPassword(plainPassword, hashedPassword): Promise<boolean> {
-        console.log(plainPassword, hashedPassword)
         return new Promise((resolve, reject) => {
             bcrypt.compare(plainPassword, hashedPassword, (err, res) => {
                 if (err) {
