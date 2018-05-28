@@ -1,8 +1,19 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
-import { JsonController, Get, Post, Delete, Param, Body, OnUndefined } from 'routing-controllers'
+import {
+    JsonController,
+    Get,
+    Post,
+    Delete,
+    Param,
+    Body,
+    CurrentUser,
+    OnUndefined,
+} from 'routing-controllers'
+import { Authorized } from '../../services/authentication'
 import { Article } from './models/article.model'
+import { User } from '../user/models/user.model'
 
 @Service()
 @JsonController('/article')
@@ -16,12 +27,14 @@ export class ArticleController {
      * Entity actions
      */
     @Post('/')
+    @Authorized('article', 'create')
     @OnUndefined(201)
-    public async createArticle(@Body() article: Article) {
-        await this.articleRepository.save(article)
+    public async createArticle(@Body() article: Article, @CurrentUser() user: User) {
+        await this.articleRepository.save({ ...article, user })
     }
 
     @Get('/:id')
+    @Authorized('article', 'read')
     public async readArticle(@Param('id') id: number) {
         return this.articleRepository.findOne(id, {
             relations: ['user', 'pictures'],
@@ -29,12 +42,14 @@ export class ArticleController {
     }
 
     @Post('/:id')
+    @Authorized('article', 'update')
     @OnUndefined(204)
     public async updateArticle(@Body() article: DeepPartial<Article>) {
         await this.articleRepository.save(article)
     }
 
     @Delete('/:id')
+    @Authorized('article', 'delete')
     @OnUndefined(204)
     public async deleteArticle(@Param('id') id: number) {
         await this.articleRepository.delete(id)
@@ -44,6 +59,7 @@ export class ArticleController {
      * Collection actions
      */
     @Get('/')
+    @Authorized('article', 'read-all')
     public async readArticles() {
         return this.articleRepository.find({
             relations: ['user', 'pictures'],

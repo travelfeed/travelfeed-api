@@ -13,7 +13,7 @@ import {
 import { Request } from 'express'
 import { v1 as uuidv1 } from 'uuid'
 import { isEmail } from 'validator'
-import { Authentication } from '../../services/authentication'
+import { Authentication, Authorized } from '../../services/authentication'
 import { User } from '../user/models/user.model'
 import { Newsletter } from './models/newsletter.model'
 import { MailAction } from '../misc/models/mail.action.model'
@@ -35,6 +35,7 @@ export class NewsletterController {
     @InjectRepository(MailAction) private mailActionRepository: Repository<MailAction>
 
     @Post('/subscribe/:email')
+    @Authorized('newsletter', 'subscribe')
     @OnUndefined(204)
     public async subscribe(@Param('email') email: string) {
         const subUser: Newsletter = await this.newsletterRepository.findOne({
@@ -110,6 +111,7 @@ export class NewsletterController {
     }
 
     @Post('/unsubscribe/:uuid')
+    @Authorized('newsletter', 'unsubscribe')
     @OnUndefined(204)
     public async unsubscribe(@Param('uuid') uuid: string) {
         await this.newsletterRepository.delete({
@@ -139,6 +141,7 @@ export class NewsletterController {
     }
 
     @Post('/send')
+    @Authorized('newsletter', 'send')
     @OnUndefined(201)
     public async send(@Req() req: Request) {
         const author: User = await this.userRepository.findOne(req.user.id)

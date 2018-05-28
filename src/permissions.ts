@@ -13,11 +13,11 @@ permissions.allow([
         ],
     },
     {
-        roles: ['admin', 'user'],
+        roles: ['user'],
         allows: [
             {
                 resources: 'comment',
-                permissions: ['create', 'edit', 'delete'],
+                permissions: ['read', 'create', 'edit', 'delete'],
             },
             {
                 resources: 'newsletter',

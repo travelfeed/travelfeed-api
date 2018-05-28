@@ -2,6 +2,7 @@ import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
 import { JsonController, Get, Post, Delete, Param, Body, OnUndefined } from 'routing-controllers'
+import { Authorized } from '../../services/authentication'
 import { Translation } from './models/translation.model'
 import { TranslationLanguage } from './models/translation.language.model'
 
@@ -19,18 +20,21 @@ export class TranslationController {
      * Entity actions
      */
     @Post('/')
+    @Authorized('translation', 'create')
     @OnUndefined(201)
     public async createTranslation(@Body() translation: Translation) {
         return this.translationRepository.create(translation)
     }
 
     @Post('/:id')
+    @Authorized('translation', 'update')
     @OnUndefined(201)
     public async saveTranslation(@Param('id') id: number, @Body() data: DeepPartial<Translation>) {
         return this.translationRepository.update(id, data)
     }
 
     @Delete('/:id')
+    @Authorized('translation', 'delete')
     @OnUndefined(201)
     public async deleteTranslation(@Param('id') id: number) {
         return this.translationRepository.delete(id)
@@ -40,11 +44,13 @@ export class TranslationController {
      * Collection actions
      */
     @Get('/')
+    @Authorized('translation', 'read-languages')
     public async readLanguages() {
         return this.translationLanguageRepository.find()
     }
 
     @Get('/keys/:lang')
+    @Authorized('translation', 'read-keys')
     public async readTranslationKeys(@Param('lang') lang: string) {
         return this.translationRepository.find({
             relations: ['key', 'lang'],
