@@ -1,5 +1,5 @@
 import { Service, Inject } from 'typedi'
-import { useExpressServer } from 'routing-controllers'
+import { useExpressServer, Action } from 'routing-controllers'
 import * as express from 'express'
 import * as compression from 'compression'
 import * as helmet from 'helmet'
@@ -80,6 +80,7 @@ export class Server {
             interceptors: [`${__dirname}/**/*.interceptor.js`],
             routePrefix: '/api',
             cors: this.corsOptions,
+            currentUserChecker: (action: Action) => action.request.user,
         })
 
         return this
