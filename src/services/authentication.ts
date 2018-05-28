@@ -202,7 +202,11 @@ export class Authentication {
                 return next('user is not authorized', null)
             }
 
-            permissions.addUserRoles(user.email, user.role.name || 'guest')
+            // remove all roles
+            await permissions.removeUserRoles(user.id, await permissions.userRoles(user.id))
+
+            // add role from db
+            await permissions.addUserRoles(user.id, user.role.name || 'guest')
 
             return next(null, user)
         } catch (error) {
@@ -211,10 +215,10 @@ export class Authentication {
     }
 }
 
-export function Authorized(resource?: string, permission?: string) {
+export function Authorized(resource?: string, permission: string = '*') {
     const middlewares = [Authentication.isAuthorized]
 
-    if (resource && permission) {
+    if (resource) {
         middlewares.push(Authentication.checkUserRole(resource, permission))
     }
 
