@@ -1,4 +1,4 @@
-import { Service, Inject } from 'typedi'
+import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
 import { JsonController, Get, Post, Delete, Param, Body, OnUndefined } from 'routing-controllers'
@@ -30,7 +30,7 @@ export class ArticleController {
 
     @Post('/:id')
     @OnUndefined(204)
-    public async updateArticle(@Param('id') id: number, @Body() article: DeepPartial<Article>) {
+    public async updateArticle(@Body() article: DeepPartial<Article>) {
         await this.articleRepository.save(article)
     }
 
