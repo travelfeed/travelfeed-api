@@ -3,7 +3,7 @@ import { Interceptor, InterceptorInterface, Action } from 'routing-controllers'
 @Interceptor()
 export class ResponseInterceptor implements InterceptorInterface {
     /**
-     * Standardizes all successful reponses to a predefined format using status + result.
+     * Standardizes all successful reponses to a pre defined format using status + result.
      *
      * @param {Action} action
      * @param {any} data
@@ -11,12 +11,13 @@ export class ResponseInterceptor implements InterceptorInterface {
      */
     public intercept(action: Action, data: any): any {
         const status: number = action.response.statusCode
+        const skipFormat: boolean = data && data.skipFormat
 
-        if (status >= 200 && status < 300 && data && !data.skipFormat) {
+        if (status >= 200 && status < 300 && data && !skipFormat) {
             return { status, data }
         }
 
-        if (data.skipFormat) {
+        if (skipFormat) {
             delete data.skipFormat
         }
 
