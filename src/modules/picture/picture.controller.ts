@@ -1,12 +1,16 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { JsonController, Get, Post, Delete, Param, Body } from 'routing-controllers'
 import { Picture } from './models/picture.model'
 
 @Service()
 @JsonController('/picture')
 export class PictureController {
-    public constructor(private pictureRepository: Repository<Picture>) {}
+    /**
+     * Model repositories
+     */
+    @InjectRepository(Picture) private pictureRepository: Repository<Picture>
 
     /**
      * Entity actions

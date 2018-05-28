@@ -1,5 +1,6 @@
 import { Service, Inject } from 'typedi'
 import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import {
     JsonController,
     Get,
@@ -26,10 +27,11 @@ export class AuthController {
 
     @Inject() private mail: Mail
 
-    public constructor(
-        private userRepository: Repository<User>,
-        private userRoleRepository: Repository<UserRole>,
-    ) {}
+    /**
+     * Model repositories
+     */
+    @InjectRepository(User) private userRepository: Repository<User>
+    @InjectRepository(UserRole) private userRoleRepository: Repository<UserRole>
 
     @Post('/signin')
     public async signin(@Body() body: any) {

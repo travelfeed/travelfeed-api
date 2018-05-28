@@ -1,5 +1,6 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { JsonController, Get, Post, Delete, Param, Body, CurrentUser } from 'routing-controllers'
 import { Authorized } from '../../services/authentication'
 import { Article } from './models/article.model'
@@ -8,7 +9,10 @@ import { User } from '../user/models/user.model'
 @Service()
 @JsonController('/article')
 export class ArticleController {
-    public constructor(private articleRepository: Repository<Article>) {}
+    /**
+     * Model repositories
+     */
+    @InjectRepository(Article) private articleRepository: Repository<Article>
 
     /**
      * Entity actions
