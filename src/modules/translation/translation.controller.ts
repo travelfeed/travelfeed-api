@@ -44,6 +44,16 @@ export class TranslationController {
         return this.translationLanguageRepository.find()
     }
 
+    @Get('/keys/:lang')
+    public async readTranslationKeys(@Param('lang') lang: string) {
+        return this.translationRepository.find({
+            relations: ['key', 'lang'],
+            where: {
+                lang: await this.translationLanguageRepository.findOne(lang),
+            },
+        })
+    }
+
     @Get('/:lang')
     public async readTranslations(@Param('lang') lang: string) {
         return this.translationRepository
