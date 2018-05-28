@@ -1,7 +1,7 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
-import { JsonController, Get, Post, Delete, Param, Body, OnUndefined } from 'routing-controllers'
+import { JsonController, Get, Post, Delete, Param, Body } from 'routing-controllers'
 import { Authorized } from '../../services/authentication'
 import { User } from './models/user.model'
 
@@ -18,9 +18,10 @@ export class UserController {
      */
     @Post('/')
     @Authorized('user', 'create')
-    @OnUndefined(201)
     public async createUser(@Body() user: User) {
-        return this.userRepository.create(user)
+        await this.userRepository.create(user)
+
+        return null
     }
 
     @Get('/:id')
@@ -34,16 +35,14 @@ export class UserController {
 
     @Post('/:id')
     @Authorized('user', 'update')
-    @OnUndefined(201)
     public async saveUser(@Param('id') id: number, @Body() data: DeepPartial<User>) {
-        return this.userRepository.update(id, data)
+        await this.userRepository.update(id, data)
     }
 
     @Delete('/:id')
     @Authorized('user', 'delete')
-    @OnUndefined(201)
     public async deleteUser(@Param('id') id: number) {
-        return this.userRepository.delete(id)
+        await this.userRepository.delete(id)
     }
 
     /**

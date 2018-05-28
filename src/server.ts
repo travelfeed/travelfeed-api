@@ -80,6 +80,13 @@ export class Server {
             interceptors: [`${__dirname}/**/*.interceptor.js`],
             routePrefix: '/api',
             cors: this.corsOptions,
+            defaults: {
+                nullResultCode: 201,
+                undefinedResultCode: 204,
+                paramOptions: {
+                    required: true,
+                },
+            },
             currentUserChecker: (action: Action) => action.request.user,
         })
 

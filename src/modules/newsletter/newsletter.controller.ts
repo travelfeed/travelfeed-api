@@ -6,7 +6,6 @@ import {
     Post,
     Param,
     Req,
-    OnUndefined,
     NotFoundError,
     BadRequestError,
 } from 'routing-controllers'
@@ -36,7 +35,6 @@ export class NewsletterController {
 
     @Post('/subscribe/:email')
     @Authorized('newsletter', 'subscribe')
-    @OnUndefined(204)
     public async subscribe(@Param('email') email: string) {
         const subUser: Newsletter = await this.newsletterRepository.findOne({
             where: {
@@ -112,7 +110,6 @@ export class NewsletterController {
 
     @Post('/unsubscribe/:uuid')
     @Authorized('newsletter', 'unsubscribe')
-    @OnUndefined(204)
     public async unsubscribe(@Param('uuid') uuid: string) {
         await this.newsletterRepository.delete({
             hash: uuid,
@@ -121,7 +118,6 @@ export class NewsletterController {
     }
 
     @Post('/activate/:uuid')
-    @OnUndefined(204)
     public async activate(@Param('uuid') uuid: string) {
         const user: Newsletter = await this.newsletterRepository.findOne({
             where: {
@@ -142,7 +138,6 @@ export class NewsletterController {
 
     @Post('/send')
     @Authorized('newsletter', 'send')
-    @OnUndefined(201)
     public async send(@Req() req: Request) {
         const author: User = await this.userRepository.findOne(req.user.id)
         const [users] = await this.newsletterRepository.findAndCount({
@@ -178,6 +173,8 @@ export class NewsletterController {
 
             // send mail to user
             await this.mail.sendMail(mail)
+
+            return null
         }
 
         // log mail

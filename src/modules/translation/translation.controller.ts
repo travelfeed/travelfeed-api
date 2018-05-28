@@ -1,7 +1,7 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
-import { JsonController, Get, Post, Delete, Param, Body, OnUndefined } from 'routing-controllers'
+import { JsonController, Get, Post, Delete, Param, Body } from 'routing-controllers'
 import { Authorized } from '../../services/authentication'
 import { Translation } from './models/translation.model'
 import { TranslationLanguage } from './models/translation.language.model'
@@ -21,23 +21,22 @@ export class TranslationController {
      */
     @Post('/')
     @Authorized('translation', 'create')
-    @OnUndefined(201)
     public async createTranslation(@Body() translation: Translation) {
-        return this.translationRepository.create(translation)
+        await this.translationRepository.create(translation)
+
+        return null
     }
 
     @Post('/:id')
     @Authorized('translation', 'update')
-    @OnUndefined(201)
     public async saveTranslation(@Param('id') id: number, @Body() data: DeepPartial<Translation>) {
-        return this.translationRepository.update(id, data)
+        await this.translationRepository.update(id, data)
     }
 
     @Delete('/:id')
     @Authorized('translation', 'delete')
-    @OnUndefined(201)
     public async deleteTranslation(@Param('id') id: number) {
-        return this.translationRepository.delete(id)
+        await this.translationRepository.delete(id)
     }
 
     /**

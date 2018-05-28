@@ -10,7 +10,6 @@ import {
     Req,
     UnauthorizedError,
     BadRequestError,
-    OnUndefined,
     NotFoundError,
 } from 'routing-controllers'
 import { v1 as uuidv1 } from 'uuid'
@@ -79,13 +78,11 @@ export class AuthController {
     }
 
     @Post('/signout')
-    @OnUndefined(204)
     public async signout(@Req() req: Request) {
         req.logout()
     }
 
     @Post('/register')
-    @OnUndefined(204)
     public async register(@Body() body: any) {
         const user: User = await this.userRepository.findOne({
             where: {
@@ -140,7 +137,6 @@ export class AuthController {
     }
 
     @Get('/activate/:uuid')
-    @OnUndefined(204)
     public async activate(@Param('uuid') uuid: string) {
         const user: User = await this.userRepository.findOne({
             where: {
@@ -160,7 +156,6 @@ export class AuthController {
     }
 
     @Get('/resend/:email')
-    @OnUndefined(204)
     public async resend(@Param('email') email: string) {
         const user: User = await this.userRepository.findOne({
             where: {
