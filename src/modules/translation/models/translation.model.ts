@@ -9,7 +9,7 @@ import {
     JoinColumn,
 } from 'typeorm'
 import { TranslationLanguage } from './translation.language.model'
-import { TranslationKey } from './transaltion.key.model'
+import { TranslationKey } from './translation.key.model'
 
 @Entity()
 export class Translation {
