@@ -1,5 +1,4 @@
 import { Service } from 'typedi'
-import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Repository } from 'typeorm'
 import { createTransport, Transporter } from 'nodemailer'
 import { renderFile, Data } from 'ejs'
@@ -28,8 +27,6 @@ export const mailAddresses = {
 
 @Service()
 export class Mail {
-    @InjectRepository(MailHistory) private mailHistoryRepository: Repository<MailHistory>
-
     private transporter: Transporter = createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
@@ -38,6 +35,8 @@ export class Mail {
             pass: 'DyWX135WAEZ3Bx9GDd',
         },
     })
+
+    public constructor(private mailHistoryRepository: Repository<MailHistory>) {}
 
     public sendMail(options: MailConfig) {
         return this.transporter.sendMail(options)

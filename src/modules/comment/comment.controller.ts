@@ -1,6 +1,5 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
-import { InjectRepository } from 'typeorm-typedi-extensions'
 import { JsonController, Get, Post, Delete, Param, Body } from 'routing-controllers'
 import { Authorized } from '../../services/authentication'
 import { Comment } from './models/comment.model'
@@ -8,10 +7,7 @@ import { Comment } from './models/comment.model'
 @Service()
 @JsonController('/comment/:article')
 export class CommentController {
-    /**
-     * Model repositories
-     */
-    @InjectRepository(Comment) private commentRepository: Repository<Comment>
+    public constructor(private commentRepository: Repository<Comment>) {}
 
     /**
      * Entity actions

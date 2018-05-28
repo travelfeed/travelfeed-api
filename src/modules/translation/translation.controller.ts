@@ -1,6 +1,5 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
-import { InjectRepository } from 'typeorm-typedi-extensions'
 import { JsonController, Get, Post, Delete, Param, Body } from 'routing-controllers'
 import { Authorized } from '../../services/authentication'
 import { Translation } from './models/translation.model'
@@ -9,12 +8,10 @@ import { TranslationLanguage } from './models/translation.language.model'
 @Service()
 @JsonController('/translation')
 export class TranslationController {
-    /**
-     * Model repositories
-     */
-    @InjectRepository(Translation) private translationRepository: Repository<Translation>
-    @InjectRepository(TranslationLanguage)
-    private translationLanguageRepository: Repository<TranslationLanguage>
+    public constructor(
+        private translationRepository: Repository<Translation>,
+        private translationLanguageRepository: Repository<TranslationLanguage>,
+    ) {}
 
     /**
      * Entity actions
