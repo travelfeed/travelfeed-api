@@ -46,11 +46,25 @@ export class TranslationController {
 
     @Get('/:lang')
     public async readTranslations(@Param('lang') lang: string) {
-        return this.translationRepository.find({
-            relations: ['key', 'lang'],
-            where: {
-                lang: await this.translationLanguageRepository.findOne(lang),
-            },
-        })
+        return this.translationRepository
+            .find({
+                relations: ['key', 'lang'],
+                where: {
+                    lang: await this.translationLanguageRepository.findOne(lang),
+                },
+            })
+            .then(data => {
+                return data.reduce(
+                    (prev: any, curr) => {
+                        return {
+                            ...prev,
+                            [curr.key.key]: curr.value,
+                        }
+                    },
+                    {
+                        skipFormat: true,
+                    },
+                )
+            })
     }
 }

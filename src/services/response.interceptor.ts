@@ -12,8 +12,12 @@ export class ResponseInterceptor implements InterceptorInterface {
     public intercept(action: Action, data: any): any {
         const status: number = action.response.statusCode
 
-        if (status >= 200 && status < 300 && data) {
+        if (status >= 200 && status < 300 && data && !data.skipFormat) {
             return { status, data }
+        }
+
+        if (data.skipFormat) {
+            delete data.skipFormat
         }
 
         return data
