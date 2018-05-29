@@ -57,7 +57,6 @@ export class Authentication {
             authenticate('jwt', { session: false }, (error, user, info) => {
                 // general error
                 if (error) {
-                    console.log('==> error', error)
                     return res.status(500).json({
                         status: 500,
                         error: error,
@@ -68,14 +67,12 @@ export class Authentication {
                 if (info) {
                     switch (info.message) {
                         case 'No auth token':
-                            console.log('==> No auth token')
                             return res.status(401).json({
                                 status: 401,
                                 error: 'Not authorized.',
                             })
 
                         case 'jwt expired':
-                            console.log('==> jwt expired')
                             return res.status(403).json({
                                 status: 403,
                                 error: 'Auth token expired.',
@@ -85,7 +82,6 @@ export class Authentication {
 
                 // user not authorized
                 if (!user) {
-                    console.log('==> user is not authorized')
                     return res.status(401).json({
                         status: 401,
                         data: 'user is not authorized',
