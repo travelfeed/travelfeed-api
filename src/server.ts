@@ -103,4 +103,13 @@ export class Server {
         this.app.listen(port)
         this.logger.info(`server is listening on port {${port}}`)
     }
+
+    /**
+     * Returns the express app. (Needed for testing!)
+     *
+     * @returns {express.Application}
+     */
+    public get App(): express.Application {
+        return this.app
+    }
 }
