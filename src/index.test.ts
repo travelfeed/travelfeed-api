@@ -18,6 +18,6 @@ export async function factory(): Promise<() => supertest.SuperTest<supertest.Tes
     return () => supertest(Container.get(Server).prepare().App)
 }
 
-test('pass', async t => {
-    t.pass()
+test.beforeEach(async () => {
+    // setup test context
 })
