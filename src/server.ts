@@ -1,6 +1,9 @@
 import { Service, Inject } from 'typedi'
 import { useExpressServer, Action } from 'routing-controllers'
+import { useSocketServer } from 'socket-controllers'
+import { createServer } from 'http'
 import * as express from 'express'
+import * as io from 'socket.io'
 import * as compression from 'compression'
 import * as helmet from 'helmet'
 import * as morgan from 'morgan'
@@ -30,6 +33,13 @@ export class Server {
      * @param {express.Application} app
      */
     private app: express.Application
+
+    /**
+     * Socket server instance.
+     *
+     * @param {io.Server} io
+     */
+    private io: io.Server
 
     /**
      * Cors options for security.
@@ -72,9 +82,36 @@ export class Server {
             }),
         )
 
+        // prepare jwt auth
         this.authentication.prepare()
 
-        this.app = useExpressServer(this.app, {
+        // init socket server
+        this.io = io(createServer(this.app), {
+            origins: 'localhost:*',
+        })
+        this.io.on('connect', (socket: io.Socket) => {
+            this.logger.debug(`user connected (#${socket.id})`)
+
+            socket.on('message', event => {
+                this.logger.silly('message', event)
+            })
+
+            socket.on('custom', event => {
+                this.logger.silly('custom', event)
+            })
+
+            socket.on('disconnect', () => {
+                this.logger.debug(`user disconnected (#${socket.id})`)
+            })
+        })
+
+        // init socket controllers
+        useSocketServer(this.io, {
+            controllers: [`${__dirname}/modules/*/*.controller.js`],
+        })
+
+        // init routing controllers
+        useExpressServer(this.app, {
             controllers: [`${__dirname}/modules/*/*.controller.js`],
             middlewares: [`${__dirname}/**/*.middleware.js`],
             interceptors: [`${__dirname}/**/*.interceptor.js`],
@@ -101,6 +138,12 @@ export class Server {
      */
     public async listen(port: number): Promise<void> {
         this.app.listen(port)
+        this.app.on('listening', () => this.logger.info(`listening on port {${port}}`))
+        this.app.on('close', () => this.logger.info('closed successfully. bye!'))
+        this.app.on('error', error => {
+            throw new Error(error.message)
+        })
+
         this.logger.info(`server is listening on port {${port}}`)
     }
 
