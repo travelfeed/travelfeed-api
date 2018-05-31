@@ -1,7 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm'
-import { Article } from '../../article/models/article.model'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
 import { UserRole } from './user.role.model'
-import { ArticleComment } from '../../article/models/article.comment.model'
 import { MailHistory } from '../../misc/models/mail.history.model'
 
 @Entity()
@@ -10,42 +8,50 @@ export class User {
     @PrimaryGeneratedColumn() public id: number
 
     @Column({
-        type: 'varchar',
-        length: 40,
-        unique: true
+        unique: true,
+        nullable: false,
     })
     public email: string
 
+    @Column() public password: string
+
     @Column({
-        select: false, // never read password
-        type: 'varchar',
-        length: 255
+        select: false,
+        nullable: true,
     })
-    public password: string
+    public hash: string
 
     @Column({
         type: 'tinyint',
-        default: false
+        default: false,
     })
     public active: boolean
 
     @Column({
-        select: false,
-        type: 'varchar',
-        length: 255
+        nullable: false,
     })
-    public hash: string
+    public username: string
+
+    @Column({
+        nullable: false,
+    })
+    public firstname: string
+
+    @Column({
+        nullable: false,
+    })
+    public lastname: string
 
     /***** relations *****/
-    @OneToMany(type => Article, article => article.user)
-    public articles: Array<Article>
 
-    @OneToMany(type => ArticleComment, articleComment => articleComment.user)
-    public comments: Array<Comment>
+    @ManyToOne(() => UserRole, {
+        nullable: false,
+    })
+    @JoinColumn({
+        name: 'role',
+    })
+    public role: UserRole
 
-    @OneToMany(type => MailHistory, mailHistory => mailHistory.user)
+    @OneToMany(() => MailHistory, mailHistory => mailHistory.user)
     public mailHistory: Array<MailHistory>
-
-    @ManyToOne(type => UserRole, userRole => userRole.userRole)
-    public userRole: UserRole
 }

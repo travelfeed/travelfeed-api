@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    Timestamp,
+    ManyToOne,
+} from 'typeorm'
 import { MailAction } from './mail.action.model'
 import { User } from '../../user/models/user.model'
 
@@ -7,26 +14,18 @@ export class MailHistory {
     /***** columns *****/
     @PrimaryGeneratedColumn() public id: number
 
-    @Column({
-        type: 'varchar',
-        length: 255
-    })
-    public endpoint: string
+    @Column() public endpoint: string
 
-    @Column({
-        type: 'varchar',
-        length: 100
-    })
-    public subject: string
+    @Column() public subject: string
 
     @Column('text') public text: string
 
-    @Column('date') public date: string
+    @CreateDateColumn() public date: Timestamp
 
     /***** relations *****/
-    @ManyToOne(type => User, user => user.mailHistory)
+    @ManyToOne(() => User, user => user.mailHistory)
     public user: User
 
-    @ManyToOne(type => MailAction, mailAction => mailAction.mailHistory)
+    @ManyToOne(() => MailAction, mailAction => mailAction.mailHistory)
     public mailAction: MailAction
 }
