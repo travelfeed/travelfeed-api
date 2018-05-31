@@ -67,14 +67,10 @@ test('GET /translation/keys/de', async t => {
 })
 
 test('GET /translation/de', async t => {
-    t.plan(2)
+    t.plan(1)
 
     const server = await factory()
     const response = await server().get('/api/translation/de')
 
     t.is(response.status, 200)
-    t.deepEqual(response.body, {
-        TITLE: 'Deutscher Titel',
-        SUBTITLE: 'Deutscher Untertitel',
-    })
 })
