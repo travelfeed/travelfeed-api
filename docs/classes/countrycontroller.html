@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Picture | Travelfeed API</title>
+	<title>CountryController | Travelfeed API</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">/*! normalize.css v1.1.3 | MIT License | git.io/normalize */
@@ -930,8 +930,25 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-class">
 			<a href="country.html" class="tsd-kind-icon">Country</a>
 		</li>
-		<li class=" tsd-kind-class">
+		<li class="current tsd-kind-class">
 			<a href="countrycontroller.html" class="tsd-kind-icon">Country<wbr>Controller</a>
+			<ul>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a href="countrycontroller.html#countryrepository" class="tsd-kind-icon">country<wbr>Repository</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="countrycontroller.html#createtranslation" class="tsd-kind-icon">create<wbr>Translation</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="countrycontroller.html#deletetranslation" class="tsd-kind-icon">delete<wbr>Translation</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="countrycontroller.html#readlanguages" class="tsd-kind-icon">read<wbr>Languages</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="countrycontroller.html#savetranslation" class="tsd-kind-icon">save<wbr>Translation</a>
+				</li>
+			</ul>
 		</li>
 		<li class=" tsd-kind-class">
 			<a href="logger.html" class="tsd-kind-icon">Logger</a>
@@ -951,25 +968,8 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-class">
 			<a href="newslettercontroller.html" class="tsd-kind-icon">Newsletter<wbr>Controller</a>
 		</li>
-		<li class="current tsd-kind-class">
+		<li class=" tsd-kind-class">
 			<a href="picture.html" class="tsd-kind-icon">Picture</a>
-			<ul>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="picture.html#alt" class="tsd-kind-icon">alt</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="picture.html#articles" class="tsd-kind-icon">articles</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="picture.html#id" class="tsd-kind-icon">id</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="picture.html#link" class="tsd-kind-icon">link</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="picture.html#title" class="tsd-kind-icon">title</a>
-				</li>
-			</ul>
 		</li>
 		<li class=" tsd-kind-class">
 			<a href="picturecontroller.html" class="tsd-kind-icon">Picture<wbr>Controller</a>
@@ -1054,7 +1054,7 @@ img { max-width: 100%; }
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<span class="target">Picture</span>
+					<span class="target">CountryController</span>
 				</li>
 			</ul>
 		</section>
@@ -1062,80 +1062,142 @@ img { max-width: 100%; }
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
-					<section class="tsd-index-section ">
+					<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="picture.html#alt" class="tsd-kind-icon">alt</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="picture.html#articles" class="tsd-kind-icon">articles</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="picture.html#id" class="tsd-kind-icon">id</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="picture.html#link" class="tsd-kind-icon">link</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="picture.html#title" class="tsd-kind-icon">title</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="countrycontroller.html#countryrepository" class="tsd-kind-icon">country<wbr>Repository</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Methods</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="countrycontroller.html#createtranslation" class="tsd-kind-icon">create<wbr>Translation</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="countrycontroller.html#deletetranslation" class="tsd-kind-icon">delete<wbr>Translation</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="countrycontroller.html#readlanguages" class="tsd-kind-icon">read<wbr>Languages</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="countrycontroller.html#savetranslation" class="tsd-kind-icon">save<wbr>Translation</a></li>
 						</ul>
 					</section>
 				</div>
 			</section>
 		</section>
-		<section class="tsd-panel-group tsd-member-group ">
+		<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 			<h2>Properties</h2>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="alt" class="tsd-anchor"></a>
-				<h3>alt</h3>
-				<div class="tsd-signature tsd-kind-icon">alt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+				<a name="countryrepository" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> country<wbr>Repository</h3>
+				<div class="tsd-signature tsd-kind-icon">country<wbr>Repository<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Repository</span><span class="tsd-signature-symbol">&lt;</span><a href="country.html" class="tsd-signature-type">Country</a><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/picture/models/picture.model.ts#L14">modules/picture/models/picture.model.ts:14</a></li>
-					</ul>
-				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="articles" class="tsd-anchor"></a>
-				<h3>articles</h3>
-				<div class="tsd-signature tsd-kind-icon">articles<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="article.html" class="tsd-signature-type">Article</a><span class="tsd-signature-symbol">&gt;</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/picture/models/picture.model.ts#L19">modules/picture/models/picture.model.ts:19</a></li>
+						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/country/country.controller.ts#L15">modules/country/country.controller.ts:15</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>relations</p>
+						<p>Model repositories</p>
 					</div>
 				</div>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="id" class="tsd-anchor"></a>
-				<h3>id</h3>
-				<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/picture/models/picture.model.ts#L8">modules/picture/models/picture.model.ts:8</a></li>
-					</ul>
-				</aside>
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>columns</p>
-					</div>
-				</div>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Methods</h2>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="createtranslation" class="tsd-anchor"></a>
+				<h3>create<wbr>Translation</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">create<wbr>Translation<span class="tsd-signature-symbol">(</span>country<span class="tsd-signature-symbol">: </span><a href="country.html" class="tsd-signature-type">Country</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/country/country.controller.ts#L22">modules/country/country.controller.ts:22</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Entity actions</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>country: <a href="country.html" class="tsd-signature-type">Country</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="link" class="tsd-anchor"></a>
-				<h3>link</h3>
-				<div class="tsd-signature tsd-kind-icon">link<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/picture/models/picture.model.ts#L10">modules/picture/models/picture.model.ts:10</a></li>
-					</ul>
-				</aside>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="deletetranslation" class="tsd-anchor"></a>
+				<h3>delete<wbr>Translation</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">delete<wbr>Translation<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/country/country.controller.ts#L36">modules/country/country.controller.ts:36</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>id: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="title" class="tsd-anchor"></a>
-				<h3>title</h3>
-				<div class="tsd-signature tsd-kind-icon">title<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/picture/models/picture.model.ts#L12">modules/picture/models/picture.model.ts:12</a></li>
-					</ul>
-				</aside>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="readlanguages" class="tsd-anchor"></a>
+				<h3>read<wbr>Languages</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">read<wbr>Languages<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="country.html" class="tsd-signature-type">Country</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/country/country.controller.ts#L44">modules/country/country.controller.ts:44</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Collection actions</p>
+							</div>
+						</div>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="country.html" class="tsd-signature-type">Country</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="savetranslation" class="tsd-anchor"></a>
+				<h3>save<wbr>Translation</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">save<wbr>Translation<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DeepPartial</span><span class="tsd-signature-symbol">&lt;</span><a href="country.html" class="tsd-signature-type">Country</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/country/country.controller.ts#L30">modules/country/country.controller.ts:30</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>id: <span class="tsd-signature-type">number</span></h5>
+							</li>
+							<li>
+								<h5>data: <span class="tsd-signature-type">DeepPartial</span><span class="tsd-signature-symbol">&lt;</span><a href="country.html" class="tsd-signature-type">Country</a><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
 			</section>
 		</section>
 		<footer class="with-border-bottom">
