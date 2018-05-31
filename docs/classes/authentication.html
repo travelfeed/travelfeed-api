@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ArticleHandler | Travelfeed API</title>
+	<title>Authentication | Travelfeed API</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">/*! normalize.css v1.1.3 | MIT License | git.io/normalize */
@@ -909,49 +909,163 @@ img { max-width: 100%; }
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
+		<li class=" tsd-kind-class">
+			<a href="article.html" class="tsd-kind-icon">Article</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="articlecontroller.html" class="tsd-kind-icon">Article<wbr>Controller</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="authcontroller.html" class="tsd-kind-icon">Auth<wbr>Controller</a>
+		</li>
 		<li class="current tsd-kind-class">
-			<a href="articlehandler.html" class="tsd-kind-icon">Article<wbr>Handler</a>
+			<a href="authentication.html" class="tsd-kind-icon">Authentication</a>
 			<ul>
-				<li class=" tsd-kind-constructor tsd-parent-kind-class">
-					<a href="articlehandler.html#constructor" class="tsd-kind-icon">constructor</a>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a href="authentication.html#refreshcounts" class="tsd-kind-icon">refresh<wbr>Counts</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a href="articlehandler.html#articlerepo" class="tsd-kind-icon">article<wbr>Repo</a>
+					<a href="authentication.html#refreshtokens" class="tsd-kind-icon">refresh<wbr>Tokens</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a href="articlehandler.html#langrepo" class="tsd-kind-icon">lang<wbr>Repo</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a href="articlehandler.html#picrepo" class="tsd-kind-icon">pic<wbr>Repo</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a href="articlehandler.html#textrepo" class="tsd-kind-icon">text<wbr>Repo</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a href="articlehandler.html#userrepo" class="tsd-kind-icon">user<wbr>Repo</a>
+					<a href="authentication.html#saltrounds" class="tsd-kind-icon">salt<wbr>Rounds</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="articlehandler.html#createarticle" class="tsd-kind-icon">create<wbr>Article</a>
+					<a href="authentication.html#createtokenpair" class="tsd-kind-icon">create<wbr>Token<wbr>Pair</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="articlehandler.html#deletearticle" class="tsd-kind-icon">delete<wbr>Article</a>
+					<a href="authentication.html#hashpassword" class="tsd-kind-icon">hash<wbr>Password</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="articlehandler.html#readarticle" class="tsd-kind-icon">read<wbr>Article</a>
+					<a href="authentication.html#hashstring" class="tsd-kind-icon">hash<wbr>String</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="articlehandler.html#readarticles" class="tsd-kind-icon">read<wbr>Articles</a>
+					<a href="authentication.html#prepare" class="tsd-kind-icon">prepare</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="articlehandler.html#readbestratedarticles" class="tsd-kind-icon">read<wbr>Best<wbr>Rated<wbr>Articles</a>
+					<a href="authentication.html#validrefreshtoken" class="tsd-kind-icon">valid<wbr>Refresh<wbr>Token</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a href="authentication.html#verify" class="tsd-kind-icon">verify</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="articlehandler.html#readnewestarticles" class="tsd-kind-icon">read<wbr>Newest<wbr>Articles</a>
+					<a href="authentication.html#verifypassword" class="tsd-kind-icon">verify<wbr>Password</a>
 				</li>
-				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="articlehandler.html#updatearticle" class="tsd-kind-icon">update<wbr>Article</a>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a href="authentication.html#checkuserrole" class="tsd-kind-icon">check<wbr>User<wbr>Role</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a href="authentication.html#isauthorized" class="tsd-kind-icon">is<wbr>Authorized</a>
+				</li>
+				<li class=" tsd-kind-object-literal tsd-parent-kind-class tsd-is-private">
+					<a href="authentication.html#signoptions" class="tsd-kind-icon">sign<wbr>Options</a>
+				</li>
+				<li class=" tsd-kind-object-literal tsd-parent-kind-class tsd-is-private">
+					<a href="authentication.html#strategyoptions" class="tsd-kind-icon">strategy<wbr>Options</a>
 				</li>
 			</ul>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="comment.html" class="tsd-kind-icon">Comment</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="commentcontroller.html" class="tsd-kind-icon">Comment<wbr>Controller</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="logger.html" class="tsd-kind-icon">Logger</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="mail.html" class="tsd-kind-icon">Mail</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="mailaction.html" class="tsd-kind-icon">Mail<wbr>Action</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="mailhistory.html" class="tsd-kind-icon">Mail<wbr>History</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="newsletter.html" class="tsd-kind-icon">Newsletter</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="newslettercontroller.html" class="tsd-kind-icon">Newsletter<wbr>Controller</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="picture.html" class="tsd-kind-icon">Picture</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="picturecontroller.html" class="tsd-kind-icon">Picture<wbr>Controller</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="responseinterceptor.html" class="tsd-kind-icon">Response<wbr>Interceptor</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="server.html" class="tsd-kind-icon">Server</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="translation.html" class="tsd-kind-icon">Translation</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="translationcontroller.html" class="tsd-kind-icon">Translation<wbr>Controller</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="translationkey.html" class="tsd-kind-icon">Translation<wbr>Key</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="translationlanguage.html" class="tsd-kind-icon">Translation<wbr>Language</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="user.html" class="tsd-kind-icon">User</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="usercontroller.html" class="tsd-kind-icon">User<wbr>Controller</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="userrole.html" class="tsd-kind-icon">User<wbr>Role</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/logmetadata.html" class="tsd-kind-icon">Log<wbr>Metadata</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/mailconfig.html" class="tsd-kind-icon">Mail<wbr>Config</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/mailmetadata.html" class="tsd-kind-icon">Mail<wbr>Metadata</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/refreshcounts.html" class="tsd-kind-icon">Refresh<wbr>Counts</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/refreshtokens.html" class="tsd-kind-icon">Refresh<wbr>Tokens</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/tokenpair.html" class="tsd-kind-icon">Token<wbr>Pair</a>
+		</li>
+		<li class=" tsd-kind-variable tsd-is-not-exported">
+			<a href="../globals.html#permissions" class="tsd-kind-icon">permissions</a>
+		</li>
+		<li class=" tsd-kind-variable tsd-is-not-exported">
+			<a href="../globals.html#port" class="tsd-kind-icon">port</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="../globals.html#authorized" class="tsd-kind-icon">Authorized</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="../globals.html#factory" class="tsd-kind-icon">factory</a>
+		</li>
+		<li class=" tsd-kind-object-literal">
+			<a href="../globals.html#channelmetadata" class="tsd-kind-icon">channel<wbr>Metadata</a>
+		</li>
+		<li class=" tsd-kind-object-literal">
+			<a href="../globals.html#mailaddresses" class="tsd-kind-icon">mail<wbr>Addresses</a>
+		</li>
+		<li class=" tsd-kind-object-literal">
+			<a href="../globals.html#registermetadata" class="tsd-kind-icon">register<wbr>Metadata</a>
+		</li>
+		<li class=" tsd-kind-object-literal">
+			<a href="../globals.html#subscribemetadata" class="tsd-kind-icon">subscribe<wbr>Metadata</a>
+		</li>
+		<li class=" tsd-kind-object-literal">
+			<a href="../globals.html#unregistermetadata" class="tsd-kind-icon">unregister<wbr>Metadata</a>
 		</li>
 	</ul>
 </nav>
@@ -961,7 +1075,7 @@ img { max-width: 100%; }
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<span class="target">ArticleHandler</span>
+					<span class="target">Authentication</span>
 				</li>
 			</ul>
 		</section>
@@ -969,106 +1083,67 @@ img { max-width: 100%; }
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
-					<section class="tsd-index-section ">
-						<h3>Constructors</h3>
-						<ul class="tsd-index-list">
-							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="articlehandler.html#constructor" class="tsd-kind-icon">constructor</a></li>
-						</ul>
-					</section>
 					<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="articlehandler.html#articlerepo" class="tsd-kind-icon">article<wbr>Repo</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="articlehandler.html#langrepo" class="tsd-kind-icon">lang<wbr>Repo</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="articlehandler.html#picrepo" class="tsd-kind-icon">pic<wbr>Repo</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="articlehandler.html#textrepo" class="tsd-kind-icon">text<wbr>Repo</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="articlehandler.html#userrepo" class="tsd-kind-icon">user<wbr>Repo</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="authentication.html#refreshcounts" class="tsd-kind-icon">refresh<wbr>Counts</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="authentication.html#refreshtokens" class="tsd-kind-icon">refresh<wbr>Tokens</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="authentication.html#saltrounds" class="tsd-kind-icon">salt<wbr>Rounds</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="articlehandler.html#createarticle" class="tsd-kind-icon">create<wbr>Article</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="articlehandler.html#deletearticle" class="tsd-kind-icon">delete<wbr>Article</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="articlehandler.html#readarticle" class="tsd-kind-icon">read<wbr>Article</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="articlehandler.html#readarticles" class="tsd-kind-icon">read<wbr>Articles</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="articlehandler.html#readbestratedarticles" class="tsd-kind-icon">read<wbr>Best<wbr>Rated<wbr>Articles</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="articlehandler.html#readnewestarticles" class="tsd-kind-icon">read<wbr>Newest<wbr>Articles</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="articlehandler.html#updatearticle" class="tsd-kind-icon">update<wbr>Article</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="authentication.html#createtokenpair" class="tsd-kind-icon">create<wbr>Token<wbr>Pair</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="authentication.html#hashpassword" class="tsd-kind-icon">hash<wbr>Password</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="authentication.html#hashstring" class="tsd-kind-icon">hash<wbr>String</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="authentication.html#prepare" class="tsd-kind-icon">prepare</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="authentication.html#validrefreshtoken" class="tsd-kind-icon">valid<wbr>Refresh<wbr>Token</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="authentication.html#verify" class="tsd-kind-icon">verify</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="authentication.html#verifypassword" class="tsd-kind-icon">verify<wbr>Password</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="authentication.html#checkuserrole" class="tsd-kind-icon">check<wbr>User<wbr>Role</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="authentication.html#isauthorized" class="tsd-kind-icon">is<wbr>Authorized</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+						<h3>Object literals</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-private"><a href="authentication.html#signoptions" class="tsd-kind-icon">sign<wbr>Options</a></li>
+							<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-private"><a href="authentication.html#strategyoptions" class="tsd-kind-icon">strategy<wbr>Options</a></li>
 						</ul>
 					</section>
 				</div>
 			</section>
 		</section>
-		<section class="tsd-panel-group tsd-member-group ">
-			<h2>Constructors</h2>
-			<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
-				<a name="constructor" class="tsd-anchor"></a>
-				<h3>constructor</h3>
-				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Article<wbr>Handler<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="articlehandler.html" class="tsd-signature-type">ArticleHandler</a></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L16">modules/article/handlers/article.handler.ts:16</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-returns-title">Returns <a href="articlehandler.html" class="tsd-signature-type">ArticleHandler</a></h4>
-					</li>
-				</ul>
-			</section>
-		</section>
 		<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 			<h2>Properties</h2>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-				<a name="articlerepo" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagPrivate">Private</span> article<wbr>Repo</h3>
-				<div class="tsd-signature tsd-kind-icon">article<wbr>Repo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Repository</span><span class="tsd-signature-symbol">&lt;</span><a href="article.html" class="tsd-signature-type">Article</a><span class="tsd-signature-symbol">&gt;</span></div>
+				<a name="refreshcounts" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> refresh<wbr>Counts</h3>
+				<div class="tsd-signature tsd-kind-icon">refresh<wbr>Counts<span class="tsd-signature-symbol">:</span> <a href="../interfaces/refreshcounts.html" class="tsd-signature-type">RefreshCounts</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L12">modules/article/handlers/article.handler.ts:12</a></li>
+						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L44">services/authentication.ts:44</a></li>
 					</ul>
 				</aside>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-				<a name="langrepo" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagPrivate">Private</span> lang<wbr>Repo</h3>
-				<div class="tsd-signature tsd-kind-icon">lang<wbr>Repo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Repository</span><span class="tsd-signature-symbol">&lt;</span><a href="language.html" class="tsd-signature-type">Language</a><span class="tsd-signature-symbol">&gt;</span></div>
+				<a name="refreshtokens" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> refresh<wbr>Tokens</h3>
+				<div class="tsd-signature tsd-kind-icon">refresh<wbr>Tokens<span class="tsd-signature-symbol">:</span> <a href="../interfaces/refreshtokens.html" class="tsd-signature-type">RefreshTokens</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L15">modules/article/handlers/article.handler.ts:15</a></li>
+						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L45">services/authentication.ts:45</a></li>
 					</ul>
 				</aside>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-				<a name="picrepo" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagPrivate">Private</span> pic<wbr>Repo</h3>
-				<div class="tsd-signature tsd-kind-icon">pic<wbr>Repo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Repository</span><span class="tsd-signature-symbol">&lt;</span><a href="picture.html" class="tsd-signature-type">Picture</a><span class="tsd-signature-symbol">&gt;</span></div>
+				<a name="saltrounds" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> salt<wbr>Rounds</h3>
+				<div class="tsd-signature tsd-kind-icon">salt<wbr>Rounds<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;10</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L16">modules/article/handlers/article.handler.ts:16</a></li>
-					</ul>
-				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-				<a name="textrepo" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagPrivate">Private</span> text<wbr>Repo</h3>
-				<div class="tsd-signature tsd-kind-icon">text<wbr>Repo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Repository</span><span class="tsd-signature-symbol">&lt;</span><a href="articletext.html" class="tsd-signature-type">ArticleText</a><span class="tsd-signature-symbol">&gt;</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L14">modules/article/handlers/article.handler.ts:14</a></li>
-					</ul>
-				</aside>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-				<a name="userrepo" class="tsd-anchor"></a>
-				<h3><span class="tsd-flag ts-flagPrivate">Private</span> user<wbr>Repo</h3>
-				<div class="tsd-signature tsd-kind-icon">user<wbr>Repo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Repository</span><span class="tsd-signature-symbol">&lt;</span><a href="user.html" class="tsd-signature-type">User</a><span class="tsd-signature-symbol">&gt;</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L13">modules/article/handlers/article.handler.ts:13</a></li>
+						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L42">services/authentication.ts:42</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1076,28 +1151,137 @@ img { max-width: 100%; }
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="createarticle" class="tsd-anchor"></a>
-				<h3>create<wbr>Article</h3>
+				<a name="createtokenpair" class="tsd-anchor"></a>
+				<h3>create<wbr>Token<wbr>Pair</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">create<wbr>Article<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li class="tsd-signature tsd-kind-icon">create<wbr>Token<wbr>Pair<span class="tsd-signature-symbol">(</span>userId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/tokenpair.html" class="tsd-signature-type">TokenPair</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L92">modules/article/handlers/article.handler.ts:92</a></li>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L162">services/authentication.ts:162</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>req: <span class="tsd-signature-type">Request</span></h5>
+								<h5>userId: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="../interfaces/tokenpair.html" class="tsd-signature-type">TokenPair</a></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="hashpassword" class="tsd-anchor"></a>
+				<h3>hash<wbr>Password</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">hash<wbr>Password<span class="tsd-signature-symbol">(</span>plainPassword<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L125">services/authentication.ts:125</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>plainPassword: <span class="tsd-signature-type">any</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="hashstring" class="tsd-anchor"></a>
+				<h3>hash<wbr>String</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">hash<wbr>String<span class="tsd-signature-symbol">(</span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L155">services/authentication.ts:155</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>text: <span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="prepare" class="tsd-anchor"></a>
+				<h3>prepare</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">prepare<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L121">services/authentication.ts:121</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="validrefreshtoken" class="tsd-anchor"></a>
+				<h3>valid<wbr>Refresh<wbr>Token</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">valid<wbr>Refresh<wbr>Token<span class="tsd-signature-symbol">(</span>refreshToken<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, userId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L174">services/authentication.ts:174</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>refreshToken: <span class="tsd-signature-type">string</span></h5>
 							</li>
 							<li>
-								<h5>res: <span class="tsd-signature-type">Response</span></h5>
+								<h5>userId: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+				<a name="verify" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> verify</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<li class="tsd-signature tsd-kind-icon">verify<span class="tsd-signature-symbol">(</span>payload<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L190">services/authentication.ts:190</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>payload: <span class="tsd-signature-type">any</span></h5>
 							</li>
 							<li>
-								<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
+								<h5>next: <span class="tsd-signature-type">any</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1105,76 +1289,75 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="deletearticle" class="tsd-anchor"></a>
-				<h3>delete<wbr>Article</h3>
+				<a name="verifypassword" class="tsd-anchor"></a>
+				<h3>verify<wbr>Password</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">delete<wbr>Article<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li class="tsd-signature tsd-kind-icon">verify<wbr>Password<span class="tsd-signature-symbol">(</span>plainPassword<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, hashedPassword<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L208">modules/article/handlers/article.handler.ts:208</a></li>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L143">services/authentication.ts:143</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>req: <span class="tsd-signature-type">Request</span></h5>
+								<h5>plainPassword: <span class="tsd-signature-type">any</span></h5>
 							</li>
 							<li>
-								<h5>res: <span class="tsd-signature-type">Response</span></h5>
-							</li>
-							<li>
-								<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
+								<h5>hashedPassword: <span class="tsd-signature-type">any</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="readarticle" class="tsd-anchor"></a>
-				<h3>read<wbr>Article</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">read<wbr>Article<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<a name="checkuserrole" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> check<wbr>User<wbr>Role</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon">check<wbr>User<wbr>Role<span class="tsd-signature-symbol">(</span>resource<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, permission<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Handler</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L150">modules/article/handlers/article.handler.ts:150</a></li>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L101">services/authentication.ts:101</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>req: <span class="tsd-signature-type">Request</span></h5>
+								<h5>resource: <span class="tsd-signature-type">any</span></h5>
 							</li>
 							<li>
-								<h5>res: <span class="tsd-signature-type">Response</span></h5>
-							</li>
-							<li>
-								<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
+								<h5>permission: <span class="tsd-signature-type">any</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Handler</span></h4>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="readarticles" class="tsd-anchor"></a>
-				<h3>read<wbr>Articles</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">read<wbr>Articles<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<a name="isauthorized" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Authorized</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon">is<wbr>Authorized<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L27">modules/article/handlers/article.handler.ts:27</a></li>
+								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L55">services/authentication.ts:55</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Middleware for checking if a user is authorized to access the endpoint.</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -1187,96 +1370,102 @@ img { max-width: 100%; }
 								<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="readbestratedarticles" class="tsd-anchor"></a>
-				<h3>read<wbr>Best<wbr>Rated<wbr>Articles</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">read<wbr>Best<wbr>Rated<wbr>Articles<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L68">modules/article/handlers/article.handler.ts:68</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>req: <span class="tsd-signature-type">Request</span></h5>
-							</li>
-							<li>
-								<h5>res: <span class="tsd-signature-type">Response</span></h5>
-							</li>
-							<li>
-								<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
-							</li>
+		</section>
+		<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+			<h2>Object literals</h2>
+			<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-class tsd-is-private">
+				<a name="signoptions" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> sign<wbr>Options</h3>
+				<div class="tsd-signature tsd-kind-icon">sign<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L36">services/authentication.ts:36</a></li>
+					</ul>
+				</aside>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+					<a name="signoptions.audience" class="tsd-anchor"></a>
+					<h3>audience</h3>
+					<div class="tsd-signature tsd-kind-icon">audience<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;this.strategyOptions.audience</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L38">services/authentication.ts:38</a></li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
-					</li>
-				</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+					<a name="signoptions.expiresin" class="tsd-anchor"></a>
+					<h3>expires<wbr>In</h3>
+					<div class="tsd-signature tsd-kind-icon">expires<wbr>In<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;10m&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L37">services/authentication.ts:37</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+					<a name="signoptions.issuer" class="tsd-anchor"></a>
+					<h3>issuer</h3>
+					<div class="tsd-signature tsd-kind-icon">issuer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;this.strategyOptions.issuer</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L39">services/authentication.ts:39</a></li>
+						</ul>
+					</aside>
+				</section>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="readnewestarticles" class="tsd-anchor"></a>
-				<h3>read<wbr>Newest<wbr>Articles</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">read<wbr>Newest<wbr>Articles<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L46">modules/article/handlers/article.handler.ts:46</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>req: <span class="tsd-signature-type">Request</span></h5>
-							</li>
-							<li>
-								<h5>res: <span class="tsd-signature-type">Response</span></h5>
-							</li>
-							<li>
-								<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
-							</li>
+			<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-class tsd-is-private">
+				<a name="strategyoptions" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagPrivate">Private</span> strategy<wbr>Options</h3>
+				<div class="tsd-signature tsd-kind-icon">strategy<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L29">services/authentication.ts:29</a></li>
+					</ul>
+				</aside>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+					<a name="strategyoptions.audience-1" class="tsd-anchor"></a>
+					<h3>audience</h3>
+					<div class="tsd-signature tsd-kind-icon">audience<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;travelfeed-angular&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L32">services/authentication.ts:32</a></li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="updatearticle" class="tsd-anchor"></a>
-				<h3>update<wbr>Article</h3>
-				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">update<wbr>Article<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/modules/article/handlers/article.handler.ts#L170">modules/article/handlers/article.handler.ts:170</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>req: <span class="tsd-signature-type">Request</span></h5>
-							</li>
-							<li>
-								<h5>res: <span class="tsd-signature-type">Response</span></h5>
-							</li>
-							<li>
-								<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
-							</li>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+					<a name="strategyoptions.issuer-1" class="tsd-anchor"></a>
+					<h3>issuer</h3>
+					<div class="tsd-signature tsd-kind-icon">issuer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;travelfeed-api&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L33">services/authentication.ts:33</a></li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
-					</li>
-				</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+					<a name="strategyoptions.jwtfromrequest" class="tsd-anchor"></a>
+					<h3>jwt<wbr>From<wbr>Request</h3>
+					<div class="tsd-signature tsd-kind-icon">jwt<wbr>From<wbr>Request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JwtFromRequestFunction</span><span class="tsd-signature-symbol"> =&nbsp;ExtractJwt.fromAuthHeaderAsBearerToken()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L30">services/authentication.ts:30</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+					<a name="strategyoptions.secretorkey" class="tsd-anchor"></a>
+					<h3>secret<wbr>OrKey</h3>
+					<div class="tsd-signature tsd-kind-icon">secret<wbr>OrKey<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;secret-api-key-wow&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/travelfeed/travelfeed-api/blob/master/src/services/authentication.ts#L31">services/authentication.ts:31</a></li>
+						</ul>
+					</aside>
+				</section>
 			</section>
 		</section>
 		<footer class="with-border-bottom">
