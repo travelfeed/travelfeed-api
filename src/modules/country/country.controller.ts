@@ -1,8 +1,9 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
-import { JsonController, Get, Post, Delete, Param, Body, OnUndefined } from 'routing-controllers'
+import { JsonController, Get, Post, Delete, Param, Body } from 'routing-controllers'
 import { Country } from './models/country.model'
+import { Authorized } from '../../services/authentication'
 
 @Service()
 @JsonController('/country')
@@ -17,21 +18,23 @@ export class CountryController {
      * Entity actions
      */
     @Post('/')
-    @OnUndefined(201)
+    @Authorized('country', 'create')
     public async createTranslation(@Body() country: Country) {
-        return this.countryRepository.create(country)
+        await this.countryRepository.create(country)
+
+        return null
     }
 
     @Post('/:id')
-    @OnUndefined(201)
+    @Authorized('country', 'update')
     public async saveTranslation(@Param('id') id: number, @Body() data: DeepPartial<Country>) {
-        return this.countryRepository.update(id, data)
+        await this.countryRepository.update(id, data)
     }
 
     @Delete('/:id')
-    @OnUndefined(201)
+    @Authorized('country', 'delete')
     public async deleteTranslation(@Param('id') id: number) {
-        return this.countryRepository.delete(id)
+        await this.countryRepository.delete(id)
     }
 
     /**
