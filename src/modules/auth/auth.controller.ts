@@ -116,7 +116,7 @@ export class AuthController {
 
         // params for html template
         const mailParams = {
-            confirmUrl: `https://travelfeed.blog/auth/activate/${uuidHash}`,
+            confirmUrl: `${process.env.DOMAIN}/api/auth/activate/${uuidHash}`,
         }
 
         // html template
@@ -176,7 +176,7 @@ export class AuthController {
 
         // params for html template
         const mailParams = {
-            confirmUrl: `https://travelfeed.blog/auth/activate/${uuidHash}`,
+            confirmUrl: `${process.env.DOMAIN}/api/auth/activate/${uuidHash}`,
         }
 
         // html template

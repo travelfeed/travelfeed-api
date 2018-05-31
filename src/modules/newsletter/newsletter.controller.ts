@@ -13,9 +13,7 @@ import { Request } from 'express'
 import { v1 as uuidv1 } from 'uuid'
 import { isEmail } from 'validator'
 import { Authentication, Authorized } from '../../services/authentication'
-import { User } from '../user/models/user.model'
 import { Newsletter } from './models/newsletter.model'
-import { MailAction } from '../misc/models/mail.action.model'
 import { Mail, MailConfig } from '../../services/mail'
 import { subscribeMetadata, channelMetadata } from './templates/config.template'
 
@@ -29,9 +27,7 @@ export class NewsletterController {
     /**
      * Model repositories
      */
-    @InjectRepository(User) private userRepository: Repository<User>
     @InjectRepository(Newsletter) private newsletterRepository: Repository<Newsletter>
-    @InjectRepository(MailAction) private mailActionRepository: Repository<MailAction>
 
     @Post('/subscribe/:email')
     @Authorized('newsletter', 'subscribe')
@@ -57,12 +53,12 @@ export class NewsletterController {
                 await this.newsletterRepository.save(nlUser)
 
                 const mailParams = {
-                    subLink: `https://travelfeed.blog/newsletter/activate/${uuidHash}`,
+                    subLink: `${process.env.DOMAIN}/api/newsletter/activate/${uuidHash}`,
                 }
 
                 // html template
                 const mailText = await this.mail.renderMailTemplate(
-                    `./src/modules/newsletter/templates/subscribe.template.html`,
+                    `./dist/modules/newsletter/templates/subscribe.template.html`,
                     mailParams,
                 )
 
@@ -86,12 +82,12 @@ export class NewsletterController {
             await this.newsletterRepository.save(subUser)
 
             const mailParams = {
-                subLink: `https://travelfeed.blog/newsletter/activate/${uuidHash}`,
+                subLink: `${process.env.DOMAIN}/api/newsletter/activate/${uuidHash}`,
             }
 
             // html template
             const mailText = await this.mail.renderMailTemplate(
-                `./src/modules/newsletter/templates/subscribe.template.html`,
+                `./dist/modules/newsletter/templates/subscribe.template.html`,
                 mailParams,
             )
 
@@ -139,7 +135,6 @@ export class NewsletterController {
     @Post('/send')
     @Authorized('newsletter', 'send')
     public async send(@Req() req: Request) {
-        const author: User = await this.userRepository.findOne(req.user.id)
         const [users] = await this.newsletterRepository.findAndCount({
             where: {
                 active: true,
@@ -155,12 +150,12 @@ export class NewsletterController {
 
             const mailParams = {
                 text: req.body.text,
-                unsubLink: `https://travelfeed.blog/newsletter/unsubscribe/${uuidHash}`,
+                unsubLink: `${process.env.DOMAIN}/api/newsletter/unsubscribe/${uuidHash}`,
             }
 
             // html template
             const mailText = await this.mail.renderMailTemplate(
-                `./src/modules/newsletter/templates/channel.template.html`,
+                `./dist/modules/newsletter/templates/channel.template.html`,
                 mailParams,
             )
 
@@ -176,14 +171,5 @@ export class NewsletterController {
 
             return null
         }
-
-        // log mail
-        const mailAction: MailAction = await this.mailActionRepository.findOne({
-            where: {
-                action: 'NewsletterAll',
-            },
-        })
-
-        await this.mail.logMail(req.path, channelMetadata.subject, author, mailAction)
     }
 }

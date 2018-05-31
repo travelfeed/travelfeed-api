@@ -1,6 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm'
 import { UserRole } from './user.role.model'
-import { MailHistory } from '../../misc/models/mail.history.model'
 
 @Entity()
 export class User {
@@ -51,7 +50,4 @@ export class User {
         name: 'role',
     })
     public role: UserRole
-
-    @OneToMany(() => MailHistory, mailHistory => mailHistory.user)
-    public mailHistory: Array<MailHistory>
 }

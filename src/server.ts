@@ -144,7 +144,7 @@ export class Server {
             throw new Error(error.message)
         })
 
-        this.logger.info(`server is listening on port {${port}}`)
+        this.logger.info(`server is listening in ${process.env.NODE_ENV} mode on port {${port}}`)
     }
 
     /**

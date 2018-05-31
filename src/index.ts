@@ -5,13 +5,19 @@ import { useContainer as useContainerRouting } from 'routing-controllers'
 import { useContainer as useContainerSocket } from 'socket-controllers'
 import { Server } from './server'
 
+const port = parseInt(process.env.PORT, 10) || 3000
+
+const devDomain = `http://localhost:${port}`
+const prodDomain = 'https://travelfeed.blog'
+
+process.env.DOMAIN = process.env.NODE_ENV === 'dev' ? devDomain : prodDomain
+
 // enable di on 3rd party libraries
 useContainerDatabase(Container)
 useContainerRouting(Container)
 useContainerSocket(Container)
 
 // try fetching port from env
-const port = parseInt(process.env.PORT, 10) || 3000
 
 // connect to database and start listening
 createConnection()
