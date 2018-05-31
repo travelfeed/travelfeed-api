@@ -35,6 +35,8 @@ export class Article {
 
     @Column() public published: boolean
 
+    @Column() public subtitle: string
+
     @CreateDateColumn() public created: Timestamp
 
     @UpdateDateColumn() public updated: Timestamp
