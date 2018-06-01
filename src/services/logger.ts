@@ -7,6 +7,15 @@ export interface LogMetadata {
     [key: string]: any
 }
 
+export function formatTime(date: Date) {
+    const zerofy = (value: number): string => `0${value}`.slice(-2)
+    const hours = zerofy(date.getHours())
+    const minutes = zerofy(date.getMinutes())
+    const seconds = zerofy(date.getSeconds())
+
+    return `${hours}:${minutes}:${seconds}`
+}
+
 @Service({
     global: true,
 })
@@ -68,7 +77,7 @@ export class Logger {
     private formatMessage(): Format {
         return format.printf(info => {
             const level = info.level
-            const date = this.formatTime(new Date())
+            const date = formatTime(new Date())
             const message = this.highlight(info.message)
 
             if (Object.entries(info).length === 2) {
@@ -84,15 +93,6 @@ export class Logger {
                 return `[${level}/${date}]: ${message}`
             }
         })
-    }
-
-    private formatTime(date: Date): string {
-        const zerofy = (value: number): string => `0${value}`.slice(-2)
-        const hours = zerofy(date.getHours())
-        const minutes = zerofy(date.getMinutes())
-        const seconds = zerofy(date.getSeconds())
-
-        return `${hours}:${minutes}:${seconds}`
     }
 
     private highlight(message: string): string {

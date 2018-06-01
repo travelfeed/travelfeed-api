@@ -1,14 +1,14 @@
 import { Service, Inject } from 'typedi'
 import { useExpressServer, Action } from 'routing-controllers'
 import { useSocketServer } from 'socket-controllers'
-import { createServer } from 'http'
+import { createServer, Server as HttpServer } from 'http'
 import * as express from 'express'
 import * as io from 'socket.io'
 import * as compression from 'compression'
 import * as helmet from 'helmet'
 import * as morgan from 'morgan'
 import * as cors from 'cors'
-import { Logger } from './services/logger'
+import { Logger, formatTime } from './services/logger'
 import { Authentication } from './services/authentication'
 
 @Service()
@@ -35,6 +35,13 @@ export class Server {
     private app: express.Application
 
     /**
+     * Server instance.
+     *
+     * @param {HttpServer} server
+     */
+    private server: HttpServer
+
+    /**
      * Socket server instance.
      *
      * @param {io.Server} io
@@ -47,7 +54,7 @@ export class Server {
      * @param {cors.CorsOptions} corsOptions
      */
     private corsOptions: cors.CorsOptions = {
-        origin: ['http://localhost:4200'],
+        origin: ['http://localhost:4200', 'https://travelfeed.blog'],
     }
 
     /**
@@ -63,13 +70,8 @@ export class Server {
         this.app.use(helmet())
         this.app.use(
             morgan((tokens, req, res) => {
-                const zerofy = (value: number): string => `0${value}`.slice(-2)
-                const date = new Date()
-                const hours = zerofy(date.getHours())
-                const minutes = zerofy(date.getMinutes())
-                const seconds = zerofy(date.getSeconds())
                 const sections = [
-                    `[http/${hours}:${minutes}:${seconds}]:`,
+                    `[http/${formatTime(new Date())}]:`,
                     tokens.method(req, res),
                     tokens.url(req, res),
                     tokens.status(req, res),
@@ -85,8 +87,11 @@ export class Server {
         // prepare jwt auth
         this.authentication.prepare()
 
+        // wrap express with http server
+        this.server = createServer(this.app)
+
         // init socket server
-        this.io = io(createServer(this.app), {
+        this.io = io(this.server, {
             origins: 'localhost:*',
         })
         this.io.on('connect', (socket: io.Socket) => {
@@ -137,10 +142,10 @@ export class Server {
      * @returns {Promise<void>}
      */
     public async listen(port: number): Promise<void> {
-        this.app.listen(port)
-        this.app.on('listening', () => this.logger.info(`listening on port {${port}}`))
-        this.app.on('close', () => this.logger.info('closed successfully. bye!'))
-        this.app.on('error', error => {
+        this.server.listen(port)
+        this.server.on('listening', () => this.logger.info(`listening on port {${port}}`))
+        this.server.on('close', () => this.logger.info('closed successfully. bye!'))
+        this.server.on('error', error => {
             throw new Error(error.message)
         })
 
