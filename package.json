@@ -5,7 +5,8 @@
   "scripts": {
     "start:prod": "NODE_ENV=production node dist/index.js",
     "start:dev": "NODE_ENV=development node dist/index.js",
-    "build": "rm -rf dist && tsc -p tsconfig.json && gulp copy",
+    "build": "rm -rf dist && tsc -p tsconfig.json && npm run copy",
+    "copy": "for FILE in src/modules/*/templates/*.html; do (cp -R $FILE $(sed s/src/dist/g <<<$FILE)); done",
     "watch": "nodemon --exec \"npm run build && npm run start:dev\" --watch src --ext ts",
     "lint": "tslint -p tsconfig.json --fix",
     "test": "ava dist/**/*.test.js",
@@ -72,7 +73,6 @@
     "@types/supertest": "^2.0.4",
     "@types/uuid": "^3.4.3",
     "ava": "^1.0.0-beta.4",
-    "gulp": "^3.9.1",
     "nodemon": "^1.17.5",
     "prettier": "^1.13.3",
     "reflect-metadata": "^0.1.12",
