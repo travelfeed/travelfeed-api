@@ -13,13 +13,29 @@ export class CommentController {
      */
     @InjectRepository(Comment) private commentRepository: Repository<Comment>
 
-    /**
-     * Entity actions
-     */
+    @Get('/')
+    @Authorized('comment', 'read')
+    public async readComments() {
+        return this.commentRepository.find({
+            relations: ['user', 'article'],
+        })
+    }
+
     @Post('/')
     @Authorized('comment', 'create')
     public async createComment(@Body() comment: Comment) {
         return this.commentRepository.save(comment)
+    }
+
+    @Get('/visible')
+    @Authorized('comment', 'read')
+    public async readVisibleComments() {
+        return this.commentRepository.find({
+            relations: ['user', 'article'],
+            where: {
+                visible: true,
+            },
+        })
     }
 
     @Get('/:id')
@@ -40,27 +56,5 @@ export class CommentController {
     @Authorized('comment', 'delete')
     public async deleteComment(@Param('id') id: number) {
         return this.commentRepository.delete(id)
-    }
-
-    /**
-     * Collection actions
-     */
-    @Get('/')
-    @Authorized('comment', 'read')
-    public async readComments() {
-        return this.commentRepository.find({
-            relations: ['user', 'article'],
-        })
-    }
-
-    @Get('/visible')
-    @Authorized('comment', 'read')
-    public async readVisibleComments() {
-        return this.commentRepository.find({
-            relations: ['user', 'article'],
-            where: {
-                visible: true,
-            },
-        })
     }
 }

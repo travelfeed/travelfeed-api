@@ -11,12 +11,13 @@ export class CountryController {
     /**
      * Model repositories
      */
-
     @InjectRepository(Country) private countryRepository: Repository<Country>
 
-    /**
-     * Entity actions
-     */
+    @Get('/')
+    public async readLanguages() {
+        return this.countryRepository.find()
+    }
+
     @Post('/')
     @Authorized('country', 'create')
     public async createTranslation(@Body() country: Country) {
@@ -35,13 +36,5 @@ export class CountryController {
     @Authorized('country', 'delete')
     public async deleteTranslation(@Param('id') id: number) {
         await this.countryRepository.delete(id)
-    }
-
-    /**
-     * Collection actions
-     */
-    @Get('/')
-    public async readLanguages() {
-        return this.countryRepository.find()
     }
 }
