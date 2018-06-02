@@ -12,13 +12,9 @@ export class PictureController {
      */
     @InjectRepository(Picture) private pictureRepository: Repository<Picture>
 
-    @Get('/')
-    public async readPictures() {
-        return this.pictureRepository.find({
-            relations: ['articles'],
-        })
-    }
-
+    /**
+     * Entity actions
+     */
     @Post('/')
     public async createPicture(@Body() article: Picture) {
         return this.pictureRepository.save(article)
@@ -39,5 +35,15 @@ export class PictureController {
     @Delete('/:id')
     public async deletePicture(@Param('id') id: number) {
         return this.pictureRepository.delete(id)
+    }
+
+    /**
+     * Collection actions
+     */
+    @Get('/')
+    public async readPictures() {
+        return this.pictureRepository.find({
+            relations: ['articles'],
+        })
     }
 }

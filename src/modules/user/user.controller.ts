@@ -13,15 +13,9 @@ export class UserController {
      */
     @InjectRepository(User) private userRepository: Repository<User>
 
-    @Get('/')
-    @Authorized('user', 'read-all')
-    public async readUsers() {
-        return this.userRepository.find({
-            select: ['id', 'email', 'username', 'firstname', 'lastname', 'role', 'active'],
-            relations: ['role'],
-        })
-    }
-
+    /**
+     * Entity actions
+     */
     @Post('/')
     @Authorized('user', 'create')
     public async createUser(@Body() user: User) {
@@ -49,5 +43,17 @@ export class UserController {
     @Authorized('user', 'delete')
     public async deleteUser(@Param('id') id: number) {
         await this.userRepository.delete(id)
+    }
+
+    /**
+     * Collection actions
+     */
+    @Get('/')
+    @Authorized('user', 'read-all')
+    public async readUsers() {
+        return this.userRepository.find({
+            select: ['id', 'email', 'username', 'firstname', 'lastname', 'role', 'active'],
+            relations: ['role'],
+        })
     }
 }
