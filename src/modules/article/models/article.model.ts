@@ -27,9 +27,9 @@ export class Article {
 
     @Column() public country: string
 
-    @Column() public latitude: string
+    @Column('float') public latitude: number
 
-    @Column() public longitude: string
+    @Column('float') public longitude: number
 
     @Column() public peaces: string
 
