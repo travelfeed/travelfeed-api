@@ -1,7 +1,16 @@
 import { Service } from 'typedi'
 import { Repository, DeepPartial } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
-import { JsonController, Get, Post, Delete, Param, Body, CurrentUser } from 'routing-controllers'
+import {
+    JsonController,
+    Get,
+    Post,
+    Delete,
+    Param,
+    Body,
+    CurrentUser,
+    QueryParam,
+} from 'routing-controllers'
 import { Authorized } from '../../services/authentication'
 import { Article } from './models/article.model'
 import { User } from '../user/models/user.model'
@@ -56,13 +65,49 @@ export class ArticleController {
         })
     }
 
-    @Get('/published')
-    public async readPublishedArticles() {
+    @Get('/newest')
+    public async readNewestArticles(
+        @QueryParam('order', {
+            required: false,
+        })
+        order: string = 'ASC',
+        @QueryParam('limit', {
+            required: false,
+        })
+        limit: number = 0,
+    ) {
         return this.articleRepository.find({
             relations: ['user', 'pictures'],
             where: {
                 published: true,
             },
+            order: {
+                created: order.toUpperCase() === 'DESC' ? 'DESC' : 'ASC',
+            },
+            take: limit > 0 ? limit : undefined,
+        })
+    }
+
+    @Get('/best-rated')
+    public async readBestRatedArticles(
+        @QueryParam('order', {
+            required: false,
+        })
+        order: string = 'DESC',
+        @QueryParam('limit', {
+            required: false,
+        })
+        limit: number = 0,
+    ) {
+        return this.articleRepository.find({
+            relations: ['user', 'pictures'],
+            where: {
+                published: true,
+            },
+            order: {
+                peaces: order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+            },
+            take: limit > 0 ? limit : undefined,
         })
     }
 }
