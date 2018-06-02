@@ -11,6 +11,7 @@ import {
     CurrentUser,
     QueryParam,
 } from 'routing-controllers'
+import * as readingTime from 'reading-time'
 import { Authorized } from '../../services/authentication'
 import { Article } from './models/article.model'
 import { User } from '../user/models/user.model'
@@ -29,6 +30,10 @@ export class ArticleController {
     @Post('/')
     @Authorized('article', 'create')
     public async createArticle(@Body() article: Article, @CurrentUser() user: User) {
+        if (article.text && article.text.length > 0) {
+            article.readingtime = readingTime(article.text).minutes.toFixed(2)
+        }
+
         await this.articleRepository.save({ ...article, user })
 
         return null
@@ -45,6 +50,10 @@ export class ArticleController {
     @Post('/:id([0-9]+)')
     @Authorized('article', 'update')
     public async updateArticle(@Body() article: DeepPartial<Article>) {
+        if (article.text && article.text.length > 0) {
+            article.readingtime = readingTime(article.text).minutes.toFixed(2)
+        }
+
         await this.articleRepository.save(article)
     }
 

@@ -33,6 +33,11 @@ export class Article {
 
     @Column() public peaces: string
 
+    @Column({
+        default: '0',
+    })
+    public readingtime: string
+
     @Column() public published: boolean
 
     @Column() public subtitle: string
