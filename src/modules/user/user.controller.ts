@@ -24,7 +24,7 @@ export class UserController {
         return null
     }
 
-    @Get('/:id')
+    @Get('/:id([0-9]+)')
     @Authorized('user', 'read')
     public async readUser(@Param('id') id: number) {
         return this.userRepository.findOne(id, {
@@ -33,13 +33,13 @@ export class UserController {
         })
     }
 
-    @Post('/:id')
+    @Post('/:id([0-9]+)')
     @Authorized('user', 'update')
     public async saveUser(@Param('id') id: number, @Body() data: DeepPartial<User>) {
         await this.userRepository.update(id, data)
     }
 
-    @Delete('/:id')
+    @Delete('/:id([0-9]+)')
     @Authorized('user', 'delete')
     public async deleteUser(@Param('id') id: number) {
         await this.userRepository.delete(id)

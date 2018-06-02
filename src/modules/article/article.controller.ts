@@ -25,7 +25,7 @@ export class ArticleController {
         return null
     }
 
-    @Get('/:id')
+    @Get('/:id([0-9]+)')
     @Authorized('article', 'read')
     public async readArticle(@Param('id') id: number) {
         return this.articleRepository.findOne(id, {
@@ -33,13 +33,13 @@ export class ArticleController {
         })
     }
 
-    @Post('/:id')
+    @Post('/:id([0-9]+)')
     @Authorized('article', 'update')
     public async updateArticle(@Body() article: DeepPartial<Article>) {
         await this.articleRepository.save(article)
     }
 
-    @Delete('/:id')
+    @Delete('/:id([0-9]+)')
     @Authorized('article', 'delete')
     public async deleteArticle(@Param('id') id: number) {
         await this.articleRepository.delete(id)

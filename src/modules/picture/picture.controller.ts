@@ -20,19 +20,19 @@ export class PictureController {
         return this.pictureRepository.save(article)
     }
 
-    @Get('/:id')
+    @Get('/:id([0-9]+)')
     public async readPicture(@Param('id') id: number) {
         return this.pictureRepository.findOne(id, {
             relations: ['articles'],
         })
     }
 
-    @Post('/:id')
+    @Post('/:id([0-9]+)')
     public async updatePicture(@Param('id') id: number, @Body() picture: DeepPartial<Picture>) {
         return this.pictureRepository.update(id, picture)
     }
 
-    @Delete('/:id')
+    @Delete('/:id([0-9]+)')
     public async deletePicture(@Param('id') id: number) {
         return this.pictureRepository.delete(id)
     }

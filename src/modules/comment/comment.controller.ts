@@ -22,7 +22,7 @@ export class CommentController {
         return this.commentRepository.save(comment)
     }
 
-    @Get('/:id')
+    @Get('/:id([0-9]+)')
     @Authorized('comment', 'read')
     public async readComment(@Param('id') id: number) {
         return this.commentRepository.findOne(id, {
@@ -30,13 +30,13 @@ export class CommentController {
         })
     }
 
-    @Post('/:id')
+    @Post('/:id([0-9]+)')
     @Authorized('comment', 'update')
     public async updateComment(@Param('id') id: number, @Body() comment: DeepPartial<Comment>) {
         return this.commentRepository.update(id, comment)
     }
 
-    @Delete('/:id')
+    @Delete('/:id([0-9]+)')
     @Authorized('comment', 'delete')
     public async deleteComment(@Param('id') id: number) {
         return this.commentRepository.delete(id)

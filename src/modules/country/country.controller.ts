@@ -25,13 +25,13 @@ export class CountryController {
         return null
     }
 
-    @Post('/:id')
+    @Post('/:id([0-9]+)')
     @Authorized('country', 'update')
     public async saveTranslation(@Param('id') id: number, @Body() data: DeepPartial<Country>) {
         await this.countryRepository.update(id, data)
     }
 
-    @Delete('/:id')
+    @Delete('/:id([0-9]+)')
     @Authorized('country', 'delete')
     public async deleteTranslation(@Param('id') id: number) {
         await this.countryRepository.delete(id)
