@@ -33,9 +33,9 @@
 
 ## API
 
----?code=src/modules/article/models/article.model.ts&title=@fa[code] article.model.ts
+---?code=src/modules/article/models/article.model.ts&title=article.model.ts
 
-@[20-47](Simple Columns)
-@[51-63](Relations to other models)
+@[20-34](Simple table columns)
+@[51-63](Relations to other models / tables)
 
 ---?color=#000
