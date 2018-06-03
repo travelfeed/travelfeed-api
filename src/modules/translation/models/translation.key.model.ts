@@ -10,7 +10,8 @@ export class TranslationKey {
     public key: string
 
     @Column({
-        nullable: false,
+        nullable: true,
+        default: null,
     })
     public default: string
 
