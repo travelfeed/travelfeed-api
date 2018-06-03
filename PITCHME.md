@@ -9,11 +9,13 @@
 ## Inhalt
 
 @ul[squares]
+
 - Einleitung
 - Architektur
 - Frontend
 - Backend
 - API
+
 @ulend
 
 ---
@@ -25,11 +27,13 @@
 ## Architektur
 
 @ul[squares]
-- App <-> API
-- TypeScript Basis (JavaScript mit echter Typisierung)
+
+- App @fa[arrows-h] API
+- TypeScript
 - App: Angular v6
-- API: ExpressJS mit mehreren Erweiterungen
-- MySql Datenbank (Zugriff durch API, gemeanged durch TypeORM library)
+- API: ExpressJS mit Erweiterungen
+- MySql Datenbank
+
 @ulend
 
 ---
@@ -40,10 +44,10 @@
 
 ## Backend
 
-- Aufruf über `http://localhost:4200/auth/signin`
 - Pflege der Berichte
 - Pflege der Übersetzungen
 - Administration von allen Benutzeraccounts
+- Aufruf über `http://localhost:4200/auth/signin`
 
 ---
 
