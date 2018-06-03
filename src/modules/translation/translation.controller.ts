@@ -4,7 +4,7 @@ import { InjectRepository } from 'typeorm-typedi-extensions'
 import { JsonController, Get, Post, Delete, Param, Body } from 'routing-controllers'
 import { Authorized } from '../../services/authentication'
 import { Translation } from './models/translation.model'
-import { TranslationLanguage } from './models/translation.language.model'
+import { Language } from '../language/models/language.model'
 
 @Service()
 @JsonController('/translation')
@@ -13,8 +13,7 @@ export class TranslationController {
      * Model repositories
      */
     @InjectRepository(Translation) private translationRepository: Repository<Translation>
-    @InjectRepository(TranslationLanguage)
-    private translationLanguageRepository: Repository<TranslationLanguage>
+    @InjectRepository(Language) private languageRepository: Repository<Language>
 
     /**
      * Entity actions
@@ -39,22 +38,13 @@ export class TranslationController {
         await this.translationRepository.delete(id)
     }
 
-    /**
-     * Collection actions
-     */
-    @Get('/')
-    @Authorized('translation', 'read-languages')
-    public async readLanguages() {
-        return this.translationLanguageRepository.find()
-    }
-
     @Get('/keys/:lang')
     @Authorized('translation', 'read-keys')
     public async readTranslationKeys(@Param('lang') lang: string) {
         return this.translationRepository.find({
             relations: ['key', 'lang'],
             where: {
-                lang: await this.translationLanguageRepository.findOne(lang),
+                lang: await this.languageRepository.findOne(lang),
             },
         })
     }
@@ -65,7 +55,7 @@ export class TranslationController {
             .find({
                 relations: ['key', 'lang'],
                 where: {
-                    lang: await this.translationLanguageRepository.findOne(lang),
+                    lang: await this.languageRepository.findOne(lang),
                 },
             })
             .then(data => {
