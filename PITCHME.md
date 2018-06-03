@@ -1,5 +1,3 @@
----?color=#000
-
 ---?image=https://raw.githubusercontent.com/travelfeed/travelfeed-app/develop/src/assets/images/header/header.png&size=contain&position=top
 
 <div style="position: fixed; bottom: 7vh; left: -50%; width: 100vw; height: 80px;">
@@ -12,6 +10,7 @@
 
 @ul[squares]
 - Einleitung
+- Architektur
 - Frontend
 - Backend
 - API
@@ -23,11 +22,28 @@
 
 ---
 
+## Architektur
+
+@ul[squares]
+- App <-> API
+- TypeScript Basis (JavaScript mit echter Typisierung)
+- App: Angular v6
+- API: ExpressJS mit mehreren Erweiterungen
+- MySql Datenbank (Zugriff durch API, gemeanged durch TypeORM library)
+@ulend
+
+---
+
 ## Frontend
 
 ---
 
 ## Backend
+
+- Aufruf über `http://localhost:4200/auth/signin`
+- Pflege der Berichte
+- Pflege der Übersetzungen
+- Administration von allen Benutzeraccounts
 
 ---
 
