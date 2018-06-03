@@ -1,0 +1,8 @@
+theme: white
+layout: center-left
+transition: fade
+theme-override: PITCHME.css
+highlight: atom-one-dark
+slide-number: true
+footnote: Dennis Fritsch | Pascal Iske | Ivan Nikic | Lars Wächter
+published: false
