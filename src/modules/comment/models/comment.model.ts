@@ -22,7 +22,7 @@ export class Comment {
 
     @Column({
         type: 'tinyint',
-        default: false,
+        default: true, // should be false when the approvement process is integrated
     })
     public visible: boolean
 
