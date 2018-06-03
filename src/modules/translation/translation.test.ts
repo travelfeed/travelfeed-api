@@ -40,11 +40,11 @@ test('DELETE /translation/1', async t => {
     })
 })
 
-test('GET /translation', async t => {
+test('GET /translation/keys/de', async t => {
     t.plan(2)
 
     const server = await factory()
-    const response = await server().get('/api/translation')
+    const response = await server().get('/api/translation/keys/de')
 
     t.is(response.status, 401)
     t.deepEqual(response.body, {
@@ -53,11 +53,11 @@ test('GET /translation', async t => {
     })
 })
 
-test('GET /translation/keys/de', async t => {
+test('POST /translation/keys', async t => {
     t.plan(2)
 
     const server = await factory()
-    const response = await server().get('/api/translation/keys/de')
+    const response = await server().post('/api/translation/keys')
 
     t.is(response.status, 401)
     t.deepEqual(response.body, {
