@@ -39,11 +39,6 @@
 - Atomic Design
 - Responsive Design
 
----
-
-### Frontend - Atomic Beispiel
-
-![Atomic Design](http://ubie.io/wp-content/uploads/2016/08/atomic-web-design.gif)
 ![Atomic Design](http://ubie.io/wp-content/uploads/2016/08/atomic-web-design.gif)
 
 ---
@@ -100,4 +95,4 @@
 }
 ```
 
----?color#000
+---?color=#000
