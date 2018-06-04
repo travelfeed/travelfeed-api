@@ -8,8 +8,8 @@ import {
     ManyToOne,
     JoinColumn,
 } from 'typeorm'
-import { TranslationLanguage } from './translation.language.model'
 import { TranslationKey } from './translation.key.model'
+import { Language } from '../../language/models/language.model'
 
 @Entity()
 export class Translation {
@@ -27,13 +27,13 @@ export class Translation {
 
     /***** relations *****/
 
-    @ManyToOne(() => TranslationLanguage, {
+    @ManyToOne(() => Language, {
         nullable: false,
     })
     @JoinColumn({
         name: 'lang',
     })
-    public lang: TranslationLanguage
+    public lang: Language
 
     @ManyToOne(() => TranslationKey, {
         nullable: false,

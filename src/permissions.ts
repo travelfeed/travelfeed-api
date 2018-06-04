@@ -17,7 +17,7 @@ permissions.allow([
         allows: [
             {
                 resources: 'comment',
-                permissions: ['read', 'create', 'edit', 'delete'],
+                permissions: ['create', 'update', 'delete'],
             },
             {
                 resources: 'newsletter',

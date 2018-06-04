@@ -11,6 +11,7 @@ import {
     JoinTable,
 } from 'typeorm'
 import { User } from '../../user/models/user.model'
+import { Country } from '../../country/models/country.model'
 import { Picture } from '../../picture/models/picture.model'
 
 @Entity()
@@ -24,8 +25,6 @@ export class Article {
     @Column('text') public text: string
 
     @Column() public city: string
-
-    @Column() public country: string
 
     @Column('float') public latitude: number
 
@@ -55,6 +54,14 @@ export class Article {
         name: 'user',
     })
     public user: User
+
+    @ManyToOne(() => Country, {
+        nullable: false,
+    })
+    @JoinColumn({
+        name: 'country',
+    })
+    public country: Country
 
     @ManyToMany(() => Picture, picture => picture.articles)
     @JoinTable({
