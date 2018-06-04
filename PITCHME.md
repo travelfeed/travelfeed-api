@@ -79,6 +79,17 @@
 
 - Modul-Struktur
 - Models repräsentieren die Tabellenstruktur
+- Module:
+    - article
+    - auth
+    - comment
+    - country
+    - language
+    - newsletter
+    - picture
+    - translation
+    - user
+
 
 @ulend
 
