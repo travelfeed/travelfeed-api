@@ -84,7 +84,25 @@
 
 ---
 
-## API Request @fa[arrow-right] Response
+## API - Modules
+
+@ul[squares]
+
+- article
+- auth
+- comment
+- country
+- language
+- newsletter
+- picture
+- translation
+- user
+
+@ulend
+
+---
+
+## API - Request @fa[arrow-right] Response
 
 @ul[squares]
 
