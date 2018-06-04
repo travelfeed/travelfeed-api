@@ -52,6 +52,8 @@
 
 - Atomic Design
 
+![Atomic Design](http://ubie.io/wp-content/uploads/2016/08/atomic-web-design.gif)
+
 @ulend
 
 ---
@@ -66,3 +68,6 @@
 ---
 
 ## API
+
+- Modul-Struktur
+- Models repräsentieren die Tabellenstruktur
