@@ -48,8 +48,12 @@
 
 ## Frontend
 
+@ul[squares]
+
 - Atomic Design
 - Responsive Design
+
+@ulend
 
 ![Atomic Design](http://ubie.io/wp-content/uploads/2016/08/atomic-web-design.gif)
 
@@ -58,14 +62,48 @@
 
 ## Backend
 
+@ul[squares]
+
 - Pflege der Berichte
 - Pflege der Übersetzungen
 - Administration von allen Benutzeraccounts
 - Aufruf über `http://localhost:4200/auth/signin`
 
+@ulend
+
 ---
 
 ## API
 
+@ul[squares]
+
 - Modul-Struktur
 - Models repräsentieren die Tabellenstruktur
+
+@ulend
+
+---
+
+## API Request @fa[arrow-right] Response
+
+@ul[squares]
+
+- Request `/api/language`
+
+@ulend
+
+```
+{
+    "status": 200,
+    "data": [
+        {
+            "id": "de",
+            "name": "Deutsch"
+        },
+        {
+            "id": "en",
+            "name": "English"
+        }
+    ]
+}
+```
