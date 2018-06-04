@@ -3,6 +3,7 @@ import { Repository, DeepPartial } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
 import { JsonController, Get, Post, Delete, Param, Body } from 'routing-controllers'
 import { Country } from './models/country.model'
+import { Article } from '../article/models/article.model'
 import { Authorized } from '../../services/authentication'
 
 @Service()
@@ -13,6 +14,7 @@ export class CountryController {
      */
 
     @InjectRepository(Country) private countryRepository: Repository<Country>
+    @InjectRepository(Article) private articleRepository: Repository<Article>
 
     /**
      * Entity actions
@@ -41,7 +43,24 @@ export class CountryController {
      * Collection actions
      */
     @Get('/')
-    public async readLanguages() {
+    public async readCountries() {
         return this.countryRepository.find()
+    }
+
+    @Get('/count')
+    public async readCountryCount() {
+        const entries = await this.countryRepository.find()
+        const countries = entries.map(async country => {
+            const articles = await this.articleRepository.find({
+                relations: ['country'],
+                where: {
+                    country: country,
+                },
+            })
+
+            return { ...country, articles: articles.length }
+        })
+
+        return Promise.all(countries)
     }
 }
