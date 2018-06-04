@@ -8,33 +8,23 @@
 
 ## Inhalt
 
-@ul[squares]
-
 - Einleitung
 - Architektur
 - Frontend
 - Backend
 - API
 
-@ulend
-
 ---
 
 ## Einleitung
-
-@ul[squares]
 
 - Was ist TravelFeed?
 - Ziele der Seite
 - Gruppenaufteilung
 
-@ulend
-
 ---
 
 ## Architektur
-
-@ul[squares]
 
 - App @fa[arrows-h] API
 - TypeScript
@@ -42,51 +32,41 @@
 - API: ExpressJS mit Erweiterungen
 - MySql Datenbank
 
-@ulend
-
 ---
 
 ## Frontend
 
-@ul[squares]
-
 - Atomic Design
 - Responsive Design
 
-@ulend
+---
+
+### Frontend - Atomic Beispiel
 
 ![Atomic Design](http://ubie.io/wp-content/uploads/2016/08/atomic-web-design.gif)
-
+![Atomic Design](http://ubie.io/wp-content/uploads/2016/08/atomic-web-design.gif)
 
 ---
 
 ## Backend
-
-@ul[squares]
 
 - Pflege der Berichte
 - Pflege der Übersetzungen
 - Administration von allen Benutzeraccounts
 - Aufruf über `http://localhost:4200/auth/signin`
 
-@ulend
-
 ---
 
 ## API
 
-@ul[squares]
-
 - Modul-Struktur
+- RESTful Prinzip
+- TypeORM Library
 - Models repräsentieren die Tabellenstruktur
-
-@ulend
 
 ---
 
 ## API - Modules
-
-@ul[squares]
 
 - article
 - auth
@@ -98,17 +78,11 @@
 - translation
 - user
 
-@ulend
-
 ---
 
 ## API - Request @fa[arrow-right] Response
 
-@ul[squares]
-
 - Request `/api/language`
-
-@ulend
 
 ```
 {
