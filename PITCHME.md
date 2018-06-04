@@ -22,6 +22,14 @@
 
 ## Einleitung
 
+@ul[squares]
+
+- Was ist TravelFeed?
+- Ziele der Seite
+- Gruppenaufteilung
+
+@ulend
+
 ---
 
 ## Architektur
@@ -40,6 +48,12 @@
 
 ## Frontend
 
+@ul[squares]
+
+- Atomic Design
+
+@ulend
+
 ---
 
 ## Backend
@@ -52,10 +66,3 @@
 ---
 
 ## API
-
----?code=src/modules/article/models/article.model.ts&title=article.model.ts
-
-@[20-34](Simple table columns)
-@[51-63](Relations to other models / tables)
-
----?color=#000
