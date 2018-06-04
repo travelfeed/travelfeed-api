@@ -34,9 +34,15 @@ export class ArticleController {
             article.readingtime = readingTime(article.text).minutes.toFixed(2)
         }
 
-        await this.articleRepository.save({ ...article, user })
-
-        return null
+        return this.articleRepository.save({
+            ...article,
+            user,
+            country: {
+                id: 1,
+                name: 'Deutschland',
+                code: 'DE',
+            },
+        })
     }
 
     @Get('/:id([0-9]+)')
@@ -53,7 +59,14 @@ export class ArticleController {
             article.readingtime = readingTime(article.text).minutes.toFixed(2)
         }
 
-        await this.articleRepository.save(article)
+        await this.articleRepository.save({
+            ...article,
+            country: {
+                id: 1,
+                name: 'Deutschland',
+                code: 'DE',
+            },
+        })
     }
 
     @Delete('/:id([0-9]+)')
