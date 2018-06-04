@@ -42,7 +42,7 @@ export class ArticleController {
     @Get('/:id([0-9]+)')
     public async readArticle(@Param('id') id: number) {
         return this.articleRepository.findOne(id, {
-            relations: ['user', 'pictures'],
+            relations: ['user', 'pictures', 'country'],
         })
     }
 
@@ -69,7 +69,7 @@ export class ArticleController {
     @Authorized('article', 'read-all')
     public async readArticles() {
         return this.articleRepository.find({
-            relations: ['user', 'pictures'],
+            relations: ['user', 'pictures', 'country'],
         })
     }
 
@@ -85,7 +85,7 @@ export class ArticleController {
         limit: number = 0,
     ) {
         return this.articleRepository.find({
-            relations: ['user'],
+            relations: ['user', 'country'],
             where: {
                 published: true,
             },
@@ -108,7 +108,7 @@ export class ArticleController {
         limit: number = 0,
     ) {
         return this.articleRepository.find({
-            relations: ['user'],
+            relations: ['user', 'country'],
             where: {
                 published: true,
             },
