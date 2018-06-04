@@ -48,13 +48,11 @@
 
 ## Frontend
 
-@ul[squares]
-
 - Atomic Design
+- Responsive Design
 
 ![Atomic Design](http://ubie.io/wp-content/uploads/2016/08/atomic-web-design.gif)
 
-@ulend
 
 ---
 
