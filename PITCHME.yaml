@@ -1,0 +1,7 @@
+theme: white
+layout: center-left
+transition: fade
+theme-override: PITCHME.css
+highlight: atom-one-dark
+slide-number: true
+published: false
